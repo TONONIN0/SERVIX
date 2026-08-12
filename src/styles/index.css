@@ -1,0 +1,515 @@
+
+/* =========================
+   GENERAL
+========================= */
+
+main {
+  background-color: #07111f;
+  color: #f5f7fa;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+section {
+  padding: 110px 8%;
+}
+
+.section-label {
+  color: #20d58a;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  min-height: calc(100vh - 75px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 80px;
+
+  box-sizing: border-box;
+
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+
+.hero-content {
+  max-width: 700px;
+}
+
+
+.hero-label {
+  color: #20d58a;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.hero h1 {
+  margin: 20px 0;
+
+  font-size: clamp(48px, 6vw, 82px);
+  line-height: 0.98;
+
+  letter-spacing: -4px;
+}
+
+.hero h1 span {
+  display: block;
+  color: #20d58a;
+}
+
+.hero p {
+  max-width: 620px;
+
+  margin: 30px 0;
+
+  color: #aeb8c7;
+
+  font-size: 19px;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   HERO BUTTONS
+========================= */
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 30px;
+
+  margin-top: 35px;
+}
+
+.hero-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px 28px;
+
+  background-color: #20d58a;
+  color: #061019;
+
+  text-decoration: none;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  border-radius: 10px;
+
+  transition: 0.2s ease;
+}
+
+.hero-button:hover {
+  background-color: #1bc77f;
+  transform: translateY(-2px);
+}
+
+.hero-link {
+  color: #f5f7fa;
+
+  text-decoration: none;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.hero-link:hover {
+  color: #20d58a;
+}
+
+
+/* =========================
+   HERO VISUAL
+========================= */
+
+
+.hero-visual {
+  width: 430px;
+  height: 430px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-logo {
+  width: 530px;
+  height: 530px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  display: block;
+}
+
+
+
+.visual-card {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 22px;
+
+  background-color: #0d1b2c;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  border-radius: 16px;
+
+  box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+}
+
+.visual-icon {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(32,213,138,0.12);
+
+  border-radius: 12px;
+
+  font-size: 24px;
+}
+
+.visual-card span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #718096;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+.visual-card strong {
+  font-size: 17px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+
+  margin-left: auto;
+
+  background-color: #20d58a;
+
+  border-radius: 50%;
+}
+
+.visual-line {
+  width: 2px;
+  height: 90px;
+
+  margin-left: 46px;
+
+  background-color: #20d58a;
+}
+
+.visual-location {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  color: #aeb8c7;
+
+  font-size: 14px;
+}
+
+.visual-location span {
+  width: 12px;
+  height: 12px;
+
+  background-color: #20d58a;
+
+  border-radius: 50%;
+}
+
+
+/* =========================
+   SERVICES
+========================= */
+
+.services {
+  background-color: #0a1625;
+}
+
+.section-header {
+  max-width: 650px;
+
+  margin-bottom: 60px;
+}
+
+.section-header h2,
+.contact h2 {
+  margin: 15px 0;
+
+  font-size: clamp(38px, 5vw, 60px);
+
+  letter-spacing: -2px;
+}
+
+.section-header h2 span,
+.contact h2 span {
+  color: #20d58a;
+}
+
+.section-header p,
+.contact p {
+  color: #8f9baa;
+
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   SERVICE CARDS
+========================= */
+
+.services-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+.service-card {
+  padding: 35px;
+
+  background-color: #07111f;
+
+  border: 1px solid rgba(255,255,255,0.07);
+
+  border-radius: 14px;
+
+  transition: transform 0.2s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-number {
+  color: #20d58a;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.service-card h3 {
+  margin: 35px 0 12px;
+
+  font-size: 25px;
+}
+
+.service-card p {
+  color: #8f9baa;
+
+  line-height: 1.7;
+}
+
+
+/* =========================
+   HOW IT WORKS
+========================= */
+
+.steps {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 50px;
+}
+
+.step-number {
+  color: #20d58a;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.step h3 {
+  margin: 20px 0 10px;
+
+  font-size: 26px;
+}
+
+.step p {
+  color: #8f9baa;
+
+  line-height: 1.7;
+}
+
+
+/* =========================
+   CTA
+========================= */
+
+.cta {
+  text-align: center;
+
+  background-color: #20d58a;
+
+  color: #061019;
+}
+
+.cta .section-label {
+  color: #061019;
+}
+
+.cta h2 {
+  margin: 15px 0;
+
+  font-size: clamp(40px, 5vw, 65px);
+
+  letter-spacing: -3px;
+}
+
+.cta p {
+  max-width: 600px;
+
+  margin: 0 auto 30px;
+
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.cta-button {
+  display: inline-flex;
+
+  padding: 16px 30px;
+
+  background-color: #07111f;
+  color: #f5f7fa;
+
+  text-decoration: none;
+
+  border-radius: 10px;
+
+  font-weight: 700;
+}
+
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact {
+  text-align: center;
+}
+
+.contact p {
+  margin: 0 auto;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+  section {
+    padding: 80px 6%;
+  }
+
+  .hero {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    min-height: auto;
+
+    gap: 50px;
+  }
+
+  .hero h1 {
+    font-size: clamp(45px, 10vw, 65px);
+  }
+
+  .hero-visual {
+    width: 100%;
+    max-width: 500px;
+
+    height: 300px;
+  }
+
+  .services-grid,
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  section {
+    padding: 70px 20px;
+  }
+
+  .hero {
+    padding-top: 60px;
+  }
+
+  .hero h1 {
+    font-size: 46px;
+
+    letter-spacing: -2px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 20px;
+  }
+
+  .hero-button {
+    width: 100%;
+  }
+
+  .hero-visual {
+    height: 240px;
+  }
+
+  .section-header h2,
+  .contact h2 {
+    font-size: 40px;
+  }
+
+}

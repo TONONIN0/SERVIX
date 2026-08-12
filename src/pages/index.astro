@@ -1,0 +1,258 @@
+
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import '../styles/index.css';
+---
+
+<Layout>
+
+  <Navbar client:load />
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <span class="hero-label">
+          LOGÍSTICA INDUSTRIAL
+        </span>
+
+        <h1>
+          La refacción que necesitas.
+          <span>Cuando la necesitas.</span>
+        </h1>
+
+        <p>
+          SERVIX conecta a empresas con entregas rápidas de
+          refacciones, materiales y componentes industriales.
+          Pensado para esas urgencias donde esperar no es una opción.
+        </p>
+
+        <div class="hero-actions">
+
+          <a href="#solicitar" class="hero-button">
+            Solicitar entrega
+          </a>
+
+          <a href="#como-funciona" class="hero-link">
+            Cómo funciona →
+          </a>
+
+        </div>
+
+      </div>
+
+  
+      <div class="hero-visual">
+        <img
+          src="/assets/logo.jpg"
+          alt="SERVIX"
+          class="hero-logo"
+        />
+      </div>
+
+
+  
+
+    </section>
+
+
+    <!-- SERVICIOS -->
+    <section class="services" id="servicios">
+
+      <div class="section-header">
+
+        <span class="section-label">
+          ¿QUÉ MOVEMOS?
+        </span>
+
+        <h2>
+          Lo que tu operación
+          <span>necesita.</span>
+        </h2>
+
+        <p>
+          Encontramos y trasladamos los componentes que necesitas
+          para mantener tu operación en movimiento.
+        </p>
+
+      </div>
+
+
+      <div class="services-grid">
+
+        <article class="service-card">
+
+          <div class="service-number">
+            01
+          </div>
+
+          <h3>Refacciones</h3>
+
+          <p>
+            Refacciones industriales y automotrices para
+            atender reparaciones y mantenimientos urgentes.
+          </p>
+
+        </article>
+
+
+        <article class="service-card">
+
+          <div class="service-number">
+            02
+          </div>
+
+          <h3>Materiales</h3>
+
+          <p>
+            Materiales necesarios para continuar proyectos,
+            mantenimientos y operaciones sin detenerte.
+          </p>
+
+        </article>
+
+
+        <article class="service-card">
+
+          <div class="service-number">
+            03
+          </div>
+
+          <h3>Componentes</h3>
+
+          <p>
+            Componentes especializados para resolver
+            necesidades específicas de tu empresa.
+          </p>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- CÓMO FUNCIONA -->
+    <section class="how-it-works" id="como-funciona">
+
+      <div class="section-header">
+
+        <span class="section-label">
+          SIMPLE Y RÁPIDO
+        </span>
+
+        <h2>
+          De la necesidad
+          <span>a tu puerta.</span>
+        </h2>
+
+      </div>
+
+
+      <div class="steps">
+
+        <div class="step">
+
+          <span class="step-number">
+            01
+          </span>
+
+          <h3>Solicita</h3>
+
+          <p>
+            Cuéntanos qué refacción, material o componente
+            necesitas y dónde debe entregarse.
+          </p>
+
+        </div>
+
+
+        <div class="step">
+
+          <span class="step-number">
+            02
+          </span>
+
+          <h3>Localizamos</h3>
+
+          <p>
+            Buscamos la opción disponible para conseguir
+            lo que tu operación necesita.
+          </p>
+
+        </div>
+
+
+        <div class="step">
+
+          <span class="step-number">
+            03
+          </span>
+
+          <h3>Entregamos</h3>
+
+          <p>
+            Coordinamos la entrega para que recibas tu
+            refacción donde y cuando la necesitas.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CTA -->
+    <section class="cta" id="solicitar">
+
+      <div class="cta-content">
+
+        <span class="section-label">
+          ¿TIENES UNA URGENCIA?
+        </span>
+
+        <h2>
+          No detengas tu operación.
+        </h2>
+
+        <p>
+          Dinos qué necesitas y nosotros nos encargamos
+          de llevarlo hasta donde lo necesitas.
+        </p>
+
+        <a href="#contacto" class="cta-button">
+          Solicitar entrega
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- CONTACTO -->
+    <section class="contact" id="contacto">
+
+      <span class="section-label">
+        CONTACTO
+      </span>
+
+      <h2>
+        ¿Necesitas algo?
+        <span>Hablemos.</span>
+      </h2>
+
+      <p>
+        Estamos listos para ayudarte con tu próxima entrega.
+      </p>
+
+    </section>
+
+  </main>
+
+</Layout>
+
