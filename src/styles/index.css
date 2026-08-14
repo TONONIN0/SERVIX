@@ -14,7 +14,7 @@ section {
 }
 
 .section-label {
-  color: #20d58a;
+  color: #6FBE44;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -46,7 +46,7 @@ section {
 
 
 .hero-label {
-  color: #20d58a;
+  color: #6FBE44;
 
   font-size: 13px;
   font-weight: 700;
@@ -65,7 +65,7 @@ section {
 
 .hero h1 span {
   display: block;
-  color: #20d58a;
+  color: #6FBE44;
 }
 
 .hero p {
@@ -100,7 +100,7 @@ section {
 
   padding: 16px 28px;
 
-  background-color: #20d58a;
+  background-color: #6FBE44;
   color: #061019;
 
   text-decoration: none;
@@ -114,7 +114,7 @@ section {
 }
 
 .hero-button:hover {
-  background-color: #1bc77f;
+  background-color: #6FBE44;
   transform: translateY(-2px);
 }
 
@@ -128,7 +128,7 @@ section {
 }
 
 .hero-link:hover {
-  color: #20d58a;
+  color: #6FBE44;
 }
 
 
@@ -214,7 +214,7 @@ section {
 
   margin-left: auto;
 
-  background-color: #20d58a;
+  background-color: #6FBE44;
 
   border-radius: 50%;
 }
@@ -225,7 +225,7 @@ section {
 
   margin-left: 46px;
 
-  background-color: #20d58a;
+  background-color: #6FBE44;
 }
 
 .visual-location {
@@ -243,7 +243,7 @@ section {
   width: 12px;
   height: 12px;
 
-  background-color: #20d58a;
+  background-color: #6FBE44;
 
   border-radius: 50%;
 }
@@ -274,7 +274,7 @@ section {
 
 .section-header h2 span,
 .contact h2 span {
-  color: #20d58a;
+  color: #6FBE44;
 }
 
 .section-header p,
@@ -315,7 +315,7 @@ section {
 }
 
 .service-number {
-  color: #20d58a;
+  color: #6FBE44;
 
   font-size: 13px;
   font-weight: 700;
@@ -333,6 +333,36 @@ section {
   line-height: 1.7;
 }
 
+/* =========================
+   IMAGEN DE LAS CARDS
+========================= */
+
+.service-image {
+  width: 100%;
+  height: 180px;
+
+  margin-bottom: 25px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+}
+
+.service-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition: transform 0.4s ease;
+}
+
+.service-card:hover .service-image img {
+  transform: scale(1.05);
+}
+
 
 /* =========================
    HOW IT WORKS
@@ -347,7 +377,7 @@ section {
 }
 
 .step-number {
-  color: #20d58a;
+  color: #6FBE44;
 
   font-size: 13px;
   font-weight: 700;
@@ -366,66 +396,8 @@ section {
 }
 
 
-/* =========================
-   CTA
-========================= */
-
-.cta {
-  text-align: center;
-
-  background-color: #20d58a;
-
-  color: #061019;
-}
-
-.cta .section-label {
-  color: #061019;
-}
-
-.cta h2 {
-  margin: 15px 0;
-
-  font-size: clamp(40px, 5vw, 65px);
-
-  letter-spacing: -3px;
-}
-
-.cta p {
-  max-width: 600px;
-
-  margin: 0 auto 30px;
-
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-.cta-button {
-  display: inline-flex;
-
-  padding: 16px 30px;
-
-  background-color: #07111f;
-  color: #f5f7fa;
-
-  text-decoration: none;
-
-  border-radius: 10px;
-
-  font-weight: 700;
-}
 
 
-/* =========================
-   CONTACT
-========================= */
-
-.contact {
-  text-align: center;
-}
-
-.contact p {
-  margin: 0 auto;
-}
 
 
 /* =========================

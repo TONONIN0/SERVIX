@@ -19,7 +19,7 @@ export default function Navbar() {
       {/* LINKS DESKTOP */}
       <div className="navbar-links">
         <a href="Servicios">Servicios</a>
-        <a href="Como-funciona">Cómo funciona</a>
+        <a href="Como-funciona">Productos</a>
         <a href="Solicitar">Solicitar</a>
         <a href="Contacto">Contacto</a>
       </div>

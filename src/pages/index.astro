@@ -2,6 +2,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.jsx';
 import '../styles/index.css';
 ---
 
@@ -37,9 +38,6 @@ import '../styles/index.css';
             Solicitar entrega
           </a>
 
-          <a href="#como-funciona" class="hero-link">
-            Cómo funciona →
-          </a>
 
         </div>
 
@@ -59,87 +57,111 @@ import '../styles/index.css';
 
     </section>
 
+<!-- SERVICIOS -->
+<section class="services" id="servicios">
 
-    <!-- SERVICIOS -->
-    <section class="services" id="servicios">
+  <div class="section-header">
 
-      <div class="section-header">
+    <span class="section-label">
+      ¿QUÉ MOVEMOS?
+    </span>
 
-        <span class="section-label">
-          ¿QUÉ MOVEMOS?
-        </span>
+    <h2>
+      Lo que tu operación
+      <span> necesita.</span>
+    </h2>
 
-        <h2>
-          Lo que tu operación
-          <span>necesita.</span>
-        </h2>
+    <p>
+      Encontramos y trasladamos los componentes que necesitas
+      para mantener tu operación en movimiento.
+    </p>
 
-        <p>
-          Encontramos y trasladamos los componentes que necesitas
-          para mantener tu operación en movimiento.
-        </p>
+  </div>
 
+
+  <div class="services-grid">
+
+    <article class="service-card">
+
+      <!-- IMAGEN -->
+      <div class="service-image">
+        <img
+          src="/assets/REF_AUT.avif"
+          alt="Refacciones industriales"
+        />
       </div>
 
-
-      <div class="services-grid">
-
-        <article class="service-card">
-
-          <div class="service-number">
-            01
-          </div>
-
-          <h3>Refacciones</h3>
-
-          <p>
-            Refacciones industriales y automotrices para
-            atender reparaciones y mantenimientos urgentes.
-          </p>
-
-        </article>
-
-
-        <article class="service-card">
-
-          <div class="service-number">
-            02
-          </div>
-
-          <h3>Materiales</h3>
-
-          <p>
-            Materiales necesarios para continuar proyectos,
-            mantenimientos y operaciones sin detenerte.
-          </p>
-
-        </article>
-
-
-        <article class="service-card">
-
-          <div class="service-number">
-            03
-          </div>
-
-          <h3>Componentes</h3>
-
-          <p>
-            Componentes especializados para resolver
-            necesidades específicas de tu empresa.
-          </p>
-
-        </article>
-
+      <div class="service-number">
+        01
       </div>
 
-    </section>
+      <h3>Refacciones</h3>
 
+      <p>
+        Refacciones industriales y automotrices para
+        atender reparaciones y mantenimientos urgentes.
+      </p>
+
+    </article>
+
+
+    <article class="service-card">
+
+      <!-- IMAGEN -->
+      <div class="service-image">
+        <img
+          src="/assets/MAT.avif"
+          alt="Materiales industriales"
+        />
+      </div>
+
+      <div class="service-number">
+        02
+      </div>
+
+      <h3>Materiales</h3>
+
+      <p>
+        Materiales necesarios para continuar proyectos,
+        mantenimientos y operaciones sin detenerte.
+      </p>
+
+    </article>
+
+
+    <article class="service-card">
+
+      <!-- IMAGEN -->
+      <div class="service-image">
+        <img
+          src="/assets/comp.avif"
+          alt="Componentes industriales"
+        />
+      </div>
+
+      <div class="service-number">
+        03
+      </div>
+
+      <h3>Componentes</h3>
+
+      <p>
+        Componentes especializados para resolver
+        necesidades específicas de tu empresa.
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
 
     <!-- CÓMO FUNCIONA -->
     <section class="how-it-works" id="como-funciona">
 
       <div class="section-header">
+
+        
 
         <span class="section-label">
           SIMPLE Y RÁPIDO
@@ -147,7 +169,7 @@ import '../styles/index.css';
 
         <h2>
           De la necesidad
-          <span>a tu puerta.</span>
+          <span> a tu puerta.</span>
         </h2>
 
       </div>
@@ -155,7 +177,9 @@ import '../styles/index.css';
 
       <div class="steps">
 
+
         <div class="step">
+        
 
           <span class="step-number">
             01
@@ -207,52 +231,14 @@ import '../styles/index.css';
     </section>
 
 
-    <!-- CTA -->
-    <section class="cta" id="solicitar">
+   
 
-      <div class="cta-content">
-
-        <span class="section-label">
-          ¿TIENES UNA URGENCIA?
-        </span>
-
-        <h2>
-          No detengas tu operación.
-        </h2>
-
-        <p>
-          Dinos qué necesitas y nosotros nos encargamos
-          de llevarlo hasta donde lo necesitas.
-        </p>
-
-        <a href="#contacto" class="cta-button">
-          Solicitar entrega
-        </a>
-
-      </div>
-
-    </section>
-
-
-    <!-- CONTACTO -->
-    <section class="contact" id="contacto">
-
-      <span class="section-label">
-        CONTACTO
-      </span>
-
-      <h2>
-        ¿Necesitas algo?
-        <span>Hablemos.</span>
-      </h2>
-
-      <p>
-        Estamos listos para ayudarte con tu próxima entrega.
-      </p>
-
-    </section>
+   
+ 
 
   </main>
+  
+    <Footer />
 
 </Layout>
 
