@@ -16,18 +16,37 @@ export default function Navbar() {
         SERVI<span>X</span>
       </a>
 
+
       {/* LINKS DESKTOP */}
       <div className="navbar-links">
-        <a href="Servicios">Servicios</a>
-        <a href="Como-funciona">Productos</a>
-        <a href="Solicitar">Solicitar</a>
-        <a href="Contacto">Contacto</a>
+
+        <a href="Servicios">
+          Servicios
+        </a>
+
+        <a href="Como-funciona">
+          Productos
+        </a>
+
+        <a href="Solicitar">
+          Solicitar
+        </a>
+
+        <a href="Contacto">
+          Contacto
+        </a>
+
       </div>
 
+
       {/* BOTÓN DESKTOP */}
-      <a href="Solicitar" className="navbar-button">
-        Solicitar entrega
+      <a
+        href="/login"
+        className="navbar-button"
+      >
+        Iniciar sesión
       </a>
+
 
       {/* BOTÓN HAMBURGUESA */}
       <button
@@ -41,31 +60,46 @@ export default function Navbar() {
         <span></span>
       </button>
 
+
       {/* MENÚ MÓVIL */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
 
-        <a href="Servicios" onClick={cerrarMenu}>
+        <a
+          href="Servicios"
+          onClick={cerrarMenu}
+        >
           Servicios
         </a>
 
-        <a href="Como-funciona" onClick={cerrarMenu}>
+        <a
+          href="Como-funciona"
+          onClick={cerrarMenu}
+        >
           Cómo funciona
-        </a>
-
-        <a href="Solicitar" onClick={cerrarMenu}>
-          Solicitar
-        </a>
-
-        <a href="Contacto" onClick={cerrarMenu}>
-          Contacto
         </a>
 
         <a
           href="Solicitar"
+          onClick={cerrarMenu}
+        >
+          Solicitar
+        </a>
+
+        <a
+          href="Contacto"
+          onClick={cerrarMenu}
+        >
+          Contacto
+        </a>
+
+
+        {/* LOGIN */}
+        <a
+          href="/login"
           className="mobile-menu-button"
           onClick={cerrarMenu}
         >
-          Solicitar entrega
+          Iniciar sesión
         </a>
 
       </div>
@@ -73,4 +107,3 @@ export default function Navbar() {
     </nav>
   );
 }
-

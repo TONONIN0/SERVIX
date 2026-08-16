@@ -362,42 +362,371 @@ section {
 .service-card:hover .service-image img {
   transform: scale(1.05);
 }
+/* =========================
+   PROCESS SECTION
+========================= */
+
+.process-section {
+  padding: 130px 8%;
+
+  background-color: #07111f;
+
+  overflow: hidden;
+}
 
 
 /* =========================
-   HOW IT WORKS
+   HEADER
 ========================= */
 
-.steps {
-  display: grid;
+.process-header {
+  max-width: 720px;
 
-  grid-template-columns: repeat(3, 1fr);
-
-  gap: 50px;
+  margin-bottom: 90px;
 }
 
-.step-number {
+.process-header h2 {
+  margin: 18px 0;
+
+  font-size: clamp(42px, 5vw, 68px);
+
+  line-height: 0.98;
+
+  letter-spacing: -3px;
+}
+
+.process-header h2 span {
+  display: block;
+
   color: #6FBE44;
-
-  font-size: 13px;
-  font-weight: 700;
 }
 
-.step h3 {
-  margin: 20px 0 10px;
+.process-header p {
+  max-width: 560px;
 
-  font-size: 26px;
-}
-
-.step p {
   color: #8f9baa;
+
+  font-size: 17px;
 
   line-height: 1.7;
 }
 
 
+/* =========================
+   TRACK
+========================= */
+
+.process-track {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    70px
+    1fr
+    70px
+    1fr;
+
+  align-items: center;
+
+  max-width: 1400px;
+
+  margin: 0 auto;
+}
 
 
+/* =========================
+   PROCESS CARD
+========================= */
+
+.process-item {
+  position: relative;
+
+  min-height: 390px;
+
+  background-color: #0a1625;
+
+  border: 1px solid rgba(255,255,255,0.07);
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.process-item:hover {
+  transform: translateY(-10px);
+
+  border-color: rgba(32,213,138,0.4);
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.process-image {
+  position: relative;
+
+  width: 100%;
+  height: 180px;
+
+  overflow: hidden;
+}
+
+.process-image::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background: linear-gradient(
+    to bottom,
+    transparent 45%,
+    #0a1625 100%
+  );
+}
+
+.process-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition: transform 0.5s ease;
+}
+
+.process-item:hover .process-image img {
+  transform: scale(1.06);
+}
+
+
+/* =========================
+   BIG NUMBER
+========================= */
+
+.process-number {
+  position: absolute;
+
+  right: 20px;
+  top: 125px;
+
+  z-index: 2;
+
+  color: rgba(32,213,138,0.12);
+
+  font-size: 120px;
+
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.process-content {
+  position: relative;
+
+  z-index: 3;
+
+  padding: 5px 35px 35px;
+}
+
+.process-tag {
+  color: #6FBE44;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.process-content h3 {
+  margin: 18px 0 12px;
+
+  font-size: 30px;
+
+  letter-spacing: -1px;
+}
+
+.process-content p {
+  max-width: 300px;
+
+  margin: 0;
+
+  color: #8f9baa;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================
+   ARROWS
+========================= */
+
+.process-arrow {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #6FBE44;
+
+  font-size: 35px;
+
+  font-weight: 300;
+}
+
+
+/* =========================
+   BOTTOM STATUS
+========================= */
+
+.process-bottom {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-top: 70px;
+
+  color: #718096;
+
+  font-size: 12px;
+
+  letter-spacing: 1.5px;
+}
+
+.process-bottom strong {
+  color: #f5f7fa;
+
+  font-weight: 600;
+}
+
+.process-status {
+  width: 8px;
+  height: 8px;
+
+  background-color: #6FBE44;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 0 5px rgba(32,213,138,0.1);
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1100px) {
+
+  .process-track {
+    grid-template-columns:
+      1fr
+      40px
+      1fr
+      40px
+      1fr;
+  }
+
+  .process-image {
+    height: 160px;
+  }
+
+  .process-number {
+    font-size: 100px;
+
+    top: 110px;
+  }
+
+  .process-content {
+    padding: 5px 25px 30px;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+  .process-section {
+    padding: 90px 20px;
+  }
+
+  .process-header {
+    margin-bottom: 55px;
+  }
+
+  .process-header h2 {
+    font-size: 45px;
+
+    letter-spacing: -2px;
+  }
+
+  .process-track {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .process-item {
+    width: 100%;
+
+    min-height: 350px;
+
+    box-sizing: border-box;
+  }
+
+  .process-image {
+    height: 160px;
+  }
+
+  .process-number {
+    top: 110px;
+
+    font-size: 100px;
+  }
+
+  .process-content {
+    padding: 5px 30px 30px;
+  }
+
+  .process-arrow {
+    transform: rotate(90deg);
+
+    height: 35px;
+  }
+
+  .process-bottom {
+    flex-wrap: wrap;
+
+    margin-top: 50px;
+
+    text-align: center;
+  }
+
+}
 
 
 /* =========================
@@ -482,6 +811,120 @@ section {
   .section-header h2,
   .contact h2 {
     font-size: 40px;
+  }
+
+}
+/* =========================
+   MARCAS
+========================= */
+
+.brands {
+  width: 100%;
+
+  overflow: hidden;
+
+  padding: 25px 0;
+
+  background-color: #07111f;
+
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+
+/* =========================
+   TRACK
+========================= */
+
+.brands-track {
+  display: flex;
+
+  align-items: center;
+
+  width: max-content;
+
+  gap: 90px;
+
+  animation: brands-scroll 25s linear infinite;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.brand {
+  width: 150px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  opacity: 0.65;
+
+  transition: opacity 0.3s ease;
+}
+
+.brand:hover {
+  opacity: 1;
+}
+
+.brand img {
+  max-width: 150px;
+  max-height: 85px;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+}
+
+
+/* =========================
+   ANIMACIÓN
+========================= */
+
+@keyframes brands-scroll {
+
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+
+}
+
+
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .brands {
+    padding: 30px 0;
+  }
+
+  .brands-track {
+    gap: 55px;
+
+    animation-duration: 20s;
+  }
+
+  .brand {
+    width: 110px;
+  }
+
+  .brand img {
+    max-width: 110px;
+    max-height: 45px;
   }
 
 }
