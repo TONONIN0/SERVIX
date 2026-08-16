@@ -20,19 +20,19 @@ export default function Navbar() {
       {/* LINKS DESKTOP */}
       <div className="navbar-links">
 
-        <a href="Servicios">
+        <a href="/Servicios">
           Servicios
         </a>
 
-        <a href="Como-funciona">
+        <a href="/Como-funciona">
           Productos
         </a>
 
-        <a href="Solicitar">
+        <a href="/Solicitar">
           Solicitar
         </a>
 
-        <a href="Contacto">
+        <a href="/Contacto">
           Contacto
         </a>
 
@@ -41,7 +41,7 @@ export default function Navbar() {
 
       {/* BOTÓN DESKTOP */}
       <a
-        href="/login"
+        href="/registro"
         className="navbar-button"
       >
         Iniciar sesión
@@ -95,7 +95,7 @@ export default function Navbar() {
 
         {/* LOGIN */}
         <a
-          href="/login"
+          href="/registro"
           className="mobile-menu-button"
           onClick={cerrarMenu}
         >

@@ -1,0 +1,61 @@
+---
+import Register from '../components/Register.jsx';
+import '../styles/Register.css';
+---
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Crear cuenta | SERVIX</title>
+
+</head>
+
+
+<body>
+
+  <main class="register-page">
+
+    <div class="register-container">
+
+      <div class="register-header">
+
+        <a href="/" class="register-logo">
+          SERVI<span>X</span>
+        </a>
+
+        <span class="register-label">
+          CREAR CUENTA
+        </span>
+
+        <h1>
+          Únete a
+          <span>SERVIX.</span>
+        </h1>
+
+        <p>
+          Crea tu cuenta para comenzar a gestionar
+          tus solicitudes y entregas.
+        </p>
+
+      </div>
+
+
+      <Register client:load />
+
+    </div>
+
+  </main>
+
+</body>
+
+</html>
