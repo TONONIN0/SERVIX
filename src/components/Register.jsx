@@ -2,78 +2,111 @@ import { useState } from 'react';
 
 export default function Register() {
 
-  const [form, setForm] = useState({
-    nombre: '',
-    email: '',
-    password: '',
-    confirmarPassword: '',
-  });
+  const [nombre, setNombre] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
+  const registrarUsuario = async (e) => {
 
-  const handleChange = (e) => {
+    e.preventDefault();
 
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setError('');
 
-  };
+    // =========================
+    // VALIDAR CONTRASEÑAS
+    // =========================
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+    if (password !== confirmPassword) {
 
-  setError('');
-  setSuccess('');
+      setError(
+        'Las contraseñas no coinciden.'
+      );
 
-  if (form.password !== form.confirmarPassword) {
-    setError('Las contraseñas no coinciden');
-    return;
-  }
-
-  setLoading(true);
-
-  try {
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        nombre: form.nombre,
-        email: form.email,
-        password: form.password,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      setError(data.error || 'No se pudo crear la cuenta');
       return;
     }
 
-    setSuccess('¡Cuenta creada correctamente!');
+    // =========================
+    // VALIDAR PASSWORD
+    // =========================
 
-  } catch (error) {
-    console.error(error);
-    setError('No se pudo conectar con el servidor');
+    if (password.length < 6) {
 
-  } finally {
-    setLoading(false);
-  }
-};
+      setError(
+        'La contraseña debe tener al menos 6 caracteres.'
+      );
+
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+
+      const response = await fetch('/api/register', {
+
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          nombre,
+          email,
+          password,
+        }),
+
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+
+        setError(
+          data.error ||
+          'No fue posible crear la cuenta.'
+        );
+
+        return;
+      }
+
+      // =========================
+      // REGISTRO CORRECTO
+      // =========================
+
+      window.location.href = '/login';
+
+    } catch (error) {
+
+      console.error(error);
+
+      setError(
+        'No fue posible conectarse con el servidor.'
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
 
 
   return (
 
     <form
-      className="register-form"
-      onSubmit={handleSubmit}
+      className="login-form"
+      onSubmit={registrarUsuario}
     >
+
+      {/* =========================
+          NOMBRE
+      ========================= */}
 
       <div className="form-group">
 
@@ -83,16 +116,21 @@ const handleSubmit = async (e) => {
 
         <input
           id="nombre"
-          name="nombre"
           type="text"
           placeholder="Tu nombre"
-          value={form.nombre}
-          onChange={handleChange}
+          value={nombre}
+          onChange={(e) =>
+            setNombre(e.target.value)
+          }
           required
         />
 
       </div>
 
+
+      {/* =========================
+          EMAIL
+      ========================= */}
 
       <div className="form-group">
 
@@ -102,16 +140,21 @@ const handleSubmit = async (e) => {
 
         <input
           id="email"
-          name="email"
           type="email"
           placeholder="correo@empresa.com"
-          value={form.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
           required
         />
 
       </div>
 
+
+      {/* =========================
+          PASSWORD
+      ========================= */}
 
       <div className="form-group">
 
@@ -121,68 +164,88 @@ const handleSubmit = async (e) => {
 
         <input
           id="password"
-          name="password"
           type="password"
-          placeholder="Mínimo 6 caracteres"
-          value={form.password}
-          onChange={handleChange}
-          minLength={6}
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) =>
+            setPassword(e.target.value)
+          }
           required
         />
 
       </div>
 
 
+      {/* =========================
+          CONFIRMAR PASSWORD
+      ========================= */}
+
       <div className="form-group">
 
-        <label htmlFor="confirmarPassword">
+        <label htmlFor="confirmPassword">
           Confirmar contraseña
         </label>
 
         <input
-          id="confirmarPassword"
-          name="confirmarPassword"
+          id="confirmPassword"
           type="password"
-          placeholder="Repite tu contraseña"
-          value={form.confirmarPassword}
-          onChange={handleChange}
+          placeholder="••••••••"
+          value={confirmPassword}
+          onChange={(e) =>
+            setConfirmPassword(e.target.value)
+          }
           required
         />
 
       </div>
 
 
+      {/* =========================
+          ERROR
+      ========================= */}
+
       {error && (
-        <p className="form-error">
+
+        <div className="login-error">
           {error}
-        </p>
+        </div>
+
       )}
 
 
-      {success && (
-        <p className="form-success">
-          {success}
-        </p>
-      )}
-
+      {/* =========================
+          BOTÓN
+      ========================= */}
 
       <button
         type="submit"
+        className="login-button"
         disabled={loading}
       >
-        {loading ? 'Creando cuenta...' : 'Crear cuenta'}
+
+        {loading
+          ? 'Creando cuenta...'
+          : 'Crear cuenta →'
+        }
+
       </button>
 
 
-      <p className="login-link">
+      {/* =========================
+          LOGIN
+      ========================= */}
 
-        ¿Ya tienes una cuenta?
+      <div className="login-register">
+
+        <span>
+          ¿Ya tienes una cuenta?
+        </span>
 
         <a href="/login">
-          Inicia sesión
+          Iniciar sesión
         </a>
 
-      </p>
+      </div>
 
     </form>
 

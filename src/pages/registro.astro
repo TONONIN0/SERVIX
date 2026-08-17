@@ -1,61 +1,59 @@
 ---
+export const prerender = false;
+
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
 import Register from '../components/Register.jsx';
-import '../styles/Register.css';
+import Footer from '../components/Footer.jsx';
+
+import '../styles/login.css';
 ---
 
-<!DOCTYPE html>
+<Layout>
 
-<html lang="es">
+  <Navbar client:load />
 
-<head>
+  <main class="login-page">
 
-  <meta charset="UTF-8" />
+    <!-- ELEMENTOS DECORATIVOS -->
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+    <div class="login-background-circle circle-one"></div>
+    <div class="login-background-circle circle-two"></div>
 
-  <title>Crear cuenta | SERVIX</title>
+    <!-- REGISTRO -->
 
-</head>
+    <section class="login-container">
 
+      <div class="login-content">
 
-<body>
+        <!-- HEADER -->
 
-  <main class="register-page">
+        <div class="login-header">
 
-    <div class="register-container">
+          <span class="login-label">
+            SERVIX
+          </span>
 
-      <div class="register-header">
+          <h1>
+            Crea tu
+            <span>cuenta.</span>
+          </h1>
 
-        <a href="/" class="register-logo">
-          SERVI<span>X</span>
-        </a>
+          <p>
+            Regístrate para comenzar a gestionar tus
+            solicitudes y entregas.
+          </p>
 
-        <span class="register-label">
-          CREAR CUENTA
-        </span>
+        </div>
 
-        <h1>
-          Únete a
-          <span>SERVIX.</span>
-        </h1>
+        <!-- FORMULARIO -->
 
-        <p>
-          Crea tu cuenta para comenzar a gestionar
-          tus solicitudes y entregas.
-        </p>
+        <Register client:load />
 
       </div>
 
-
-      <Register client:load />
-
-    </div>
+    </section>
 
   </main>
-
-</body>
-
-</html>
+  <Footer />
+</Layout>
