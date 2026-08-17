@@ -26,11 +26,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
+    const emailNormalizado = email.toLowerCase().trim();
+
     console.log('🔎 Buscando usuario...');
 
     const usuario = await prisma.user.findUnique({
       where: {
-        email,
+        email: emailNormalizado,
       },
     });
 
@@ -69,7 +71,35 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
-    console.log('✅ Login correcto');
+    // =========================
+    // VERIFICAR CORREO
+    // =========================
+
+    if (!usuario.emailVerified) {
+      console.log('⚠️ Correo no verificado');
+
+      return new Response(
+        JSON.stringify({
+          error: 'Debes verificar tu correo antes de iniciar sesión.',
+          email: usuario.email,
+          emailVerified: false,
+        }),
+        {
+          status: 403,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    }
+
+    console.log('✅ Correo verificado');
+
+    // =========================
+    // CREAR SESIÓN
+    // =========================
+
+    console.log('🎉 Login correcto');
 
     cookies.set('servix_session', String(usuario.id), {
       httpOnly: true,
@@ -113,3 +143,4 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     );
   }
 };
+

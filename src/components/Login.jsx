@@ -7,12 +7,15 @@ export default function Login() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [correoNoVerificado, setCorreoNoVerificado] = useState(false);
+
 
   const iniciarSesion = async (e) => {
 
     e.preventDefault();
 
     setError('');
+    setCorreoNoVerificado(false);
     setLoading(true);
 
     try {
@@ -32,10 +35,47 @@ export default function Login() {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        setError(data.error || 'No se pudo iniciar sesión.');
+
+      // =========================
+      // CORREO NO VERIFICADO
+      // =========================
+
+      if (response.status === 403) {
+
+        localStorage.setItem(
+          'servix_verification_email',
+          data.email || email.toLowerCase().trim()
+        );
+
+        setError(
+          data.error ||
+          'Debes verificar tu correo antes de iniciar sesión.'
+        );
+
+        setCorreoNoVerificado(true);
+
         return;
       }
+
+
+      // =========================
+      // OTROS ERRORES
+      // =========================
+
+      if (!response.ok) {
+
+        setError(
+          data.error ||
+          'No se pudo iniciar sesión.'
+        );
+
+        return;
+      }
+
+
+      // =========================
+      // LOGIN CORRECTO
+      // =========================
 
       window.location.href = '/';
 
@@ -50,9 +90,23 @@ export default function Login() {
     } finally {
 
       setLoading(false);
-
     }
 
+  };
+
+
+  // =========================
+  // IR A VERIFICACIÓN
+  // =========================
+
+  const irAVerificarCorreo = () => {
+
+    localStorage.setItem(
+      'servix_verification_email',
+      email.toLowerCase().trim()
+    );
+
+    window.location.href = '/verificar-correo';
   };
 
 
@@ -122,6 +176,21 @@ export default function Login() {
       )}
 
 
+      {/* VERIFICAR CORREO */}
+
+      {correoNoVerificado && (
+
+        <button
+          type="button"
+          className="verify-email-button"
+          onClick={irAVerificarCorreo}
+        >
+          Verificar correo
+        </button>
+
+      )}
+
+
       {/* BOTÓN */}
 
       <button
@@ -157,3 +226,4 @@ export default function Login() {
   );
 
 }
+

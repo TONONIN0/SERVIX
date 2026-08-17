@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import bcrypt from 'bcryptjs';
 import prisma from '../../lib/prisma';
+import { enviarCodigoVerificacion } from '../../lib/email';
 
 export const prerender = false;
 
@@ -82,17 +83,42 @@ const body = JSON.parse(text);
 
     console.log('🔐 Creando hash...');
 
-    const passwordHash = await bcrypt.hash(password, 10);
+        const passwordHash = await bcrypt.hash(password, 10);
 
-    console.log('💾 Creando usuario en MySQL...');
+        console.log('🔢 Generando código de verificación...');
 
-    const usuario = await prisma.user.create({
-      data: {
-        nombre: nombre.trim(),
-        email: emailNormalizado,
-        password: passwordHash,
-      },
-    });
+        const verificationCode = Math.floor(
+          100000 + Math.random() * 900000
+        ).toString();
+
+        const verificationCodeExpires = new Date(
+          Date.now() + 10 * 60 * 1000
+        );
+
+        console.log('💾 Creando usuario en MySQL...');
+
+        const usuario = await prisma.user.create({
+          data: {
+            nombre: nombre.trim(),
+            email: emailNormalizado,
+            password: passwordHash,
+
+            emailVerified: false,
+
+            verificationCode,
+            verificationCodeExpires,
+          },
+        });
+
+      console.log('📧 Enviando código de verificación...');
+
+      await enviarCodigoVerificacion(
+        usuario.email,
+        usuario.nombre,
+        verificationCode
+      );
+
+      console.log('✅ Código enviado al correo');
 
     console.log('✅ Usuario creado:', usuario.id);
 

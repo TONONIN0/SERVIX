@@ -1,0 +1,214 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/verificar-correo.css';
+---
+
+<Layout>
+
+  <main class="verify-page">
+
+    <div class="verify-card">
+
+      <a href="/" class="verify-logo">
+        SERVI<span>X</span>
+      </a>
+
+      <div class="verify-icon">
+        ✉
+      </div>
+
+      <h1>Verifica tu correo</h1>
+
+      <p class="verify-description">
+        Hemos enviado un código de verificación de 6 dígitos
+        a tu correo electrónico.
+      </p>
+
+      <p class="verify-email" id="email-text">
+        tu correo
+      </p>
+
+      <form id="verify-form">
+
+        <label for="codigo">
+          Código de verificación
+        </label>
+
+        <input
+          id="codigo"
+          name="codigo"
+          type="text"
+          inputmode="numeric"
+          maxlength="6"
+          autocomplete="one-time-code"
+          placeholder="000000"
+          required
+        />
+
+        <button type="submit">
+          Verificar correo
+        </button>
+
+      </form>
+
+      <p id="mensaje" class="message"></p>
+
+      <div class="resend-section">
+
+        <span>¿No recibiste el código?</span>
+
+        <button id="resend-button" type="button">
+          Reenviar código
+        </button>
+
+      </div>
+
+      <a href="/login" class="back-login">
+        Volver a iniciar sesión
+      </a>
+
+    </div>
+
+  </main>
+
+</Layout>
+
+<script>
+  const form = document.getElementById('verify-form');
+  const codigoInput = document.getElementById('codigo');
+  const mensaje = document.getElementById('mensaje');
+  const resendButton = document.getElementById('resend-button');
+  const emailText = document.getElementById('email-text');
+
+  const email = localStorage.getItem('servix_verification_email');
+
+  if (!email) {
+    window.location.href = '/registro';
+  } else {
+    emailText.textContent = email;
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const codigo = codigoInput.value.trim();
+
+    if (codigo.length !== 6) {
+      mensaje.textContent = 'Introduce un código de 6 dígitos.';
+      mensaje.className = 'message error';
+      return;
+    }
+
+    mensaje.textContent = 'Verificando...';
+    mensaje.className = 'message';
+
+    try {
+
+      const response = await fetch('/api/verify-email', {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          email,
+          codigo,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        mensaje.textContent = data.error || 'Código incorrecto.';
+        mensaje.className = 'message error';
+        return;
+      }
+
+      mensaje.textContent = '¡Correo verificado correctamente!';
+      mensaje.className = 'message success';
+
+      localStorage.removeItem('servix_verification_email');
+
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1500);
+
+    } catch (error) {
+
+      console.error(error);
+
+      mensaje.textContent =
+        'No se pudo conectar con el servidor.';
+
+      mensaje.className = 'message error';
+    }
+  });
+
+  resendButton?.addEventListener('click', async () => {
+
+    if (!email) {
+      return;
+    }
+
+    resendButton.disabled = true;
+    resendButton.textContent = 'Enviando...';
+
+    mensaje.textContent = '';
+    mensaje.className = 'message';
+
+    try {
+
+      const response = await fetch('/api/resend-code', {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+
+        mensaje.textContent =
+          data.error || 'No se pudo reenviar el código.';
+
+        mensaje.className = 'message error';
+
+        resendButton.disabled = false;
+        resendButton.textContent = 'Reenviar código';
+
+        return;
+      }
+
+      mensaje.textContent =
+        'Te enviamos un nuevo código.';
+
+      mensaje.className = 'message success';
+
+      resendButton.textContent = 'Código enviado';
+
+      setTimeout(() => {
+        resendButton.disabled = false;
+        resendButton.textContent = 'Reenviar código';
+      }, 30000);
+
+    } catch (error) {
+
+      console.error(error);
+
+      mensaje.textContent =
+        'No se pudo conectar con el servidor.';
+
+      mensaje.className = 'message error';
+
+      resendButton.disabled = false;
+      resendButton.textContent = 'Reenviar código';
+    }
+  });
+</script>

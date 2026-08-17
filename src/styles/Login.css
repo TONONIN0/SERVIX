@@ -488,3 +488,84 @@ body {
   }
 
 }
+
+/* =========================
+   BOTÓN VERIFICAR CORREO
+========================= */
+
+.verify-email-button {
+  width: 100%;
+  height: 52px;
+
+  margin-top: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border: 1px solid rgba(111, 190, 68, 0.45);
+  border-radius: 12px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(111, 190, 68, 0.14),
+    rgba(111, 190, 68, 0.06)
+  );
+
+  color: #6FBE44;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+
+  letter-spacing: 0.2px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.12);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+}
+
+.verify-email-button::before {
+  content: '✉';
+
+  font-size: 17px;
+
+  transition: transform 0.25s ease;
+}
+
+.verify-email-button:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(111, 190, 68, 0.22),
+    rgba(111, 190, 68, 0.10)
+  );
+
+  border-color: rgba(111, 190, 68, 0.8);
+
+  box-shadow:
+    0 6px 22px rgba(111, 190, 68, 0.14);
+
+  transform: translateY(-1px);
+}
+
+.verify-email-button:hover::before {
+  transform: translateY(-1px);
+}
+
+.verify-email-button:active {
+  transform: translateY(0);
+}
+
+.verify-email-button:focus-visible {
+  outline: 2px solid #6FBE44;
+  outline-offset: 3px;
+}
+

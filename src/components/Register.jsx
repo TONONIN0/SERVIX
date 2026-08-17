@@ -78,7 +78,12 @@ export default function Register() {
       // REGISTRO CORRECTO
       // =========================
 
-      window.location.href = '/login';
+        localStorage.setItem(
+        'servix_verification_email',
+        email.toLowerCase().trim()
+      );
+
+      window.location.href = '/verificar-correo';
 
     } catch (error) {
 
