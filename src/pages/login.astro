@@ -1,28 +1,50 @@
 ---
+export const prerender = false;
+
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
 import Login from '../components/Login.jsx';
 
-export const prerender = false;
+import '../styles/login.css';
 ---
 
-<html lang="es">
+<Layout>
 
-  <head>
+  <Navbar client:load />
 
-    <meta charset="UTF-8" />
+  <main class="login-page">
 
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <div class="login-background-circle circle-one"></div>
+    <div class="login-background-circle circle-two"></div>
 
-    <title>Iniciar sesión | SERVIX</title>
+    <section class="login-container">
 
-  </head>
+      <div class="login-content">
 
-  <body>
+        <div class="login-header">
 
-    <Login client:load />
+          <span class="login-label">
+            SERVIX
+          </span>
 
-  </body>
+          <h1>
+            Bienvenido
+            <span>de nuevo.</span>
+          </h1>
 
-</html>
+          <p>
+            Ingresa a tu cuenta para continuar
+            gestionando tus solicitudes.
+          </p>
+
+        </div>
+
+        <Login client:load />
+
+      </div>
+
+    </section>
+
+  </main>
+
+</Layout>

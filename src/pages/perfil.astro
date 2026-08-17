@@ -1,0 +1,204 @@
+---
+export const prerender = false;
+
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.jsx';
+import '../styles/perfil.css';
+
+import prisma from '../lib/prisma';
+
+const session = Astro.cookies.get('servix_session');
+
+let usuario = null;
+
+if (session) {
+  const userId = Number(session.value);
+
+  if (!isNaN(userId)) {
+    usuario = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        nombre: true,
+        email: true,
+        createdAt: true,
+      },
+    });
+  }
+}
+
+/*
+  Si no hay sesión, mandamos al login
+*/
+
+if (!usuario) {
+  return Astro.redirect('/login');
+}
+---
+
+<Layout>
+
+  <Navbar
+    client:load
+    usuario={usuario}
+  />
+
+  <main class="profile-page">
+
+    <section class="profile-section">
+
+      <div class="profile-header">
+
+        <span class="section-label">
+          MI CUENTA
+        </span>
+
+        <h1>
+          Hola, <span>{usuario.nombre}</span>.
+        </h1>
+
+        <p>
+          Administra tu información y consulta tu actividad
+          dentro de SERVIX.
+        </p>
+
+      </div>
+
+
+      <div class="profile-grid">
+
+        <!-- INFORMACIÓN DEL USUARIO -->
+
+        <article class="profile-card">
+
+          <div class="profile-card-top">
+
+            <div class="profile-avatar">
+              {usuario.nombre.charAt(0).toUpperCase()}
+            </div>
+
+            <div>
+              <span class="profile-tag">
+                USUARIO
+              </span>
+
+              <h2>
+                {usuario.nombre}
+              </h2>
+            </div>
+
+          </div>
+
+
+          <div class="profile-info">
+
+            <div class="info-item">
+
+              <span>
+                NOMBRE
+              </span>
+
+              <strong>
+                {usuario.nombre}
+              </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+              <span>
+                CORREO
+              </span>
+
+              <strong>
+                {usuario.email}
+              </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+              <span>
+                MIEMBRO DESDE
+              </span>
+
+              <strong>
+                {usuario.createdAt.toLocaleDateString('es-MX')}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </article>
+
+
+        <!-- CARRITO -->
+
+        <article class="profile-card profile-cart">
+
+          <div class="profile-card-number">
+            01
+          </div>
+
+          <span class="profile-tag">
+            CARRITO
+          </span>
+
+          <h2>
+            Tus productos.
+          </h2>
+
+          <p>
+            Aquí aparecerán las refacciones, materiales y
+            componentes que agregues a tu carrito.
+          </p>
+
+          <a href="/carrito" class="profile-button">
+            Ver carrito →
+          </a>
+
+        </article>
+
+
+        <!-- PEDIDOS -->
+
+        <article class="profile-card">
+
+          <div class="profile-card-number">
+            02
+          </div>
+
+          <span class="profile-tag">
+            PEDIDOS
+          </span>
+
+          <h2>
+            Tus pedidos.
+          </h2>
+
+          <p>
+            Consulta próximamente el estado y el historial
+            de tus solicitudes y entregas.
+          </p>
+
+          <a href="/solicitar" class="profile-button">
+            Solicitar entrega →
+          </a>
+
+        </article>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <Footer />
+
+</Layout>

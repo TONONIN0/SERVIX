@@ -1,4 +1,3 @@
-
 .navbar {
   width: 100%;
   height: 75px;
@@ -20,14 +19,19 @@
 }
 
 
-/* LOGO */
+/* =========================
+   LOGO
+========================= */
 
 .navbar-logo {
   text-decoration: none;
+
   font-family: Arial, Helvetica, sans-serif;
   font-size: 36px;
   font-weight: 700;
+
   color: #f5f7fa;
+
   letter-spacing: -2px;
 }
 
@@ -36,17 +40,21 @@
 }
 
 
-/* LINKS */
+/* =========================
+   LINKS
+========================= */
 
 .navbar-links {
   display: flex;
   align-items: center;
+
   gap: 35px;
   margin-left: 40px;
 }
 
 .navbar-links a {
   text-decoration: none;
+
   color: #c8d0dc;
 
   font-family: Arial, Helvetica, sans-serif;
@@ -61,10 +69,13 @@
 }
 
 
-/* BOTÓN */
+/* =========================
+   BOTÓN
+========================= */
 
 .navbar-button {
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -72,11 +83,13 @@
   height: 50px;
 
   background-color: #6FBE44;
+
   color: #061019;
 
   text-decoration: none;
 
   font-family: Arial, Helvetica, sans-serif;
+
   font-size: 17px;
   font-weight: 700;
 
@@ -89,15 +102,155 @@
 
 .navbar-button:hover {
   background-color: #6FBE44;
+
   transform: translateY(-2px);
 }
 
 
-/* RESPONSIVE */
+/* =========================
+   ÁREA USUARIO
+========================= */
+
+.navbar-user-area {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+
+/* =========================
+   USUARIO
+========================= */
+
+.navbar-user {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: #f5f7fa;
+
+  text-decoration: none;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  transition: color 0.2s ease;
+}
+
+.navbar-user:hover {
+  color: #6FBE44;
+}
+
+
+/* =========================
+   ICONO USUARIO
+========================= */
+
+.user-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  background-color: rgba(111, 190, 68, 0.12);
+
+  border: 1px solid rgba(111, 190, 68, 0.35);
+
+  color: #6FBE44;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* =========================
+   CARRITO
+========================= */
+
+.navbar-cart {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 10px;
+
+  background-color: #0a1625;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  color: #f5f7fa;
+
+  text-decoration: none;
+
+  font-size: 18px;
+
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.navbar-cart:hover {
+  border-color: rgba(111, 190, 68, 0.5);
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================
+   CONTADOR CARRITO
+========================= */
+
+.cart-count {
+  position: absolute;
+
+  top: -6px;
+  right: -6px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background-color: #6FBE44;
+
+  color: #07111f;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+
+/* =========================
+   RESPONSIVE TABLET
+========================= */
 
 @media (max-width: 1100px) {
+
   .navbar {
     height: 70px;
+
     padding: 0 20px;
   }
 
@@ -107,6 +260,7 @@
 
   .navbar-links {
     gap: 22px;
+
     margin-left: 20px;
   }
 
@@ -116,33 +270,16 @@
 
   .navbar-button {
     min-width: 160px;
+
     height: 46px;
+
     font-size: 15px;
+
     border-radius: 10px;
   }
+
 }
 
-
-@media (max-width: 800px) {
-  .navbar-links {
-    display: none;
-  }
-
-  .navbar {
-    height: 65px;
-    padding: 0 20px;
-  }
-
-  .navbar-logo {
-    font-size: 30px;
-  }
-
-  .navbar-button {
-    min-width: 140px;
-    height: 42px;
-    font-size: 14px;
-  }
-}
 
 /* =========================
    MENÚ HAMBURGUESA
@@ -157,13 +294,19 @@
   padding: 8px;
 
   background: transparent;
+
   border: none;
 
   cursor: pointer;
 
   flex-direction: column;
+
+  align-items: center;
   justify-content: center;
+
   gap: 5px;
+
+  flex-shrink: 0;
 
   z-index: 1001;
 }
@@ -183,7 +326,187 @@
     opacity 0.3s ease;
 }
 
+/* =========================
+   PERFIL DESKTOP
+========================= */
 
+.profile-container {
+  position: relative;
+}
+
+
+/* BOTÓN DEL USUARIO */
+
+.navbar-user {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 5px 8px;
+
+  background: transparent;
+
+  border: none;
+
+  color: #f5f7fa;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  border-radius: 10px;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.navbar-user:hover {
+  background-color: rgba(255,255,255,0.05);
+
+  color: #6FBE44;
+}
+
+
+/* FLECHA */
+
+.profile-arrow {
+  color: #718096;
+
+  font-size: 13px;
+
+  transition: transform 0.2s ease;
+}
+
+.profile-arrow.open {
+  transform: rotate(180deg);
+}
+
+
+/* =========================
+   DROPDOWN
+========================= */
+
+.profile-dropdown {
+  position: absolute;
+
+  top: calc(100% + 12px);
+
+  right: 0;
+
+  width: 210px;
+
+  padding: 8px;
+
+  background-color: #0a1625;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,0.35);
+
+  z-index: 1100;
+}
+
+
+/* LINKS */
+
+.profile-dropdown a {
+  display: block;
+
+  padding: 12px;
+
+  color: #c8d0dc;
+
+  text-decoration: none;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  border-radius: 8px;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.profile-dropdown a:hover {
+  background-color: rgba(111,190,68,0.08);
+
+  color: #6FBE44;
+}
+
+
+/* DIVISOR */
+
+.profile-divider {
+  height: 1px;
+
+  margin: 6px 4px;
+
+  background-color: rgba(255,255,255,0.08);
+}
+
+
+/* CERRAR SESIÓN */
+
+.logout-button {
+  width: 100%;
+
+  padding: 12px;
+
+  background: transparent;
+
+  border: none;
+
+  border-radius: 8px;
+
+  color: #ff6b6b;
+
+  text-align: left;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: rgba(255,107,107,0.08);
+
+  color: #ff8585;
+}
+
+@media (max-width: 800px) {
+
+  .profile-container {
+    display: none;
+  }
+
+  .navbar-user-area {
+    margin-left: auto;
+    margin-right: 5px;
+  }
+
+}
 /* =========================
    ANIMACIÓN HAMBURGUESA
 ========================= */
@@ -217,26 +540,100 @@
 @media (max-width: 800px) {
 
   .navbar {
-    position: relative;
+    position: fixed;
+
+    height: 65px;
+
+    padding: 0 15px;
   }
 
-  /* Ocultamos navegación normal */
+
+  /* LOGO */
+
+  .navbar-logo {
+    font-size: 30px;
+  }
+
+
+  /* OCULTAMOS LINKS */
 
   .navbar-links {
     display: none;
   }
 
+
+  /* OCULTAMOS BOTÓN DESKTOP */
+
   .navbar-button {
     display: none;
   }
 
-  /* Mostramos hamburguesa */
+
+  /* =========================
+     ÁREA USUARIO + CARRITO
+  ========================= */
+
+  .navbar-user-area {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-left: auto;
+
+    margin-right: 5px;
+  }
+
+
+  /* USUARIO */
+
+  .navbar-user {
+    gap: 0;
+
+    font-size: 13px;
+  }
+
+
+  /* SOLO MOSTRAMOS LA INICIAL */
+
+  .navbar-user > span:not(.user-icon) {
+    display: none;
+  }
+
+
+  /* ICONO */
+
+  .user-icon {
+    width: 32px;
+    height: 32px;
+
+    font-size: 13px;
+  }
+
+
+  /* CARRITO */
+
+  .navbar-cart {
+    width: 38px;
+    height: 38px;
+
+    font-size: 17px;
+  }
+
+
+  /* =========================
+     HAMBURGUESA
+  ========================= */
 
   .menu-toggle {
     display: flex;
   }
 
-  /* Menú desplegable */
+
+  /* =========================
+     MENÚ DESPLEGABLE
+  ========================= */
 
   .mobile-menu {
     position: absolute;
@@ -249,6 +646,7 @@
     background-color: #07111f;
 
     display: flex;
+
     flex-direction: column;
 
     padding: 20px;
@@ -256,6 +654,7 @@
     box-sizing: border-box;
 
     opacity: 0;
+
     visibility: hidden;
 
     transform: translateY(-10px);
@@ -269,17 +668,18 @@
   }
 
 
-  /* Menú abierto */
+  /* MENÚ ABIERTO */
 
   .mobile-menu.open {
     opacity: 1;
+
     visibility: visible;
 
     transform: translateY(0);
   }
 
 
-  /* Links */
+  /* LINKS */
 
   .mobile-menu a {
     text-decoration: none;
@@ -293,18 +693,30 @@
 
     padding: 15px 10px;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
 
     transition: color 0.2s ease;
   }
-
 
   .mobile-menu a:hover {
     color: #6FBE44;
   }
 
 
-  /* Botón del menú */
+  /* =========================
+     USUARIO EN MENÚ
+  ========================= */
+
+  .mobile-menu .mobile-user {
+    color: #6FBE44;
+
+    border-bottom: 1px solid rgba(111,190,68,0.15);
+  }
+
+
+  /* =========================
+     BOTÓN MENÚ
+  ========================= */
 
   .mobile-menu .mobile-menu-button {
     margin-top: 15px;
@@ -329,10 +741,53 @@
 
   .mobile-menu .mobile-menu-button:hover {
     color: #061019;
+
     background-color: #6FBE44;
   }
+
 }
+
+
+/* =========================
+   MAIN
+========================= */
 
 main {
   padding-top: 75px;
+}
+
+/* =========================
+   CERRAR SESIÓN
+========================= */
+
+.mobile-logout {
+  width: 100%;
+
+  margin-top: 15px;
+
+  padding: 15px 10px;
+
+  background: transparent;
+
+  border: none;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  color: #ff6b6b;
+
+  text-align: left;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 18px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+.mobile-logout:hover {
+  color: #ff8585;
 }

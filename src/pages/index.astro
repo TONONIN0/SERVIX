@@ -1,14 +1,38 @@
-
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import '../styles/index.css';
+import prisma from '../lib/prisma';
+const session = Astro.cookies.get('servix_session');
+
+let usuario = null;
+
+if (session) {
+  const userId = Number(session.value);
+
+  usuario = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      nombre: true,
+      email: true,
+    },
+  });
+}
 ---
+
+  
 
 <Layout>
 
-  <Navbar client:load />
+ 
+  <Navbar
+    client:load
+    usuario={usuario}
+  />
 
   <main>
 

@@ -1,23 +1,50 @@
 import { useState } from 'react';
 import '../styles/Navbar.css';
 
-export default function Navbar() {
+export default function Navbar({ usuario = null }) {
+
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const cerrarMenu = () => {
     setMenuOpen(false);
   };
 
+  const cerrarSesion = async () => {
+
+    try {
+
+      await fetch('/api/logout', {
+        method: 'POST',
+      });
+
+      window.location.href = '/login';
+
+    } catch (error) {
+
+      console.error('Error al cerrar sesión:', error);
+
+    }
+
+  };
+
   return (
+
     <nav className="navbar">
 
-      {/* LOGO */}
+      {/* =========================
+          LOGO
+      ========================= */}
+
       <a href="/" className="navbar-logo">
         SERVI<span>X</span>
       </a>
 
 
-      {/* LINKS DESKTOP */}
+      {/* =========================
+          LINKS DESKTOP
+      ========================= */}
+
       <div className="navbar-links">
 
         <a href="/Servicios">
@@ -39,71 +66,221 @@ export default function Navbar() {
       </div>
 
 
-      {/* BOTÓN DESKTOP */}
-      <a
-        href="/registro"
-        className="navbar-button"
-      >
-        Iniciar sesión
-      </a>
+      {/* =========================
+          ZONA DERECHA DESKTOP
+      ========================= */}
+
+      <div className="navbar-user-area">
+
+        {usuario ? (
+
+          <>
+
+            {/* PERFIL */}
+
+            <div className="profile-container">
+
+              <button
+                className="navbar-user"
+                onClick={() => setProfileOpen(!profileOpen)}
+                aria-expanded={profileOpen}
+              >
+
+                <span className="user-icon">
+                  {usuario.nombre.charAt(0).toUpperCase()}
+                </span>
+
+                <span className="user-name">
+                  {usuario.nombre}
+                </span>
+
+                <span
+                  className={`profile-arrow ${
+                    profileOpen ? 'open' : ''
+                  }`}
+                >
+                  ▾
+                </span>
+
+              </button>
 
 
-      {/* BOTÓN HAMBURGUESA */}
+              {/* MENÚ PERFIL */}
+
+              {profileOpen && (
+
+                <div className="profile-dropdown">
+
+                  <a href="/perfil">
+                    👤 Mi perfil
+                  </a>
+
+                  <a href="/carrito">
+                    🛒 Carrito
+                  </a>
+
+                  <div className="profile-divider"></div>
+
+                  <button
+                    className="logout-button"
+                    onClick={cerrarSesion}
+                  >
+                    Cerrar sesión
+                  </button>
+
+                </div>
+
+              )}
+
+            </div>
+
+
+            {/* CARRITO DESKTOP */}
+
+            <a
+              href="/carrito"
+              className="navbar-cart"
+              aria-label="Carrito"
+            >
+
+              🛒
+
+              <span className="cart-count">
+                0
+              </span>
+
+            </a>
+
+          </>
+
+        ) : (
+
+          /* USUARIO NO LOGUEADO */
+
+          <a
+            href="/login"
+            className="navbar-button"
+          >
+            Iniciar sesión
+          </a>
+
+        )}
+
+      </div>
+
+
+      {/* =========================
+          HAMBURGUESA
+      ========================= */}
+
       <button
-        className={`menu-toggle ${menuOpen ? 'active' : ''}`}
+        className={`menu-toggle ${
+          menuOpen ? 'active' : ''
+        }`}
         onClick={() => setMenuOpen(!menuOpen)}
         aria-label="Abrir menú"
         aria-expanded={menuOpen}
       >
+
         <span></span>
         <span></span>
         <span></span>
+
       </button>
 
 
-      {/* MENÚ MÓVIL */}
-      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+      {/* =========================
+          MENÚ MÓVIL
+      ========================= */}
+
+      <div
+        className={`mobile-menu ${
+          menuOpen ? 'open' : ''
+        }`}
+      >
 
         <a
-          href="Servicios"
+          href="/Servicios"
           onClick={cerrarMenu}
         >
           Servicios
         </a>
 
         <a
-          href="Como-funciona"
+          href="/Como-funciona"
           onClick={cerrarMenu}
         >
-          Cómo funciona
+          Productos
         </a>
 
         <a
-          href="Solicitar"
+          href="/Solicitar"
           onClick={cerrarMenu}
         >
           Solicitar
         </a>
 
         <a
-          href="Contacto"
+          href="/Contacto"
           onClick={cerrarMenu}
         >
           Contacto
         </a>
 
 
-        {/* LOGIN */}
-        <a
-          href="/registro"
-          className="mobile-menu-button"
-          onClick={cerrarMenu}
-        >
-          Iniciar sesión
-        </a>
+        {/* =========================
+            USUARIO LOGUEADO
+        ========================= */}
+
+        {usuario ? (
+
+          <>
+
+            <a
+              href="/perfil"
+              className="mobile-user"
+              onClick={cerrarMenu}
+            >
+              👤 {usuario.nombre}
+            </a>
+
+
+            <a
+              href="/carrito"
+              onClick={cerrarMenu}
+            >
+              🛒 Carrito
+            </a>
+
+
+            <button
+              className="mobile-logout"
+              onClick={cerrarSesion}
+            >
+              Cerrar sesión
+            </button>
+
+          </>
+
+        ) : (
+
+          /* =========================
+             NO LOGUEADO
+          ========================= */
+
+          <a
+            href="/login"
+            className="mobile-menu-button"
+            onClick={cerrarMenu}
+          >
+            Iniciar sesión
+          </a>
+
+        )}
 
       </div>
 
     </nav>
+
   );
 }
