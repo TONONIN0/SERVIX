@@ -791,3 +791,469 @@ main {
 .mobile-logout:hover {
   color: #ff8585;
 }
+
+
+/* =========================
+   CARGANDO SESIÓN
+========================= */
+
+.navbar-session-loading {
+
+  width: 120px;
+
+  height: 42px;
+
+}
+
+
+/* =========================
+   CARGANDO SESIÓN MÓVIL
+========================= */
+
+.mobile-session-loading {
+
+  width: 100%;
+
+  height: 45px;
+
+}
+
+
+/* =========================
+   ZONA DERECHA ESTABLE
+========================= */
+
+.navbar-user-area {
+
+  min-width: 190px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 18px;
+
+}
+
+
+/* =========================
+   CARGANDO SESIÓN
+========================= */
+
+.navbar-session-loading {
+
+  width: 190px;
+
+  height: 42px;
+
+}
+
+
+/* =========================
+   LINKS ESTABLES
+========================= */
+
+.navbar-links {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 35px;
+
+  white-space: nowrap;
+
+}
+
+.navbar-user {
+
+  min-width: 125px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  white-space: nowrap;
+
+}
+
+.user-name {
+
+  max-width: 110px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+}
+
+
+/* =========================
+   MENÚ MÓVIL
+========================= */
+
+.menu-toggle {
+  display: none;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 900px) {
+
+  .navbar-links {
+    display: none !important;
+  }
+
+  .navbar-user-area {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    margin-left: auto;
+
+    border: none;
+
+    background: transparent;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    cursor: pointer;
+
+    z-index: 1002;
+  }
+
+
+  .menu-toggle span {
+    display: block;
+
+    width: 24px;
+    height: 2px;
+
+    background: #f5f7fa;
+
+    border-radius: 2px;
+
+    transition:
+      transform 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+
+  /* =========================
+     HAMBURGUESA ABIERTA
+  ========================= */
+
+  .menu-toggle.active span:nth-child(1) {
+    transform:
+      translateY(7px)
+      rotate(45deg);
+  }
+
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+
+  .menu-toggle.active span:nth-child(3) {
+    transform:
+      translateY(-7px)
+      rotate(-45deg);
+  }
+
+
+  /* =========================
+     MENÚ
+  ========================= */
+
+  .mobile-menu {
+    display: flex;
+
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    padding: 25px;
+
+    background: #07111f;
+
+    border-top:
+      1px solid
+      rgba(255,255,255,0.06);
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+      translateY(-10px);
+
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0.2s ease;
+
+    z-index: 1001;
+  }
+
+
+  .mobile-menu.open {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+      translateY(0);
+
+  }
+
+
+  .mobile-menu a,
+  .mobile-menu button {
+
+    width: 100%;
+
+    padding:
+      14px 16px;
+
+    box-sizing: border-box;
+
+    color: #f5f7fa;
+
+    background: transparent;
+
+    border: none;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    text-align: left;
+
+    font-size: 15px;
+
+    font-family:
+      Arial,
+      Helvetica,
+      sans-serif;
+
+    cursor: pointer;
+
+  }
+
+
+  .mobile-menu a:hover,
+  .mobile-menu button:hover {
+
+    background:
+      rgba(111,190,68,0.08);
+
+    color: #6FBE44;
+
+  }
+
+
+  /* =========================
+     USUARIO MÓVIL
+  ========================= */
+
+  .mobile-user {
+
+    color: #6FBE44 !important;
+
+    font-weight: 700;
+
+  }
+
+
+  .mobile-cart-count {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 20px;
+    height: 20px;
+
+    margin-left: 8px;
+
+    padding: 0 5px;
+
+    border-radius: 999px;
+
+    background: #6FBE44;
+
+    color: #061019;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+  }
+
+
+  .mobile-logout {
+
+    color: #ff7f7f !important;
+
+  }
+
+
+  .mobile-menu-button {
+
+    background:
+      #6FBE44 !important;
+
+    color:
+      #061019 !important;
+
+    font-weight: 700;
+
+    text-align: center !important;
+
+  }
+
+
+  /* =========================
+     CARGANDO SESIÓN
+  ========================= */
+
+  .mobile-session-loading {
+
+    height: 45px;
+
+    width: 100%;
+
+  }
+
+}
+
+
+/* =========================
+   MOBILE PEQUEÑO
+========================= */
+
+@media (max-width: 500px) {
+
+  .navbar {
+    padding:
+      0 18px;
+  }
+
+  .navbar-logo {
+    font-size: 30px;
+  }
+
+}
+
+
+
+
+
+/* =========================
+   ICONOS DEL PERFIL
+========================= */
+
+.profile-menu-icon {
+
+    width: 20px;
+  height: 20px;
+
+  object-fit: contain;
+
+  filter: brightness(0) invert(1);
+
+}
+
+
+/* =========================
+   ICONO CARRITO NAVBAR
+========================= */
+
+.navbar-cart {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+}
+
+
+.navbar-cart-icon {
+
+  width: 24px;
+  height: 24px;
+
+  object-fit: contain;
+
+  filter: brightness(0) invert(1);
+
+}
+
+
+/* =========================
+   ELEMENTOS DEL DROPDOWN
+========================= */
+
+.profile-dropdown a {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+}
+
+
+.profile-menu-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: filter 0.2s ease;
+}
+
+.profile-dropdown a:hover .profile-menu-icon {
+  filter: brightness(0) saturate(100%)
+          invert(69%)
+          sepia(45%)
+          saturate(650%)
+          hue-rotate(55deg)
+          brightness(90%);
+}

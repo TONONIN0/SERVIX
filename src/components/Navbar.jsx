@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import '../styles/Navbar.css';
 
 export default function Navbar({ usuario: usuarioInicial = null }) {
@@ -12,14 +12,18 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
   const [cartCount, setCartCount] =
     useState(0);
 
+  const [sessionLoading, setSessionLoading] =
+    useState(!usuarioInicial);
+
 
   // =========================
-  // CERRAR MENÚ MÓVIL
+  // CERRAR MENÚ
   // =========================
 
   const cerrarMenu = () => {
 
     setMenuOpen(false);
+    setProfileOpen(false);
 
   };
 
@@ -28,17 +32,20 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
   // CARGAR USUARIO
   // =========================
 
-  const cargarUsuario = async () => {
+  const cargarUsuario = useCallback(async () => {
 
     try {
 
       const response =
-        await fetch('/api/me');
+        await fetch('/api/me', {
+          credentials: 'same-origin',
+        });
 
 
       if (!response.ok) {
 
         setUsuario(null);
+        setCartCount(0);
 
         return;
 
@@ -59,6 +66,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
       } else {
 
         setUsuario(null);
+        setCartCount(0);
 
       }
 
@@ -70,10 +78,15 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
       );
 
       setUsuario(null);
+      setCartCount(0);
+
+    } finally {
+
+      setSessionLoading(false);
 
     }
 
-  };
+  }, []);
 
 
   // =========================
@@ -86,12 +99,15 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
       await fetch('/api/logout', {
         method: 'POST',
+        credentials: 'same-origin',
       });
 
       setUsuario(null);
+      setCartCount(0);
+      setProfileOpen(false);
+      setMenuOpen(false);
 
-      window.location.href =
-        '/login';
+      window.location.href = '/login';
 
     } catch (error) {
 
@@ -109,7 +125,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
   // CARGAR CARRITO
   // =========================
 
-  const actualizarCarrito = async () => {
+  const actualizarCarrito = useCallback(async () => {
 
     if (!usuario) {
 
@@ -123,7 +139,10 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
     try {
 
       const response =
-        await fetch('/api/cart');
+        await fetch('/api/cart', {
+          credentials: 'same-origin',
+          cache: 'no-store',
+        });
 
 
       if (!response.ok) {
@@ -141,7 +160,8 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
       if (
         !data.success ||
-        !data.cart
+        !data.cart ||
+        !Array.isArray(data.cart.items)
       ) {
 
         setCartCount(0);
@@ -155,7 +175,8 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
         data.cart.items.reduce(
           (total, item) => {
 
-            return total + item.cantidad;
+            return total +
+              Number(item.cantidad || 0);
 
           },
           0
@@ -175,7 +196,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
     }
 
-  };
+  }, [usuario]);
 
 
   // =========================
@@ -187,6 +208,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
     if (usuarioInicial) {
 
       setUsuario(usuarioInicial);
+      setSessionLoading(false);
 
       return;
 
@@ -194,18 +216,73 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
     cargarUsuario();
 
-  }, []);
+  }, [
+    usuarioInicial,
+    cargarUsuario
+  ]);
 
 
   // =========================
-  // ACTUALIZAR CARRITO
+  // CARGAR CARRITO
   // =========================
 
   useEffect(() => {
 
+    if (!usuario) {
+
+      setCartCount(0);
+
+      return;
+
+    }
+
     actualizarCarrito();
 
-  }, [usuario]);
+  }, [
+    usuario,
+    actualizarCarrito
+  ]);
+
+
+  // =========================
+  // ACTUALIZAR CARRITO
+  // AUTOMÁTICAMENTE
+  // =========================
+
+  useEffect(() => {
+
+    if (!usuario) {
+      return;
+    }
+
+
+    /*
+      Actualiza el contador periódicamente.
+
+      Esto permite que cuando agregues,
+      elimines o cambies cantidades en el
+      carrito, el número del Navbar se
+      actualice automáticamente.
+    */
+
+    const intervalo =
+      setInterval(() => {
+
+        actualizarCarrito();
+
+      }, 1000);
+
+
+    return () => {
+
+      clearInterval(intervalo);
+
+    };
+
+  }, [
+    usuario,
+    actualizarCarrito
+  ]);
 
 
   // =========================
@@ -214,16 +291,27 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
   useEffect(() => {
 
-    const actualizarCuandoRegresa =
-      () => {
+    const actualizarCuandoRegresa = () => {
 
-        cargarUsuario();
+      cargarUsuario();
 
-      };
+      if (usuario) {
+
+        actualizarCarrito();
+
+      }
+
+    };
 
 
     window.addEventListener(
       'focus',
+      actualizarCuandoRegresa
+    );
+
+
+    window.addEventListener(
+      'pageshow',
       actualizarCuandoRegresa
     );
 
@@ -235,9 +323,18 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
         actualizarCuandoRegresa
       );
 
+      window.removeEventListener(
+        'pageshow',
+        actualizarCuandoRegresa
+      );
+
     };
 
-  }, []);
+  }, [
+    usuario,
+    cargarUsuario,
+    actualizarCarrito
+  ]);
 
 
   // =========================
@@ -281,6 +378,10 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
           Solicitar
         </a>
 
+        <a href="/pedidos">
+          Mis solicitudes
+        </a>
+
         <a href="/Contacto">
           Contacto
         </a>
@@ -295,7 +396,18 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
       <div className="navbar-user-area">
 
 
-        {usuario ? (
+        {/* =========================
+            CARGANDO SESIÓN
+        ========================= */}
+
+        {sessionLoading ? (
+
+          <div
+            className="navbar-session-loading"
+            aria-hidden="true"
+          ></div>
+
+        ) : usuario ? (
 
           <>
 
@@ -307,6 +419,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
             <div className="profile-container">
 
               <button
+                type="button"
                 className="navbar-user"
                 onClick={() =>
                   setProfileOpen(
@@ -347,32 +460,75 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
               </button>
 
 
+              {/* =========================
+                  DROPDOWN
+              ========================= */}
+
               {profileOpen && (
 
-                <div
-                  className="profile-dropdown"
-                >
+                <div className="profile-dropdown">
+
+
+                  {/* PERFIL */}
 
                   <a href="/perfil">
-                    👤 Mi perfil
+
+                    <img
+                      src="/assets/perfil.avif"
+                      alt=""
+                      className="profile-menu-icon"
+                    />
+
+                    <span>
+                      Mi perfil
+                    </span>
+
                   </a>
 
+
+                  {/* CARRITO */}
 
                   <a href="/carrito">
-                    🛒 Carrito
+
+                    <img
+                      src="/assets/carrito.avif"
+                      alt=""
+                      className="profile-menu-icon"
+                    />
+
+                    <span>
+                      Carrito
+                    </span>
+
                   </a>
 
 
-                  <div
-                    className="profile-divider"
-                  ></div>
+                  {/* SOLICITUDES */}
 
+                  <a href="/pedidos">
+
+                    <img
+                      src="/assets/entrega.avif"
+                      alt=""
+                      className="profile-menu-icon"
+                    />
+
+                    <span>
+                      Mis solicitudes
+                    </span>
+
+                  </a>
+
+
+                  <div className="profile-divider"></div>
+
+
+                  {/* CERRAR SESIÓN */}
 
                   <button
+                    type="button"
                     className="logout-button"
-                    onClick={
-                      cerrarSesion
-                    }
+                    onClick={cerrarSesion}
                   >
 
                     Cerrar sesión
@@ -387,7 +543,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
 
             {/* =========================
-                CARRITO
+                CARRITO DESKTOP
             ========================= */}
 
             <a
@@ -396,17 +552,33 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
               aria-label="Carrito"
             >
 
-              🛒
+              <img
+                src="/assets/carrito.avif"
+                alt="Carrito"
+                className="navbar-cart-icon"
+              />
 
-              <span className="cart-count">
-                {cartCount}
-              </span>
+
+              {cartCount > 0 && (
+
+                <span className="cart-count">
+
+                  {cartCount}
+
+                </span>
+
+              )}
 
             </a>
 
           </>
 
         ) : (
+
+
+          /* =========================
+             NO LOGUEADO
+          ========================= */
 
           <a
             href="/login"
@@ -427,6 +599,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
       ========================= */}
 
       <button
+        type="button"
         className={`menu-toggle ${
           menuOpen
             ? 'active'
@@ -460,11 +633,14 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
         }`}
       >
 
+
         <a
           href="/Servicios"
           onClick={cerrarMenu}
         >
+
           Servicios
+
         </a>
 
 
@@ -472,7 +648,9 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
           href="/productos"
           onClick={cerrarMenu}
         >
+
           Productos
+
         </a>
 
 
@@ -480,7 +658,19 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
           href="/Solicitar"
           onClick={cerrarMenu}
         >
+
           Solicitar
+
+        </a>
+
+
+        <a
+          href="/pedidos"
+          onClick={cerrarMenu}
+        >
+
+          Mis solicitudes
+
         </a>
 
 
@@ -488,36 +678,74 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
           href="/Contacto"
           onClick={cerrarMenu}
         >
+
           Contacto
+
         </a>
 
 
-        {usuario ? (
+        {/* =========================
+            USUARIO MÓVIL
+        ========================= */}
+
+        {sessionLoading ? (
+
+          <div
+            className="mobile-session-loading"
+            aria-hidden="true"
+          ></div>
+
+        ) : usuario ? (
 
           <>
+
+
+            {/* PERFIL */}
 
             <a
               href="/perfil"
               className="mobile-user"
               onClick={cerrarMenu}
             >
-              👤 {usuario.nombre}
+
+              <img
+                src="/assets/perfil.avif"
+                alt=""
+                className="mobile-menu-icon"
+              />
+
+              <span>
+                {usuario.nombre}
+              </span>
+
             </a>
 
 
+            {/* CARRITO */}
+
             <a
               href="/carrito"
+              className="mobile-menu-item"
               onClick={cerrarMenu}
             >
 
-              🛒 Carrito
+              <img
+                src="/assets/carrito.avif"
+                alt=""
+                className="mobile-menu-icon"
+              />
+
+              <span>
+                Carrito
+              </span>
+
 
               {cartCount > 0 && (
 
-                <span
-                  className="mobile-cart-count"
-                >
+                <span className="mobile-cart-count">
+
                   {cartCount}
+
                 </span>
 
               )}
@@ -525,11 +753,37 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
             </a>
 
 
+            {/* SOLICITUDES */}
+
+            <a
+              href="/pedidos"
+              className="mobile-menu-item"
+              onClick={cerrarMenu}
+            >
+
+              <img
+                src="/assets/entrega.avif"
+                alt=""
+                className="mobile-menu-icon"
+              />
+
+              <span>
+                Mis solicitudes
+              </span>
+
+            </a>
+
+
+            {/* CERRAR SESIÓN */}
+
             <button
+              type="button"
               className="mobile-logout"
               onClick={cerrarSesion}
             >
+
               Cerrar sesión
+
             </button>
 
           </>
@@ -541,7 +795,9 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
             className="mobile-menu-button"
             onClick={cerrarMenu}
           >
+
             Iniciar sesión
+
           </a>
 
         )}
@@ -553,4 +809,3 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
   );
 
 }
-
