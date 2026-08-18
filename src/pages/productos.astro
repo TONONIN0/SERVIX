@@ -1,0 +1,535 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.jsx';
+import prisma from '../lib/prisma';
+import '../styles/productos.css';
+
+const session = Astro.cookies.get('servix_session');
+
+let usuario = null;
+
+if (session) {
+
+  const userId = Number(session.value);
+
+  if (Number.isInteger(userId) && userId > 0) {
+
+    usuario = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+
+      select: {
+        id: true,
+        nombre: true,
+        email: true,
+      },
+    });
+
+  }
+
+}
+
+
+const productos = await prisma.product.findMany({
+
+  where: {
+    activo: true,
+  },
+
+  orderBy: {
+    createdAt: 'desc',
+  },
+
+});
+---
+
+<Layout>
+
+  <Navbar
+    client:load
+    usuario={usuario}
+  />
+
+
+  <main class="productos-page">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="productos-header">
+
+      <div>
+
+        <p class="section-label">
+          CATÁLOGO SERVIX
+        </p>
+
+        <h1>
+          Refacciones y componentes
+          <span>industriales.</span>
+        </h1>
+
+        <p class="productos-description">
+          Encuentra rápidamente las refacciones,
+          materiales y componentes que necesitas
+          para mantener tu operación funcionando.
+        </p>
+
+      </div>
+
+
+      <!-- BUSCADOR -->
+
+      <div class="productos-search">
+
+        <input
+          id="buscar-producto"
+          type="text"
+          placeholder="Buscar producto..."
+        />
+
+        <span>
+          🔎
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         PRODUCTOS
+    ========================== -->
+
+    <section class="productos-section">
+
+      <div
+        id="productos-grid"
+        class="productos-grid"
+      >
+
+        {productos.length === 0 ? (
+
+          <div class="productos-empty">
+
+            <div>
+              📦
+            </div>
+
+            <h2>
+              No hay productos todavía
+            </h2>
+
+            <p>
+              Pronto tendremos productos
+              disponibles.
+            </p>
+
+          </div>
+
+        ) : (
+
+          productos.map((producto) => (
+
+            <article
+              class="producto-card"
+              data-nombre={producto.nombre.toLowerCase()}
+              data-categoria={
+                producto.categoria?.toLowerCase() || ''
+              }
+            >
+
+              <div class="producto-image">
+
+                {producto.imagen ? (
+
+                  <img
+                    src={producto.imagen}
+                    alt={producto.nombre}
+                    loading="lazy"
+                  />
+
+                ) : (
+
+                  <div class="producto-no-image">
+                    📦
+                  </div>
+
+                )}
+
+              </div>
+
+
+              <div class="producto-content">
+
+                {producto.categoria && (
+
+                  <span class="producto-category">
+                    {producto.categoria}
+                  </span>
+
+                )}
+
+
+                <h2>
+                  {producto.nombre}
+                </h2>
+
+
+                {producto.descripcion && (
+
+                  <p>
+                    {producto.descripcion}
+                  </p>
+
+                )}
+
+
+                <div class="producto-bottom">
+
+                  <div>
+
+                    <span class="producto-price-label">
+                      Precio
+                    </span>
+
+                    <strong class="producto-price">
+                      ${Number(producto.precio).toLocaleString(
+                        'es-MX',
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}
+                    </strong>
+
+                  </div>
+
+
+                  <button
+                    class="producto-add"
+                    data-product-id={producto.id}
+                  >
+                    +
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+
+          ))
+
+        )}
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <Footer />
+
+</Layout>
+
+
+<script>
+
+  // =========================
+  // BUSCADOR
+  // =========================
+
+  const searchInput =
+    document.getElementById(
+      'buscar-producto'
+    );
+
+  const productCards =
+    document.querySelectorAll(
+      '.producto-card'
+    );
+
+
+  searchInput?.addEventListener(
+    'input',
+    (event) => {
+
+      const value =
+        event.target.value
+          .toLowerCase()
+          .trim();
+
+
+      productCards.forEach(
+        (card) => {
+
+          const nombre =
+            card.dataset.nombre || '';
+
+          const categoria =
+            card.dataset.categoria || '';
+
+
+          const coincide =
+            nombre.includes(value) ||
+            categoria.includes(value);
+
+
+          card.style.display =
+            coincide
+              ? ''
+              : 'none';
+
+        }
+      );
+
+    }
+  );
+
+
+  // =========================
+  // AGREGAR AL CARRITO
+  // =========================
+
+  const botonesAgregar =
+    document.querySelectorAll(
+      '.producto-add'
+    );
+
+
+  botonesAgregar.forEach(
+    (boton) => {
+
+      boton.addEventListener(
+        'click',
+        async () => {
+
+          const productId =
+            boton.dataset.productId;
+
+
+          if (!productId) {
+            return;
+          }
+
+
+          // =========================
+          // ESTADO LOADING
+          // =========================
+
+          const textoOriginal =
+            boton.textContent;
+
+
+          boton.textContent =
+            '...';
+
+          boton.disabled = true;
+
+
+          try {
+
+            const response =
+              await fetch(
+                '/api/cart',
+                {
+
+                  method: 'POST',
+
+                  headers: {
+                    'Content-Type':
+                      'application/json',
+                  },
+
+                  body:
+                    JSON.stringify({
+                      productId:
+                        Number(productId),
+
+                      cantidad: 1,
+                    }),
+
+                }
+              );
+
+
+            const data =
+              await response.json();
+
+
+            // =========================
+            // NO LOGUEADO
+            // =========================
+
+            if (
+              response.status === 401
+            ) {
+
+              window.location.href =
+                '/login';
+
+              return;
+
+            }
+
+
+            // =========================
+            // ERROR
+            // =========================
+
+            if (!response.ok) {
+
+              alert(
+                data.error ||
+                'No fue posible agregar el producto'
+              );
+
+              return;
+
+            }
+
+
+            // =========================
+            // CORRECTO
+            // =========================
+
+            boton.textContent =
+              '✓';
+
+
+            setTimeout(
+              () => {
+
+                boton.textContent =
+                  textoOriginal;
+
+              },
+              1000
+            );
+
+
+            // Actualizamos contador
+            // del carrito
+
+            actualizarContadorCarrito();
+
+
+          } catch (error) {
+
+            console.error(
+              '🔥 ERROR:',
+              error
+            );
+
+
+            alert(
+              'No fue posible conectarse con el servidor.'
+            );
+
+          } finally {
+
+            setTimeout(
+              () => {
+
+                boton.disabled =
+                  false;
+
+              },
+              1000
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  // =========================
+  // CONTADOR CARRITO
+  // =========================
+
+  async function
+  actualizarContadorCarrito() {
+
+    try {
+
+      const response =
+        await fetch(
+          '/api/cart'
+        );
+
+
+      if (!response.ok) {
+        return;
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !data.success ||
+        !data.cart
+      ) {
+        return;
+      }
+
+
+      const cantidadTotal =
+        data.cart.items.reduce(
+          (total, item) => {
+
+            return (
+              total +
+              item.cantidad
+            );
+
+          },
+          0
+        );
+
+
+      const contador =
+        document.querySelector(
+          '.cart-count'
+        );
+
+
+      if (!contador) {
+        return;
+      }
+
+
+      contador.textContent =
+        cantidadTotal;
+
+
+    } catch (error) {
+
+      console.error(
+        'Error actualizando carrito:',
+        error
+      );
+
+    }
+
+  }
+
+
+  // =========================
+  // CARGAR CONTADOR
+  // =========================
+
+  actualizarContadorCarrito();
+
+</script>

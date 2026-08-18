@@ -147,7 +147,7 @@ export default function Login() {
             Contraseña
           </label>
 
-          <a href="#">
+          <a href="/recuperar-password">
             ¿Olvidaste tu contraseña?
           </a>
 

@@ -1,40 +1,39 @@
 ---
-export const prerender = false;
-
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
-import '../styles/perfil.css';
-
 import prisma from '../lib/prisma';
+import '../styles/perfil.css';
 
 const session = Astro.cookies.get('servix_session');
 
-let usuario = null;
-
-if (session) {
-  const userId = Number(session.value);
-
-  if (!isNaN(userId)) {
-    usuario = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        id: true,
-        nombre: true,
-        email: true,
-        createdAt: true,
-      },
-    });
-  }
+if (!session) {
+  return Astro.redirect('/login');
 }
 
-/*
-  Si no hay sesión, mandamos al login
-*/
+const userId = Number(session.value);
+
+if (!Number.isInteger(userId) || userId <= 0) {
+  return Astro.redirect('/login');
+}
+
+const usuario = await prisma.user.findUnique({
+  where: {
+    id: userId,
+  },
+  select: {
+    id: true,
+    nombre: true,
+    email: true,
+    emailVerified: true,
+  },
+});
 
 if (!usuario) {
+  Astro.cookies.delete('servix_session', {
+    path: '/',
+  });
+
   return Astro.redirect('/login');
 }
 ---
@@ -46,59 +45,66 @@ if (!usuario) {
     usuario={usuario}
   />
 
-  <main class="profile-page">
+  <main class="perfil-page">
 
-    <section class="profile-section">
+    <section class="perfil-container">
 
-      <div class="profile-header">
+      <div class="perfil-header">
 
-        <span class="section-label">
-          MI CUENTA
-        </span>
+        <div class="perfil-avatar">
+          {usuario.nombre.charAt(0).toUpperCase()}
+        </div>
 
-        <h1>
-          Hola, <span>{usuario.nombre}</span>.
-        </h1>
+        <div>
+          <p class="perfil-label">
+            MI CUENTA
+          </p>
 
-        <p>
-          Administra tu información y consulta tu actividad
-          dentro de SERVIX.
-        </p>
+          <h1>
+            Hola, {usuario.nombre}
+          </h1>
+
+          <p class="perfil-email">
+            {usuario.email}
+          </p>
+        </div>
 
       </div>
 
 
-      <div class="profile-grid">
+      <div class="perfil-grid">
 
-        <!-- INFORMACIÓN DEL USUARIO -->
+        <!-- INFORMACIÓN -->
 
-        <article class="profile-card">
+        <div class="perfil-card">
 
-          <div class="profile-card-top">
+          <div class="perfil-card-header">
 
-            <div class="profile-avatar">
-              {usuario.nombre.charAt(0).toUpperCase()}
+            <div>
+              <span class="perfil-icon">
+                👤
+              </span>
             </div>
 
             <div>
-              <span class="profile-tag">
-                USUARIO
-              </span>
-
               <h2>
-                {usuario.nombre}
+                Información personal
               </h2>
+
+              <p>
+                Información de tu cuenta SERVIX
+              </p>
             </div>
 
           </div>
 
 
-          <div class="profile-info">
+          <div class="perfil-info">
 
-            <div class="info-item">
+            <div class="perfil-info-item">
 
               <span>
-                NOMBRE
+                Nombre
               </span>
 
               <strong>
@@ -108,10 +114,10 @@ if (!usuario) {
             </div>
 
 
-            <div class="info-item">
+            <div class="perfil-info-item">
 
               <span>
-                CORREO
+                Correo electrónico
               </span>
 
               <strong>
@@ -121,77 +127,90 @@ if (!usuario) {
             </div>
 
 
-            <div class="info-item">
+            <div class="perfil-info-item">
 
               <span>
-                MIEMBRO DESDE
+                Estado del correo
               </span>
 
-              <strong>
-                {usuario.createdAt.toLocaleDateString('es-MX')}
-              </strong>
+              {usuario.emailVerified ? (
+
+                <strong class="perfil-verified">
+                  ✓ Verificado
+                </strong>
+
+              ) : (
+
+                <strong class="perfil-unverified">
+                  ⚠ No verificado
+                </strong>
+
+              )}
 
             </div>
 
           </div>
 
-        </article>
+        </div>
 
 
-        <!-- CARRITO -->
+        <!-- SEGURIDAD -->
 
-        <article class="profile-card profile-cart">
+        <div class="perfil-card">
 
-          <div class="profile-card-number">
-            01
+          <div class="perfil-card-header">
+
+            <div>
+              <span class="perfil-icon">
+                🔐
+              </span>
+            </div>
+
+            <div>
+              <h2>
+                Seguridad
+              </h2>
+
+              <p>
+                Administra la seguridad de tu cuenta
+              </p>
+            </div>
+
           </div>
 
-          <span class="profile-tag">
-            CARRITO
-          </span>
 
-          <h2>
-            Tus productos.
-          </h2>
+          <div class="perfil-actions">
 
-          <p>
-            Aquí aparecerán las refacciones, materiales y
-            componentes que agregues a tu carrito.
-          </p>
+            <a
+              href="/recuperar-password"
+              class="perfil-action"
+            >
+              <span>
+                Cambiar contraseña
+              </span>
 
-          <a href="/carrito" class="profile-button">
-            Ver carrito →
-          </a>
-
-        </article>
+              <span>
+                →
+              </span>
+            </a>
 
 
-        <!-- PEDIDOS -->
+            <button
+              id="logout-button"
+              class="perfil-logout"
+            >
+              <span>
+                Cerrar sesión
+              </span>
 
-        <article class="profile-card">
+              <span>
+                ↗
+              </span>
+            </button>
 
-          <div class="profile-card-number">
-            02
           </div>
 
-          <span class="profile-tag">
-            PEDIDOS
-          </span>
-
-          <h2>
-            Tus pedidos.
-          </h2>
-
-          <p>
-            Consulta próximamente el estado y el historial
-            de tus solicitudes y entregas.
-          </p>
-
-          <a href="/solicitar" class="profile-button">
-            Solicitar entrega →
-          </a>
-
-        </article>
+        </div>
 
       </div>
 
@@ -202,3 +221,45 @@ if (!usuario) {
   <Footer />
 
 </Layout>
+
+
+<script>
+  const logoutButton =
+    document.getElementById('logout-button');
+
+  logoutButton?.addEventListener(
+    'click',
+    async () => {
+
+      logoutButton.textContent =
+        'Cerrando sesión...';
+
+      try {
+
+        const response = await fetch(
+          '/api/logout',
+          {
+            method: 'POST',
+          }
+        );
+
+        if (response.ok) {
+          window.location.href = '/login';
+          return;
+        }
+
+        logoutButton.textContent =
+          'Cerrar sesión';
+
+      } catch (error) {
+
+        console.error(error);
+
+        logoutButton.textContent =
+          'Cerrar sesión';
+      }
+
+    }
+  );
+</script>
+

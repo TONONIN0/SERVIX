@@ -1,0 +1,470 @@
+/* =========================
+   PRODUCTOS
+========================= */
+
+.productos-page {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 80% 0%,
+      rgba(111, 190, 68, 0.08),
+      transparent 30%
+    ),
+    #07111f;
+
+  color: #f5f7fa;
+
+  padding-top: 75px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.productos-header {
+  padding: 90px 8% 55px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 50px;
+}
+
+
+.section-label {
+  margin: 0 0 15px;
+
+  color: #6FBE44;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+
+.productos-header h1 {
+  max-width: 750px;
+
+  margin: 0;
+
+  font-size: clamp(
+    38px,
+    5vw,
+    68px
+  );
+
+  line-height: 1;
+
+  letter-spacing: -2px;
+}
+
+
+.productos-header h1 span {
+  color: #6FBE44;
+}
+
+
+.productos-description {
+  max-width: 650px;
+
+  margin: 25px 0 0;
+
+  color: #8e9aaa;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================
+   BUSCADOR
+========================= */
+
+.productos-search {
+  position: relative;
+
+  width: 300px;
+
+  flex-shrink: 0;
+}
+
+
+.productos-search input {
+  width: 100%;
+
+  height: 52px;
+
+  padding: 0 48px 0 18px;
+
+  box-sizing: border-box;
+
+  background: #0d1a2b;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+  outline: none;
+
+  color: #f5f7fa;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 15px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.productos-search input::placeholder {
+  color: #657286;
+}
+
+
+.productos-search input:focus {
+  border-color: #6FBE44;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(111, 190, 68, 0.08);
+}
+
+
+.productos-search span {
+  position: absolute;
+
+  right: 17px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  font-size: 17px;
+
+  pointer-events: none;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.productos-section {
+  padding: 20px 8% 110px;
+}
+
+
+.productos-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 25px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.producto-card {
+  overflow: hidden;
+
+  background: #0d1a2b;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.07);
+
+  border-radius: 18px;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.producto-card:hover {
+  transform: translateY(-6px);
+
+  border-color:
+    rgba(111, 190, 68, 0.35);
+
+  box-shadow:
+    0 20px 45px
+    rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================
+   IMAGEN
+========================= */
+
+.producto-image {
+  height: 230px;
+
+  background: #101f32;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+
+.producto-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.4s ease;
+}
+
+
+.producto-card:hover
+.producto-image img {
+  transform: scale(1.05);
+}
+
+
+.producto-no-image {
+  font-size: 60px;
+
+  opacity: 0.5;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.producto-content {
+  padding: 24px;
+}
+
+
+.producto-category {
+  display: inline-block;
+
+  margin-bottom: 10px;
+
+  color: #6FBE44;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+
+.producto-content h2 {
+  margin: 0;
+
+  font-size: 21px;
+
+  line-height: 1.25;
+}
+
+
+.producto-content p {
+  min-height: 45px;
+
+  margin: 12px 0 20px;
+
+  color: #7f8c9d;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.producto-bottom {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding-top: 18px;
+
+  border-top: 1px solid
+    rgba(255, 255, 255, 0.07);
+}
+
+
+.producto-price-label {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #657286;
+
+  font-size: 11px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+
+.producto-price {
+  color: #f5f7fa;
+
+  font-size: 22px;
+}
+
+
+.producto-add {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #6FBE44;
+
+  color: #061019;
+
+  font-size: 26px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+
+.producto-add:hover {
+  transform: scale(1.08);
+
+  background: #82d153;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.productos-empty {
+  grid-column: 1 / -1;
+
+  text-align: center;
+
+  padding: 100px 20px;
+
+  color: #7f8c9d;
+}
+
+
+.productos-empty div {
+  font-size: 60px;
+
+  margin-bottom: 20px;
+}
+
+
+.productos-empty h2 {
+  margin: 0 0 10px;
+
+  color: #f5f7fa;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+  .productos-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .productos-search {
+    width: 100%;
+
+    max-width: 500px;
+  }
+
+
+  .productos-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .productos-header {
+    padding:
+      65px 20px 35px;
+  }
+
+
+  .productos-section {
+    padding:
+      15px 20px 70px;
+  }
+
+
+  .productos-header h1 {
+    font-size: 40px;
+
+    letter-spacing: -1.5px;
+  }
+
+
+  .productos-description {
+    font-size: 15px;
+  }
+
+
+  .productos-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .producto-image {
+    height: 240px;
+  }
+
+}
+

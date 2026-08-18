@@ -1,7 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// This is your Prisma schema file
 
 generator client {
   provider = "prisma-client"
@@ -12,16 +9,102 @@ datasource db {
   provider = "mysql"
 }
 
+// =========================
+// USER
+// =========================
+
 model User {
-  id       Int    @id @default(autoincrement())
-  nombre   String
-  email    String @unique
+  id Int @id @default(autoincrement())
+
+  nombre String
+
+  email String @unique
+
   password String
 
-  emailVerified           Boolean  @default(false)
-  verificationCode        String?
+  emailVerified Boolean @default(false)
+
+  verificationCode String?
+
   verificationCodeExpires DateTime?
 
+  passwordResetCode String?
+
+  passwordResetCodeExpires DateTime?
+
   createdAt DateTime @default(now())
+
   updatedAt DateTime @updatedAt
+
+  cart Cart?
+}
+
+// =========================
+// PRODUCT
+// =========================
+
+model Product {
+  id Int @id @default(autoincrement())
+
+  nombre String
+
+  descripcion String? @db.Text
+
+  precio Decimal @db.Decimal(10, 2)
+
+  stock Int @default(0)
+
+  categoria String?
+
+  imagen String?
+
+  activo Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  cartItems CartItem[]
+}
+
+// =========================
+// CART
+// =========================
+
+model Cart {
+  id Int @id @default(autoincrement())
+
+  userId Int @unique
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items CartItem[]
+}
+
+// =========================
+// CART ITEM
+// =========================
+
+model CartItem {
+  id Int @id @default(autoincrement())
+
+  cartId Int
+
+  productId Int
+
+  cantidad Int @default(1)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
 }

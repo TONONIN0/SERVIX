@@ -1,0 +1,42 @@
+
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/login.css';
+import VerificarReset from '../components/VerificarReset.jsx';
+---
+
+<Layout>
+
+  <main class="login-page">
+
+    <div class="login-container">
+
+      <div class="login-card">
+
+        <div class="login-header">
+
+          <div class="login-logo">
+            SERVI<span>X</span>
+          </div>
+
+          <h1>
+            Nueva contraseña
+          </h1>
+
+          <p>
+            Introduce el código que enviamos a tu
+            correo y crea una nueva contraseña.
+          </p>
+
+        </div>
+
+        <VerificarReset client:load />
+
+      </div>
+
+    </div>
+
+  </main>
+
+</Layout>
+
