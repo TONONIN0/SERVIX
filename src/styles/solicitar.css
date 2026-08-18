@@ -1,0 +1,675 @@
+
+/* =========================
+   GENERAL
+========================= */
+
+.solicitar-page {
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(111, 190, 68, 0.08),
+      transparent 35%
+    ),
+    #07111f;
+
+  color: #f5f7fa;
+
+  padding:
+    120px 7%
+    80px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.solicitar-header {
+
+  max-width: 1200px;
+
+  margin:
+    0 auto 50px;
+
+}
+
+
+.solicitar-header .section-label {
+
+  color: #6FBE44;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+}
+
+
+.solicitar-header h1 {
+
+  margin:
+    12px 0 10px;
+
+  font-size: 48px;
+
+}
+
+
+.solicitar-header p {
+
+  margin: 0;
+
+  color: #9ca8b7;
+
+  font-size: 17px;
+
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.solicitar-container {
+
+  max-width: 1200px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    370px;
+
+  gap: 35px;
+
+  align-items: start;
+
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.pedido-form {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+
+}
+
+
+.form-section {
+
+  background:
+    rgba(255,255,255,0.035);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.08);
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+}
+
+
+.form-section-header {
+
+  display: flex;
+
+  gap: 18px;
+
+  align-items: flex-start;
+
+  margin-bottom: 30px;
+
+}
+
+
+.form-number {
+
+  width: 42px;
+
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    rgba(111,190,68,0.12);
+
+  color: #6FBE44;
+
+  font-weight: 800;
+
+}
+
+
+.form-section-header h2 {
+
+  margin:
+    0 0 5px;
+
+  font-size: 21px;
+
+}
+
+
+.form-section-header p {
+
+  margin: 0;
+
+  color: #8996a6;
+
+  font-size: 14px;
+
+}
+
+
+/* =========================
+   FORM GRID
+========================= */
+
+.form-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 20px;
+
+}
+
+
+.form-group {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+}
+
+
+.form-group.full {
+
+  grid-column:
+    1 / -1;
+
+}
+
+
+.form-group label {
+
+  color: #dce3eb;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+}
+
+
+.form-group label span {
+
+  color: #697789;
+
+  font-size: 12px;
+
+  font-weight: 400;
+
+  margin-left: 5px;
+
+}
+
+
+.form-group input,
+.form-group textarea {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid
+    rgba(255,255,255,0.1);
+
+  background:
+    #0c1928;
+
+  color: #f5f7fa;
+
+  border-radius: 10px;
+
+  padding:
+    14px 15px;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+}
+
+
+.form-group textarea {
+
+  resize: vertical;
+
+  min-height: 120px;
+
+}
+
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+
+  color: #536274;
+
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus {
+
+  border-color:
+    #6FBE44;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(111,190,68,0.08);
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.pedido-error {
+
+  background:
+    rgba(255,80,80,0.08);
+
+  border:
+    1px solid
+    rgba(255,80,80,0.2);
+
+  color: #ff8b8b;
+
+  padding: 14px 16px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+
+}
+
+
+/* =========================
+   CONFIRMAR
+========================= */
+
+.btn-confirmar {
+
+  width: 100%;
+
+  height: 56px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background:
+    #6FBE44;
+
+  color: #061019;
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+
+}
+
+
+.btn-confirmar:hover {
+
+  transform:
+    translateY(-2px);
+
+  filter:
+    brightness(1.08);
+
+}
+
+
+.btn-confirmar:disabled {
+
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+
+}
+
+
+/* =========================
+   RESUMEN
+========================= */
+
+.solicitar-resumen {
+
+  position: sticky;
+
+  top: 100px;
+
+  background:
+    rgba(255,255,255,0.045);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.09);
+
+  border-radius: 20px;
+
+  padding: 28px;
+
+}
+
+
+.solicitar-resumen h2 {
+
+  margin:
+    0 0 25px;
+
+  font-size: 23px;
+
+}
+
+
+.resumen-loading {
+
+  min-height: 150px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #8996a6;
+
+}
+
+
+/* =========================
+   PRODUCTOS RESUMEN
+========================= */
+
+.resumen-productos {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+
+}
+
+
+.resumen-producto {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+}
+
+
+.resumen-producto-info {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  min-width: 0;
+
+}
+
+
+.resumen-producto-info strong {
+
+  font-size: 14px;
+
+}
+
+
+.resumen-producto-info span {
+
+  color: #8996a6;
+
+  font-size: 12px;
+
+}
+
+
+.resumen-producto > strong {
+
+  font-size: 14px;
+
+  white-space: nowrap;
+
+}
+
+
+/* =========================
+   TOTAL
+========================= */
+
+.resumen-separador {
+
+  height: 1px;
+
+  background:
+    rgba(255,255,255,0.1);
+
+  margin:
+    25px 0 20px;
+
+}
+
+
+.resumen-total {
+
+  display: flex;
+
+  justify-content:
+    space-between;
+
+  align-items: center;
+
+}
+
+
+.resumen-total span {
+
+  font-size: 16px;
+
+}
+
+
+.resumen-total strong {
+
+  color: #6FBE44;
+
+  font-size: 25px;
+
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.resumen-info {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 25px;
+
+  padding: 14px;
+
+  background:
+    rgba(111,190,68,0.06);
+
+  border-radius: 10px;
+
+}
+
+
+.resumen-info span {
+
+  font-size: 16px;
+
+}
+
+
+.resumen-info p {
+
+  margin: 0;
+
+  color: #8996a6;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 950px) {
+
+  .solicitar-container {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+  .solicitar-resumen {
+
+    position: static;
+
+  }
+
+}
+
+
+/* =========================
+   MÓVIL
+========================= */
+
+@media (max-width: 650px) {
+
+  .solicitar-page {
+
+    padding:
+      100px 18px
+      60px;
+
+  }
+
+
+  .solicitar-header h1 {
+
+    font-size: 36px;
+
+  }
+
+
+  .solicitar-header p {
+
+    font-size: 15px;
+
+  }
+
+
+  .form-section {
+
+    padding: 22px;
+
+  }
+
+
+  .form-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+  .form-group.full {
+
+    grid-column:
+      auto;
+
+  }
+
+
+  .form-section-header {
+
+    margin-bottom: 25px;
+
+  }
+
+}
+

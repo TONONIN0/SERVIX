@@ -1,0 +1,785 @@
+
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import '../styles/pedido.css';
+
+const session = Astro.cookies.get('servix_session');
+
+if (!session) {
+  return Astro.redirect('/login');
+}
+
+const orderId = Astro.url.searchParams.get('id');
+
+if (!orderId) {
+  return Astro.redirect('/pedidos');
+}
+---
+
+<Layout>
+
+  <Navbar client:load />
+
+  <main class="pedido-page">
+
+    <div class="pedido-container">
+
+      <a
+        href="/pedidos"
+        class="pedido-volver"
+      >
+        ← Volver a mis solicitudes
+      </a>
+
+
+      <div
+        id="pedido-loading"
+        class="pedido-loading"
+      >
+        Cargando solicitud...
+      </div>
+
+
+      <div
+        id="pedido-error"
+        class="pedido-error"
+        style="display:none;"
+      ></div>
+
+
+      <div
+        id="pedido-contenido"
+        style="display:none;"
+      >
+
+        <!-- HEADER -->
+
+        <div class="pedido-header">
+
+          <div>
+
+            <span class="section-label">
+              SERVIX / SOLICITUD
+            </span>
+
+            <h1>
+              Solicitud #<span id="pedido-id"></span>
+            </h1>
+
+            <p id="pedido-fecha"></p>
+
+          </div>
+
+
+          <span
+            id="pedido-estado"
+            class="pedido-estado"
+          ></span>
+
+        </div>
+
+
+        <!-- =========================
+            SEGUIMIENTO
+        ========================= -->
+
+        <section class="pedido-section">
+
+        <h2>
+            Seguimiento de la solicitud
+        </h2>
+
+        <div class="pedido-tracking">
+
+            <div
+            class="tracking-step"
+            data-step="pendiente"
+            >
+
+            <div class="tracking-icon">
+                ✓
+            </div>
+
+            <div class="tracking-info">
+
+                <strong>
+                Solicitud recibida
+                </strong>
+
+                <span>
+                Hemos recibido tu solicitud.
+                </span>
+
+            </div>
+
+            </div>
+
+
+            <div
+            class="tracking-line"
+            data-line="confirmado"
+            ></div>
+
+
+            <div
+            class="tracking-step"
+            data-step="confirmado"
+            >
+
+            <div class="tracking-icon">
+                ✓
+            </div>
+
+            <div class="tracking-info">
+
+                <strong>
+                Pedido confirmado
+                </strong>
+
+                <span>
+                Tu solicitud fue confirmada.
+                </span>
+
+            </div>
+
+            </div>
+
+
+            <div
+            class="tracking-line"
+            data-line="preparando"
+            ></div>
+
+
+            <div
+            class="tracking-step"
+            data-step="preparando"
+            >
+
+            <div class="tracking-icon">
+                ●
+            </div>
+
+            <div class="tracking-info">
+
+                <strong>
+                Preparando pedido
+                </strong>
+
+                <span>
+                Estamos preparando tus productos.
+                </span>
+
+            </div>
+
+            </div>
+
+
+            <div
+            class="tracking-line"
+            data-line="enviado"
+            ></div>
+
+
+            <div
+            class="tracking-step"
+            data-step="enviado"
+            >
+
+            <div class="tracking-icon">
+                →
+            </div>
+
+            <div class="tracking-info">
+
+                <strong>
+                En camino
+                </strong>
+
+                <span>
+                Tu pedido está siendo enviado.
+                </span>
+
+            </div>
+
+            </div>
+
+
+            <div
+            class="tracking-line"
+            data-line="entregado"
+            ></div>
+
+
+            <div
+            class="tracking-step"
+            data-step="entregado"
+            >
+
+            <div class="tracking-icon">
+                ✓
+            </div>
+
+            <div class="tracking-info">
+
+                <strong>
+                Entregado
+                </strong>
+
+                <span>
+                Pedido entregado correctamente.
+                </span>
+
+            </div>
+
+            </div>
+
+        </div>
+
+        </section>
+
+
+        <!-- PRODUCTOS -->
+
+        <section class="pedido-section">
+
+          <h2>
+            Productos solicitados
+          </h2>
+
+          <div
+            id="pedido-productos"
+            class="pedido-productos"
+          ></div>
+
+          <div class="pedido-total">
+
+            <span>
+              Total
+            </span>
+
+            <strong id="pedido-total">
+              $0.00
+            </strong>
+
+          </div>
+
+        </section>
+
+
+        <!-- ENTREGA -->
+
+        <section class="pedido-section">
+
+          <h2>
+            Información de entrega
+          </h2>
+
+          <div class="entrega-grid">
+
+            <div>
+              <span>Dirección</span>
+
+              <strong id="pedido-direccion">
+                —
+              </strong>
+            </div>
+
+
+            <div>
+              <span>Ciudad</span>
+
+              <strong id="pedido-ciudad">
+                —
+              </strong>
+            </div>
+
+
+            <div>
+              <span>Teléfono</span>
+
+              <strong id="pedido-telefono">
+                —
+              </strong>
+            </div>
+
+
+            <div>
+              <span>Notas</span>
+
+              <strong id="pedido-notas">
+                —
+              </strong>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <script define:vars={{ orderId }}>
+
+    const loading =
+      document.getElementById(
+        'pedido-loading'
+      );
+
+    const errorBox =
+      document.getElementById(
+        'pedido-error'
+      );
+
+    const contenido =
+      document.getElementById(
+        'pedido-contenido'
+      );
+
+
+    // =========================
+    // FORMATO PRECIO
+    // =========================
+
+    function precio(valor) {
+
+      return new Intl.NumberFormat(
+        'es-MX',
+        {
+          style: 'currency',
+          currency: 'MXN',
+        }
+      ).format(Number(valor));
+
+    }
+
+
+    // =========================
+    // FORMATO FECHA
+    // =========================
+
+    function fecha(valor) {
+
+      return new Intl.DateTimeFormat(
+        'es-MX',
+        {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        }
+      ).format(
+        new Date(valor)
+      );
+
+    }
+
+
+    // =========================
+    // ESTADO
+    // =========================
+
+    function estadoTexto(estado) {
+
+      const estados = {
+
+        pendiente: 'Pendiente',
+
+        confirmado: 'Confirmado',
+
+        preparando: 'Preparando',
+
+        enviado: 'Enviado',
+
+        entregado: 'Entregado',
+
+        cancelado: 'Cancelado',
+
+      };
+
+      return (
+        estados[
+          String(estado).toLowerCase()
+        ] || estado
+      );
+
+    }
+
+
+    // =========================
+    // CARGAR PEDIDO
+    // =========================
+
+    async function cargarPedido() {
+
+      try {
+
+        const response =
+          await fetch(
+            `/api/orders/${orderId}`
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (response.status === 401) {
+
+          window.location.href =
+            '/login';
+
+          return;
+
+        }
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            'No fue posible cargar el pedido.'
+          );
+
+        }
+
+
+        const pedido =
+          data.order;
+
+          // =========================
+            // ACTUALIZAR TRACKING
+            // =========================
+
+            actualizarTracking(
+            pedido.estado
+            );
+
+
+        // =========================
+        // INFORMACIÓN PRINCIPAL
+        // =========================
+
+        document.getElementById(
+          'pedido-id'
+        ).textContent =
+          pedido.id;
+
+
+        document.getElementById(
+          'pedido-fecha'
+        ).textContent =
+          `Realizado el ${fecha(
+            pedido.createdAt
+          )}`;
+
+
+        const estado =
+          document.getElementById(
+            'pedido-estado'
+          );
+
+
+        estado.textContent =
+          estadoTexto(
+            pedido.estado
+          );
+
+
+        estado.className =
+          `pedido-estado estado-${String(
+            pedido.estado
+          ).toLowerCase()}`;
+
+
+        // =========================
+        // PRODUCTOS
+        // =========================
+
+        const productos =
+          document.getElementById(
+            'pedido-productos'
+          );
+
+
+        productos.innerHTML = '';
+
+
+        pedido.items.forEach(
+          (item) => {
+
+            const producto =
+              item.product;
+
+
+            const elemento =
+              document.createElement(
+                'div'
+              );
+
+
+            elemento.className =
+              'producto-pedido';
+
+
+            const imagen =
+              producto.imagen
+                ? `
+                  <img
+                    src="${producto.imagen}"
+                    alt="${producto.nombre}"
+                  >
+                `
+                : `
+                  <div class="producto-sin-imagen">
+                    SERVIX
+                  </div>
+                `;
+
+
+            elemento.innerHTML = `
+
+              <div class="producto-info">
+
+                ${imagen}
+
+                <div>
+
+                  <strong>
+                    ${producto.nombre}
+                  </strong>
+
+                  <span>
+                    ${item.cantidad}
+                    ×
+                    ${precio(item.precio)}
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <strong class="producto-subtotal">
+                ${precio(
+                  Number(item.precio) *
+                  item.cantidad
+                )}
+              </strong>
+
+            `;
+
+
+            productos.appendChild(
+              elemento
+            );
+
+          }
+        );
+
+
+        // =========================
+        // TOTAL
+        // =========================
+
+        document.getElementById(
+          'pedido-total'
+        ).textContent =
+          precio(
+            pedido.total
+          );
+
+
+        // =========================
+        // ENTREGA
+        // =========================
+
+        document.getElementById(
+          'pedido-direccion'
+        ).textContent =
+          pedido.direccion ||
+          'No especificada';
+
+
+        document.getElementById(
+          'pedido-ciudad'
+        ).textContent =
+          pedido.ciudad ||
+          'No especificada';
+
+
+        document.getElementById(
+          'pedido-telefono'
+        ).textContent =
+          pedido.telefono ||
+          'No especificado';
+
+
+        document.getElementById(
+          'pedido-notas'
+        ).textContent =
+          pedido.notas ||
+          'Sin notas';
+
+
+        // =========================
+        // MOSTRAR
+        // =========================
+
+        loading.style.display =
+          'none';
+
+        contenido.style.display =
+          'block';
+
+      } catch (error) {
+
+        console.error(error);
+
+        loading.style.display =
+          'none';
+
+        errorBox.textContent =
+          error.message ||
+          'No fue posible cargar el pedido.';
+
+        errorBox.style.display =
+          'block';
+
+      }
+
+    }
+    function actualizarTracking(estado) {
+
+  const ordenEstados = [
+    'pendiente',
+    'confirmado',
+    'preparando',
+    'enviado',
+    'entregado'
+  ];
+
+  const estadoActual =
+    String(estado).toLowerCase();
+
+  let indiceActual =
+    ordenEstados.indexOf(
+      estadoActual
+    );
+
+  // Si está cancelado,
+  // no avanzamos el tracking.
+  if (estadoActual === 'cancelado') {
+
+    document
+      .querySelectorAll(
+        '.tracking-step'
+      )
+      .forEach((step) => {
+
+        step.classList.remove(
+          'completado',
+          'actual'
+        );
+
+      });
+
+    return;
+
+  }
+
+  if (indiceActual === -1) {
+    indiceActual = 0;
+  }
+
+
+  document
+    .querySelectorAll(
+      '.tracking-step'
+    )
+    .forEach((step) => {
+
+      const stepEstado =
+        step.dataset.step;
+
+      const stepIndex =
+        ordenEstados.indexOf(
+          stepEstado
+        );
+
+      step.classList.remove(
+        'completado',
+        'actual'
+      );
+
+      if (
+        stepIndex <
+        indiceActual
+      ) {
+
+        step.classList.add(
+          'completado'
+        );
+
+      }
+
+      if (
+        stepIndex ===
+        indiceActual
+      ) {
+
+        step.classList.add(
+          'actual'
+        );
+
+      }
+
+    });
+
+
+  document
+    .querySelectorAll(
+      '.tracking-line'
+    )
+    .forEach((line) => {
+
+      const lineEstado =
+        line.dataset.line;
+
+      const lineIndex =
+        ordenEstados.indexOf(
+          lineEstado
+        );
+
+      line.classList.remove(
+        'activa'
+      );
+
+      if (
+        lineIndex <=
+        indiceActual
+      ) {
+
+        line.classList.add(
+          'activa'
+        );
+
+      }
+
+    });
+
+}
+
+
+    cargarPedido();
+
+  </script>
+
+</Layout>
+

@@ -1,0 +1,422 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import '../styles/pedidos.css';
+
+const session =
+  Astro.cookies.get('servix_session');
+
+if (!session) {
+  return Astro.redirect('/login');
+}
+---
+
+<Layout>
+
+  <Navbar client:load />
+
+  <main class="pedidos-page">
+
+    <section class="pedidos-header">
+
+      <span class="section-label">
+        SERVIX / MIS SOLICITUDES
+      </span>
+
+      <h1>
+        Mis solicitudes
+      </h1>
+
+      <p>
+        Consulta el estado de tus pedidos
+        y revisa tus solicitudes anteriores.
+      </p>
+
+    </section>
+
+
+    <section class="pedidos-container">
+
+      <div
+        id="pedidos-loading"
+        class="pedidos-loading"
+      >
+        Cargando tus solicitudes...
+      </div>
+
+
+      <div
+        id="pedidos-error"
+        class="pedidos-error"
+        style="display:none;"
+      ></div>
+
+
+      <div
+        id="pedidos-vacio"
+        class="pedidos-vacio"
+        style="display:none;"
+      >
+
+        <div class="vacio-icono">
+          🛒
+        </div>
+
+        <h2>
+          Todavía no tienes solicitudes
+        </h2>
+
+        <p>
+          Cuando realices tu primer pedido,
+          aparecerá aquí.
+        </p>
+
+        <a href="/">
+          Ver productos →
+        </a>
+
+      </div>
+
+
+      <div
+        id="pedidos-lista"
+        class="pedidos-lista"
+        style="display:none;"
+      ></div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    const loading =
+      document.getElementById(
+        'pedidos-loading'
+      );
+
+    const errorBox =
+      document.getElementById(
+        'pedidos-error'
+      );
+
+    const vacio =
+      document.getElementById(
+        'pedidos-vacio'
+      );
+
+    const lista =
+      document.getElementById(
+        'pedidos-lista'
+      );
+
+
+    // =========================
+    // PRECIO
+    // =========================
+
+    function precio(valor) {
+
+      return new Intl.NumberFormat(
+        'es-MX',
+        {
+          style: 'currency',
+          currency: 'MXN',
+        }
+      ).format(Number(valor));
+
+    }
+
+
+    // =========================
+    // FECHA
+    // =========================
+
+    function fecha(valor) {
+
+      return new Intl.DateTimeFormat(
+        'es-MX',
+        {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        }
+      ).format(
+        new Date(valor)
+      );
+
+    }
+
+
+    // =========================
+    // ESTADO
+    // =========================
+
+    function estadoClase(
+      estado
+    ) {
+
+      return estado
+        .toLowerCase()
+        .replaceAll(
+          ' ',
+          '-'
+        );
+
+    }
+
+
+    function estadoTexto(
+      estado
+    ) {
+
+      const estados = {
+
+        pendiente:
+          'Pendiente',
+
+        confirmado:
+          'Confirmado',
+
+        preparando:
+          'Preparando',
+
+        enviado:
+          'Enviado',
+
+        entregado:
+          'Entregado',
+
+        cancelado:
+          'Cancelado',
+
+      };
+
+      return (
+        estados[
+          estado.toLowerCase()
+        ] ||
+        estado
+      );
+
+    }
+
+
+    // =========================
+    // CARGAR PEDIDOS
+    // =========================
+
+    async function cargarPedidos() {
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/orders'
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          response.status === 401
+        ) {
+
+          window.location.href =
+            '/login';
+
+          return;
+
+        }
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            'No fue posible cargar los pedidos'
+          );
+
+        }
+
+
+        loading.style.display =
+          'none';
+
+
+        if (
+          !data.orders ||
+          data.orders.length === 0
+        ) {
+
+          vacio.style.display =
+            'flex';
+
+          return;
+
+        }
+
+
+        lista.style.display =
+          'flex';
+
+
+        lista.innerHTML =
+          '';
+
+
+        data.orders.forEach(
+          (pedido) => {
+
+            const elemento =
+              document.createElement(
+                'article'
+              );
+
+
+            elemento.className =
+              'pedido-card';
+
+
+            const cantidadProductos =
+              pedido.items.reduce(
+                (
+                  total,
+                  item
+                ) =>
+                  total +
+                  item.cantidad,
+                0
+              );
+
+
+            elemento.innerHTML = `
+
+              <div class="pedido-card-top">
+
+                <div>
+
+                  <span class="pedido-label">
+                    SOLICITUD
+                  </span>
+
+                  <h2>
+                    #${pedido.id}
+                  </h2>
+
+                </div>
+
+
+                <span
+                  class="
+                    pedido-estado
+                    estado-${estadoClase(
+                      pedido.estado
+                    )}
+                  "
+                >
+                  ${estadoTexto(
+                    pedido.estado
+                  )}
+                </span>
+
+              </div>
+
+
+              <div class="pedido-card-info">
+
+                <div>
+
+                  <span>
+                    Fecha
+                  </span>
+
+                  <strong>
+                    ${fecha(
+                      pedido.createdAt
+                    )}
+                  </strong>
+
+                </div>
+
+
+                <div>
+
+                  <span>
+                    Productos
+                  </span>
+
+                  <strong>
+                    ${cantidadProductos}
+                  </strong>
+
+                </div>
+
+
+                <div>
+
+                  <span>
+                    Total
+                  </span>
+
+                  <strong class="pedido-total">
+                    ${precio(
+                      pedido.total
+                    )}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <div class="pedido-card-bottom">
+
+                <a
+                  href="/pedido?id=${pedido.id}"
+                  class="pedido-ver"
+                >
+                  Ver solicitud →
+                </a>
+
+              </div>
+
+            `;
+
+
+            lista.appendChild(
+              elemento
+            );
+
+          }
+        );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        loading.style.display =
+          'none';
+
+        errorBox.textContent =
+          error.message ||
+          'No fue posible cargar tus solicitudes.';
+
+        errorBox.style.display =
+          'block';
+
+      }
+
+    }
+
+
+    cargarPedidos();
+
+  </script>
+
+</Layout>
+

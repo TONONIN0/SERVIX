@@ -1,0 +1,532 @@
+
+/* =========================
+   PÁGINA
+========================= */
+
+.pedidos-page {
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(111, 190, 68, 0.08),
+      transparent 35%
+    ),
+    #07111f;
+
+  color: #f5f7fa;
+
+  padding:
+    120px 7%
+    80px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.pedidos-header {
+
+  max-width: 1100px;
+
+  margin:
+    0 auto 45px;
+
+}
+
+
+.section-label {
+
+  color: #6FBE44;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+}
+
+
+.pedidos-header h1 {
+
+  margin:
+    12px 0 10px;
+
+  font-size: 48px;
+
+}
+
+
+.pedidos-header p {
+
+  margin: 0;
+
+  color: #9ca8b7;
+
+  font-size: 16px;
+
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.pedidos-container {
+
+  max-width: 1100px;
+
+  margin: auto;
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.pedidos-loading {
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  color: #8996a6;
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.pedidos-error {
+
+  padding: 18px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(255,80,80,0.08);
+
+  border:
+    1px solid
+    rgba(255,80,80,0.2);
+
+  color: #ff9292;
+
+}
+
+
+/* =========================
+   LISTA
+========================= */
+
+.pedidos-lista {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.pedido-card {
+
+  padding: 25px 28px;
+
+  background:
+    rgba(255,255,255,0.035);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.08);
+
+  border-radius: 18px;
+
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+
+}
+
+
+.pedido-card:hover {
+
+  transform:
+    translateY(-2px);
+
+  border-color:
+    rgba(111,190,68,0.3);
+
+}
+
+
+/* =========================
+   TOP
+========================= */
+
+.pedido-card-top {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+}
+
+
+.pedido-label {
+
+  color: #6d7b8d;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+
+}
+
+
+.pedido-card h2 {
+
+  margin:
+    5px 0 0;
+
+  font-size: 25px;
+
+}
+
+
+/* =========================
+   ESTADO
+========================= */
+
+.pedido-estado {
+
+  padding:
+    8px 13px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  color: #cbd3dd;
+
+}
+
+
+/* Estados */
+
+.estado-pendiente {
+
+  color: #f0bd63;
+
+  background:
+    rgba(240,189,99,0.1);
+
+}
+
+
+.estado-confirmado {
+
+  color: #72c8ff;
+
+  background:
+    rgba(114,200,255,0.1);
+
+}
+
+
+.estado-preparando {
+
+  color: #b99cff;
+
+  background:
+    rgba(185,156,255,0.1);
+
+}
+
+
+.estado-enviado {
+
+  color: #64d7c5;
+
+  background:
+    rgba(100,215,197,0.1);
+
+}
+
+
+.estado-entregado {
+
+  color: #6FBE44;
+
+  background:
+    rgba(111,190,68,0.1);
+
+}
+
+
+.estado-cancelado {
+
+  color: #ff7f7f;
+
+  background:
+    rgba(255,127,127,0.1);
+
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.pedido-card-info {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr 1fr;
+
+  gap: 20px;
+
+  margin:
+    25px 0;
+
+  padding:
+    20px 0;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,0.06);
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,0.06);
+
+}
+
+
+.pedido-card-info div {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+
+}
+
+
+.pedido-card-info span {
+
+  color: #697789;
+
+  font-size: 12px;
+
+}
+
+
+.pedido-card-info strong {
+
+  color: #dce3eb;
+
+  font-size: 14px;
+
+}
+
+
+.pedido-total {
+
+  color: #6FBE44 !important;
+
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.pedido-card-bottom {
+
+  display: flex;
+
+  justify-content: flex-end;
+
+}
+
+
+.pedido-ver {
+
+  color: #6FBE44;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+}
+
+
+.pedido-ver:hover {
+
+  text-decoration: underline;
+
+}
+
+
+/* =========================
+   VACÍO
+========================= */
+
+.pedidos-vacio {
+
+  min-height: 350px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+
+}
+
+
+.vacio-icono {
+
+  font-size: 45px;
+
+  margin-bottom: 15px;
+
+}
+
+
+.pedidos-vacio h2 {
+
+  margin: 0 0 8px;
+
+  font-size: 24px;
+
+}
+
+
+.pedidos-vacio p {
+
+  margin:
+    0 0 25px;
+
+  color: #8996a6;
+
+}
+
+
+.pedidos-vacio a {
+
+  padding:
+    13px 20px;
+
+  border-radius: 10px;
+
+  background:
+    #6FBE44;
+
+  color: #061019;
+
+  text-decoration: none;
+
+  font-weight: 700;
+
+  font-size: 14px;
+
+}
+
+
+/* =========================
+   MÓVIL
+========================= */
+
+@media (max-width: 650px) {
+
+  .pedidos-page {
+
+    padding:
+      100px 18px
+      60px;
+
+  }
+
+
+  .pedidos-header h1 {
+
+    font-size: 36px;
+
+  }
+
+
+  .pedido-card {
+
+    padding:
+      22px;
+
+  }
+
+
+  .pedido-card-info {
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+
+  .pedido-card-info div:last-child {
+
+    grid-column:
+      1 / -1;
+
+  }
+
+
+  .pedido-card-top {
+
+    align-items:
+      flex-start;
+
+  }
+
+
+  .pedido-estado {
+
+    font-size: 11px;
+
+  }
+
+}
+

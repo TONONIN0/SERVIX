@@ -1,0 +1,402 @@
+/* =========================
+   PÁGINA
+========================= */
+
+.confirmacion-page {
+
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(111, 190, 68, 0.09),
+      transparent 40%
+    ),
+    #07111f;
+
+  color: #f5f7fa;
+
+  padding:
+    130px 20px
+    70px;
+
+}
+
+
+/* =========================
+   CONTENEDOR
+========================= */
+
+.confirmacion-container {
+
+  width: 100%;
+
+  max-width: 650px;
+
+  text-align: center;
+
+}
+
+
+/* =========================
+   ICONO
+========================= */
+
+.confirmacion-icono {
+
+  width: 82px;
+
+  height: 82px;
+
+  margin:
+    0 auto 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(111, 190, 68, 0.12);
+
+  border:
+    1px solid
+    rgba(111, 190, 68, 0.35);
+
+  color: #6FBE44;
+
+  font-size: 42px;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 0 50px
+    rgba(111, 190, 68, 0.08);
+
+}
+
+
+/* =========================
+   LABEL
+========================= */
+
+.section-label {
+
+  color: #6FBE44;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+}
+
+
+/* =========================
+   TITULO
+========================= */
+
+.confirmacion-container h1 {
+
+  margin:
+    14px 0 15px;
+
+  font-size: 48px;
+
+  line-height: 1.1;
+
+}
+
+
+.confirmacion-texto {
+
+  max-width: 560px;
+
+  margin:
+    0 auto;
+
+  color: #9ca8b7;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+
+}
+
+
+/* =========================
+   NUMERO
+========================= */
+
+.pedido-numero {
+
+  margin:
+    35px auto 18px;
+
+  padding:
+    20px 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  max-width: 500px;
+
+  background:
+    rgba(255,255,255,0.035);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.09);
+
+  border-radius: 14px;
+
+}
+
+
+.pedido-numero span {
+
+  color: #8e9aaa;
+
+  font-size: 14px;
+
+}
+
+
+.pedido-numero strong {
+
+  color: #6FBE44;
+
+  font-size: 22px;
+
+}
+
+
+/* =========================
+   ESTADO
+========================= */
+
+.estado-pedido {
+
+  max-width: 500px;
+
+  margin:
+    0 auto 30px;
+
+  padding:
+    18px 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  text-align: left;
+
+  gap: 15px;
+
+  background:
+    rgba(255,255,255,0.025);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.07);
+
+  border-radius: 14px;
+
+}
+
+
+.estado-icono {
+
+  width: 42px;
+
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 184, 77, 0.1);
+
+  font-size: 19px;
+
+}
+
+
+.estado-pedido strong {
+
+  font-size: 14px;
+
+}
+
+
+.estado-pedido p {
+
+  margin:
+    5px 0 0;
+
+  color: #7f8c9d;
+
+  font-size: 12px;
+
+}
+
+
+/* =========================
+   BOTONES
+========================= */
+
+.confirmacion-botones {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 12px;
+
+}
+
+
+.btn-principal,
+.btn-secundario {
+
+  min-width: 190px;
+
+  padding:
+    15px 22px;
+
+  border-radius: 10px;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+
+}
+
+
+.btn-principal {
+
+  background:
+    #6FBE44;
+
+  color:
+    #061019;
+
+}
+
+
+.btn-secundario {
+
+  border:
+    1px solid
+    rgba(255,255,255,0.12);
+
+  background:
+    rgba(255,255,255,0.03);
+
+  color:
+    #f5f7fa;
+
+}
+
+
+.btn-principal:hover,
+.btn-secundario:hover {
+
+  transform:
+    translateY(-2px);
+
+}
+
+
+.btn-principal:hover {
+
+  filter:
+    brightness(1.08);
+
+}
+
+
+/* =========================
+   MÓVIL
+========================= */
+
+@media (max-width: 600px) {
+
+  .confirmacion-page {
+
+    padding:
+      110px 18px
+      50px;
+
+  }
+
+
+  .confirmacion-container h1 {
+
+    font-size: 38px;
+
+  }
+
+
+  .confirmacion-texto {
+
+    font-size: 14px;
+
+  }
+
+
+  .pedido-numero {
+
+    flex-direction: column;
+
+    gap: 8px;
+
+  }
+
+
+  .confirmacion-botones {
+
+    flex-direction: column;
+
+  }
+
+
+  .btn-principal,
+  .btn-secundario {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+  }
+
+}
+

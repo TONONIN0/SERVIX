@@ -1,0 +1,627 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import '../styles/solicitar.css';
+
+const session = Astro.cookies.get('servix_session');
+
+if (!session) {
+  return Astro.redirect('/login');
+}
+---
+
+<Layout>
+
+  <Navbar client:load />
+
+  <main class="solicitar-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="solicitar-header">
+
+      <span class="section-label">
+        SERVIX / SOLICITAR
+      </span>
+
+      <h1>
+        Solicita tus productos
+      </h1>
+
+      <p>
+        Confirma los datos de entrega
+        y envía tu solicitud.
+      </p>
+
+    </section>
+
+
+    <!-- =========================
+         CONTENIDO
+    ========================== -->
+
+    <section class="solicitar-container">
+
+      <!-- =========================
+           FORMULARIO
+      ========================== -->
+
+      <form
+        id="pedido-form"
+        class="pedido-form"
+      >
+
+        <div class="form-section">
+
+          <div class="form-section-header">
+
+            <span class="form-number">
+              01
+            </span>
+
+            <div>
+
+              <h2>
+                Datos de entrega
+              </h2>
+
+              <p>
+                ¿Dónde debemos entregar tu pedido?
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-grid">
+
+            <div class="form-group full">
+
+              <label for="direccion">
+                Dirección
+              </label>
+
+              <input
+                id="direccion"
+                name="direccion"
+                type="text"
+                placeholder="Calle, número y colonia"
+                required
+              />
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="ciudad">
+                Ciudad
+              </label>
+
+              <input
+                id="ciudad"
+                name="ciudad"
+                type="text"
+                placeholder="Guadalajara"
+                required
+              />
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="telefono">
+                Teléfono
+              </label>
+
+              <input
+                id="telefono"
+                name="telefono"
+                type="tel"
+                placeholder="33 1234 5678"
+                required
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =========================
+             NOTAS
+        ========================== -->
+
+        <div class="form-section">
+
+          <div class="form-section-header">
+
+            <span class="form-number">
+              02
+            </span>
+
+            <div>
+
+              <h2>
+                Información adicional
+              </h2>
+
+              <p>
+                Agrega instrucciones para la entrega.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="notas">
+              Notas
+              <span>
+                Opcional
+              </span>
+            </label>
+
+            <textarea
+              id="notas"
+              name="notas"
+              placeholder="Ej. Entregar en recepción, horario de 9:00 a 17:00..."
+              rows="5"
+            ></textarea>
+
+          </div>
+
+        </div>
+
+
+        <!-- =========================
+             ERROR
+        ========================== -->
+
+        <div
+          id="pedido-error"
+          class="pedido-error"
+          style="display:none;"
+        ></div>
+
+
+        <!-- =========================
+             BOTÓN
+        ========================== -->
+
+        <button
+          type="submit"
+          id="btn-confirmar"
+          class="btn-confirmar"
+        >
+          Confirmar solicitud →
+        </button>
+
+      </form>
+
+
+      <!-- =========================
+           RESUMEN
+      ========================== -->
+
+      <aside class="solicitar-resumen">
+
+        <div
+          id="resumen-loading"
+          class="resumen-loading"
+        >
+          Cargando...
+        </div>
+
+
+        <div
+          id="resumen-contenido"
+          style="display:none;"
+        >
+
+          <h2>
+            Resumen del pedido
+          </h2>
+
+
+          <div
+            id="resumen-productos"
+            class="resumen-productos"
+          ></div>
+
+
+          <div class="resumen-separador"></div>
+
+
+          <div class="resumen-total">
+
+            <span>
+              Total
+            </span>
+
+            <strong id="resumen-total-precio">
+              $0.00
+            </strong>
+
+          </div>
+
+
+          <div class="resumen-info">
+
+            <span>
+              🛡️
+            </span>
+
+            <p>
+              Tu solicitud será revisada por
+              nuestro equipo antes de coordinar
+              la entrega.
+            </p>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script>
+
+    const loading =
+      document.getElementById(
+        'resumen-loading'
+      );
+
+    const contenido =
+      document.getElementById(
+        'resumen-contenido'
+      );
+
+    const productos =
+      document.getElementById(
+        'resumen-productos'
+      );
+
+    const totalPrecio =
+      document.getElementById(
+        'resumen-total-precio'
+      );
+
+    const form =
+      document.getElementById(
+        'pedido-form'
+      );
+
+    const errorBox =
+      document.getElementById(
+        'pedido-error'
+      );
+
+    const btnConfirmar =
+      document.getElementById(
+        'btn-confirmar'
+      );
+
+
+    // =========================
+    // FORMATEAR PRECIO
+    // =========================
+
+    function formatearPrecio(
+      precio
+    ) {
+
+      return new Intl.NumberFormat(
+        'es-MX',
+        {
+          style: 'currency',
+          currency: 'MXN',
+        }
+      ).format(precio);
+
+    }
+
+
+    // =========================
+    // CARGAR CARRITO
+    // =========================
+
+    async function cargarCarrito() {
+
+      try {
+
+        const response =
+          await fetch('/api/cart');
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          response.status === 401
+        ) {
+
+          window.location.href =
+            '/login';
+
+          return;
+
+        }
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            'No fue posible cargar el carrito'
+          );
+
+        }
+
+
+        const carrito =
+          data.cart;
+
+
+        loading.style.display =
+          'none';
+
+
+        if (
+          !carrito.items ||
+          carrito.items.length === 0
+        ) {
+
+          window.location.href =
+            '/carrito';
+
+          return;
+
+        }
+
+
+        contenido.style.display =
+          'block';
+
+
+        productos.innerHTML =
+          '';
+
+
+        carrito.items.forEach(
+          (item) => {
+
+            const producto =
+              item.product;
+
+
+            const subtotal =
+              Number(
+                producto.precio
+              ) *
+              item.cantidad;
+
+
+            const elemento =
+              document.createElement(
+                'div'
+              );
+
+
+            elemento.className =
+              'resumen-producto';
+
+
+            elemento.innerHTML = `
+
+              <div class="resumen-producto-info">
+
+                <strong>
+                  ${producto.nombre}
+                </strong>
+
+                <span>
+                  ${item.cantidad} ×
+                  ${formatearPrecio(
+                    producto.precio
+                  )}
+                </span>
+
+              </div>
+
+              <strong>
+                ${formatearPrecio(
+                  subtotal
+                )}
+              </strong>
+
+            `;
+
+
+            productos.appendChild(
+              elemento
+            );
+
+          }
+        );
+
+
+        totalPrecio.textContent =
+          formatearPrecio(
+            carrito.total
+          );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        loading.textContent =
+          'No fue posible cargar el carrito.';
+
+      }
+
+    }
+
+
+    // =========================
+    // CREAR PEDIDO
+    // =========================
+
+    form.addEventListener(
+      'submit',
+      async (e) => {
+
+        e.preventDefault();
+
+
+        errorBox.style.display =
+          'none';
+
+
+        btnConfirmar.disabled =
+          true;
+
+
+        btnConfirmar.textContent =
+          'Enviando solicitud...';
+
+
+        const direccion =
+          document
+            .getElementById('direccion')
+            .value
+            .trim();
+
+
+        const ciudad =
+          document
+            .getElementById('ciudad')
+            .value
+            .trim();
+
+
+        const telefono =
+          document
+            .getElementById('telefono')
+            .value
+            .trim();
+
+
+        const notas =
+          document
+            .getElementById('notas')
+            .value
+            .trim();
+
+
+        try {
+
+          const response =
+            await fetch(
+              '/api/orders',
+              {
+
+                method: 'POST',
+
+                headers: {
+                  'Content-Type':
+                    'application/json',
+                },
+
+                body:
+                  JSON.stringify({
+
+                    direccion,
+
+                    ciudad,
+
+                    telefono,
+
+                    notas,
+
+                  }),
+
+              }
+            );
+
+
+          const data =
+            await response.json();
+
+
+          if (!response.ok) {
+
+            errorBox.textContent =
+              data.error ||
+              'No fue posible crear el pedido.';
+
+            errorBox.style.display =
+              'block';
+
+            btnConfirmar.disabled =
+              false;
+
+            btnConfirmar.textContent =
+              'Confirmar solicitud →';
+
+            return;
+
+          }
+
+
+          // =========================
+          // PEDIDO CREADO
+          // =========================
+
+          window.location.href =
+            `/pedido-confirmado?id=${data.order.id}`;
+
+        } catch (error) {
+
+          console.error(error);
+
+          errorBox.textContent =
+            'No fue posible conectarse con el servidor.';
+
+          errorBox.style.display =
+            'block';
+
+          btnConfirmar.disabled =
+            false;
+
+          btnConfirmar.textContent =
+            'Confirmar solicitud →';
+
+        }
+
+      }
+    );
+
+
+    // =========================
+    // INICIAR
+    // =========================
+
+    cargarCarrito();
+
+  </script>
+
+</Layout>
+

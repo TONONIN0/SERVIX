@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import '../styles/Navbar.css';
 
-export default function Navbar({ usuario = null }) {
+export default function Navbar({ usuario: usuarioInicial = null }) {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
-  const [cartCount, setCartCount] = useState(0);
+  const [usuario, setUsuario] =
+    useState(usuarioInicial);
+
+  const [cartCount, setCartCount] =
+    useState(0);
 
 
   // =========================
@@ -14,7 +18,61 @@ export default function Navbar({ usuario = null }) {
   // =========================
 
   const cerrarMenu = () => {
+
     setMenuOpen(false);
+
+  };
+
+
+  // =========================
+  // CARGAR USUARIO
+  // =========================
+
+  const cargarUsuario = async () => {
+
+    try {
+
+      const response =
+        await fetch('/api/me');
+
+
+      if (!response.ok) {
+
+        setUsuario(null);
+
+        return;
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        data.authenticated &&
+        data.user
+      ) {
+
+        setUsuario(data.user);
+
+      } else {
+
+        setUsuario(null);
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        'Error cargando usuario:',
+        error
+      );
+
+      setUsuario(null);
+
+    }
+
   };
 
 
@@ -30,7 +88,10 @@ export default function Navbar({ usuario = null }) {
         method: 'POST',
       });
 
-      window.location.href = '/login';
+      setUsuario(null);
+
+      window.location.href =
+        '/login';
 
     } catch (error) {
 
@@ -49,9 +110,6 @@ export default function Navbar({ usuario = null }) {
   // =========================
 
   const actualizarCarrito = async () => {
-
-    // Si no hay usuario,
-    // no necesitamos consultar el carrito
 
     if (!usuario) {
 
@@ -93,10 +151,6 @@ export default function Navbar({ usuario = null }) {
       }
 
 
-      // =========================
-      // SUMAR CANTIDADES
-      // =========================
-
       const cantidad =
         data.cart.items.reduce(
           (total, item) => {
@@ -125,7 +179,26 @@ export default function Navbar({ usuario = null }) {
 
 
   // =========================
-  // CARGAR AL INICIAR
+  // CARGAR SESIÓN AL INICIAR
+  // =========================
+
+  useEffect(() => {
+
+    if (usuarioInicial) {
+
+      setUsuario(usuarioInicial);
+
+      return;
+
+    }
+
+    cargarUsuario();
+
+  }, []);
+
+
+  // =========================
+  // ACTUALIZAR CARRITO
   // =========================
 
   useEffect(() => {
@@ -144,7 +217,7 @@ export default function Navbar({ usuario = null }) {
     const actualizarCuandoRegresa =
       () => {
 
-        actualizarCarrito();
+        cargarUsuario();
 
       };
 
@@ -164,7 +237,7 @@ export default function Navbar({ usuario = null }) {
 
     };
 
-  }, [usuario]);
+  }, []);
 
 
   // =========================
@@ -216,7 +289,7 @@ export default function Navbar({ usuario = null }) {
 
 
       {/* =========================
-          ZONA DERECHA DESKTOP
+          ZONA DERECHA
       ========================= */}
 
       <div className="navbar-user-area">
@@ -246,7 +319,7 @@ export default function Navbar({ usuario = null }) {
                 <span className="user-icon">
 
                   {usuario.nombre
-                    .charAt(0)
+                    ?.charAt(0)
                     .toUpperCase()}
 
                 </span>
@@ -274,10 +347,6 @@ export default function Navbar({ usuario = null }) {
               </button>
 
 
-              {/* =========================
-                  MENÚ PERFIL
-              ========================= */}
-
               {profileOpen && (
 
                 <div
@@ -285,16 +354,12 @@ export default function Navbar({ usuario = null }) {
                 >
 
                   <a href="/perfil">
-
                     👤 Mi perfil
-
                   </a>
 
 
                   <a href="/carrito">
-
                     🛒 Carrito
-
                   </a>
 
 
@@ -322,7 +387,7 @@ export default function Navbar({ usuario = null }) {
 
 
             {/* =========================
-                CARRITO DESKTOP
+                CARRITO
             ========================= */}
 
             <a
@@ -333,11 +398,8 @@ export default function Navbar({ usuario = null }) {
 
               🛒
 
-
               <span className="cart-count">
-
                 {cartCount}
-
               </span>
 
             </a>
@@ -345,11 +407,6 @@ export default function Navbar({ usuario = null }) {
           </>
 
         ) : (
-
-
-          /* =========================
-             USUARIO NO LOGUEADO
-          ========================= */
 
           <a
             href="/login"
@@ -403,58 +460,37 @@ export default function Navbar({ usuario = null }) {
         }`}
       >
 
-
         <a
           href="/Servicios"
-          onClick={
-            cerrarMenu
-          }
+          onClick={cerrarMenu}
         >
-
           Servicios
-
         </a>
 
 
         <a
           href="/productos"
-          onClick={
-            cerrarMenu
-          }
+          onClick={cerrarMenu}
         >
-
           Productos
-
         </a>
 
 
         <a
           href="/Solicitar"
-          onClick={
-            cerrarMenu
-          }
+          onClick={cerrarMenu}
         >
-
           Solicitar
-
         </a>
 
 
         <a
           href="/Contacto"
-          onClick={
-            cerrarMenu
-          }
+          onClick={cerrarMenu}
         >
-
           Contacto
-
         </a>
 
-
-        {/* =========================
-            USUARIO LOGUEADO
-        ========================= */}
 
         {usuario ? (
 
@@ -463,21 +499,15 @@ export default function Navbar({ usuario = null }) {
             <a
               href="/perfil"
               className="mobile-user"
-              onClick={
-                cerrarMenu
-              }
+              onClick={cerrarMenu}
             >
-
               👤 {usuario.nombre}
-
             </a>
 
 
             <a
               href="/carrito"
-              onClick={
-                cerrarMenu
-              }
+              onClick={cerrarMenu}
             >
 
               🛒 Carrito
@@ -487,9 +517,7 @@ export default function Navbar({ usuario = null }) {
                 <span
                   className="mobile-cart-count"
                 >
-
                   {cartCount}
-
                 </span>
 
               )}
@@ -499,34 +527,21 @@ export default function Navbar({ usuario = null }) {
 
             <button
               className="mobile-logout"
-              onClick={
-                cerrarSesion
-              }
+              onClick={cerrarSesion}
             >
-
               Cerrar sesión
-
             </button>
 
           </>
 
         ) : (
 
-
-          /* =========================
-             NO LOGUEADO
-          ========================= */
-
           <a
             href="/login"
             className="mobile-menu-button"
-            onClick={
-              cerrarMenu
-            }
+            onClick={cerrarMenu}
           >
-
             Iniciar sesión
-
           </a>
 
         )}
@@ -538,3 +553,4 @@ export default function Navbar({ usuario = null }) {
   );
 
 }
+
