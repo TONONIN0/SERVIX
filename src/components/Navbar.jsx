@@ -245,8 +245,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
 
   // =========================
-  // ACTUALIZAR CARRITO
-  // AUTOMÁTICAMENTE
+  // ACTUALIZAR CARRITO POR EVENTO
   // =========================
 
   useEffect(() => {
@@ -256,26 +255,36 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
     }
 
 
-    /*
-      Actualiza el contador periódicamente.
+    const actualizarDesdeEvento = (event) => {
 
-      Esto permite que cuando agregues,
-      elimines o cambies cantidades en el
-      carrito, el número del Navbar se
-      actualice automáticamente.
-    */
+      const cantidad =
+        event.detail?.cartCount;
 
-    const intervalo =
-      setInterval(() => {
+      if (Number.isFinite(cantidad)) {
 
-        actualizarCarrito();
+        setCartCount(cantidad);
 
-      }, 1000);
+        return;
+
+      }
+
+      actualizarCarrito();
+
+    };
+
+
+    window.addEventListener(
+      'servix:cart-updated',
+      actualizarDesdeEvento
+    );
 
 
     return () => {
 
-      clearInterval(intervalo);
+      window.removeEventListener(
+        'servix:cart-updated',
+        actualizarDesdeEvento
+      );
 
     };
 
@@ -366,8 +375,8 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
       <div className="navbar-links">
 
-        <a href="/Servicios">
-          Servicios
+        <a href="/">
+          Nosotros
         </a>
 
         <a href="/productos">
@@ -393,7 +402,7 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
           ZONA DERECHA
       ========================= */}
 
-      <div className="navbar-user-area">
+      <div className="navbar-user-area navbar-desktop-actions">
 
 
         {/* =========================
@@ -635,11 +644,11 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
 
 
         <a
-          href="/Servicios"
+          href="/"
           onClick={cerrarMenu}
         >
 
-          Servicios
+          Nosotros
 
         </a>
 
