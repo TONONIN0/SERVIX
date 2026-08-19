@@ -383,9 +383,6 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
           Productos
         </a>
 
-        <a href="/Solicitar">
-          Solicitar
-        </a>
 
         <a href="/pedidos">
           Mis solicitudes
@@ -661,17 +658,6 @@ export default function Navbar({ usuario: usuarioInicial = null }) {
           Productos
 
         </a>
-
-
-        <a
-          href="/Solicitar"
-          onClick={cerrarMenu}
-        >
-
-          Solicitar
-
-        </a>
-
 
         <a
           href="/pedidos"
