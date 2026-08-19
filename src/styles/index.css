@@ -1971,3 +1971,174 @@ section {
 }
 
 
+/* =========================
+   CARGA PROGRESIVA
+========================= */
+
+.scroll-reveal {
+
+  opacity: 0;
+
+  transform:
+    translateY(45px);
+
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+
+}
+
+
+/* Cuando entra en pantalla */
+
+.scroll-reveal.visible {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+}
+
+
+/* =========================
+   ELEMENTOS INTERNOS
+========================= */
+
+.scroll-reveal .section-label,
+.scroll-reveal h2,
+.scroll-reveal h3,
+.scroll-reveal p,
+.scroll-reveal .card,
+.scroll-reveal .brand,
+.scroll-reveal .experience-card-main,
+.scroll-reveal .experience-stat {
+
+  opacity: 0;
+
+  transform:
+    translateY(20px);
+
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+
+}
+
+
+/* Aparecen después de la sección */
+
+.scroll-reveal.visible .section-label {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+  transition-delay:
+    0.1s;
+
+}
+
+
+.scroll-reveal.visible h2 {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+  transition-delay:
+    0.2s;
+
+}
+
+
+.scroll-reveal.visible p {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+  transition-delay:
+    0.3s;
+
+}
+
+
+.scroll-reveal.visible .card {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+}
+
+
+.scroll-reveal.visible .experience-card-main {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+  transition-delay:
+    0.35s;
+
+}
+
+
+.scroll-reveal.visible .experience-stat {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+  transition-delay:
+    0.5s;
+
+}
+
+
+/* =========================
+   LOGOS
+========================= */
+
+.scroll-reveal.visible .brand {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+}
+
+
+/* =========================
+   REDUCIR ANIMACIONES
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .scroll-reveal,
+  .scroll-reveal .section-label,
+  .scroll-reveal h2,
+  .scroll-reveal h3,
+  .scroll-reveal p,
+  .scroll-reveal .card,
+  .scroll-reveal .brand,
+  .scroll-reveal .experience-card-main,
+  .scroll-reveal .experience-stat {
+
+    opacity: 1;
+
+    transform: none;
+
+    transition: none;
+
+  }
+
+}

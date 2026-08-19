@@ -33,11 +33,10 @@ if (session) {
     client:load
     usuario={usuario}
   />
-
   <main>
 
      <!-- MARCAS -->
-<section class="brands">
+<section class="brands scroll-reveal">
 
   <div class="brands-track">
 
@@ -97,7 +96,7 @@ if (session) {
 </section>
 
     <!-- HERO -->
-    <section class="hero">
+    <section class="hero scroll-reveal">
 
       <div class="hero-content">
 
@@ -141,7 +140,7 @@ if (session) {
 
 
 <!-- SERVICIOS -->
-<section class="services" id="servicios">
+<section class="services scroll-reveal" id="servicios">
 
   <div class="section-header">
 
@@ -234,7 +233,7 @@ if (session) {
 
 
  <!-- CÓMO FUNCIONA -->
-<section class="process-section" id="como-funciona">
+<section class="process-section scroll-reveal" id="como-funciona">
 
   <div class="process-header">
 
@@ -384,7 +383,7 @@ if (session) {
      EXPERIENCIA INDUSTRIAL
 ========================= -->
 
-<section class="experience-section">
+<section class="experience-section scroll-reveal">
 
   <div class="experience-container">
 
@@ -495,6 +494,65 @@ if (session) {
   </main>
   
     <Footer />
+
+
+    <script>
+
+  const elementos =
+    document.querySelectorAll(
+      '.scroll-reveal'
+    );
+
+
+  const observer =
+    new IntersectionObserver(
+
+      (entries) => {
+
+        entries.forEach(
+          (entry) => {
+
+            if (
+              entry.isIntersecting
+            ) {
+
+              entry.target.classList.add(
+                'visible'
+              );
+
+              observer.unobserve(
+                entry.target
+              );
+
+            }
+
+          }
+        );
+
+      },
+
+      {
+        threshold: 0.15,
+
+        rootMargin:
+          '0px 0px -60px 0px'
+
+      }
+
+    );
+
+
+  elementos.forEach(
+    (elemento) => {
+
+      observer.observe(
+        elemento
+      );
+
+    }
+  );
+
+</script>
 
 </Layout>
 
