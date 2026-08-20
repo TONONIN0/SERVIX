@@ -92,9 +92,11 @@ const productos = await prisma.product.findMany({
           placeholder="Buscar producto..."
         />
 
-        <span>
-          🔎
-        </span>
+        <img
+          src="/assets/lupa.avif"
+          alt="Buscar"
+          class="search-icon"
+        />
 
       </div>
 
@@ -452,78 +454,79 @@ const productos = await prisma.product.findMany({
     }
   );
 
+// =========================
+// CONTADOR CARRITO
+// =========================
 
-  // =========================
-  // CONTADOR CARRITO
-  // =========================
+async function
+actualizarContadorCarrito() {
 
-  async function
-  actualizarContadorCarrito() {
+  try {
 
-    try {
-
-      const response =
-        await fetch(
-          '/api/cart'
-        );
-
-
-      if (!response.ok) {
-        return;
-      }
-
-
-      const data =
-        await response.json();
-
-
-      if (
-        !data.success ||
-        !data.cart
-      ) {
-        return;
-      }
-
-
-      const cantidadTotal =
-        data.cart.items.reduce(
-          (total, item) => {
-
-            return (
-              total +
-              item.cantidad
-            );
-
-          },
-          0
-        );
-
-
-      const contador =
-        document.querySelector(
-          '.cart-count'
-        );
-
-
-      if (!contador) {
-        return;
-      }
-
-
-      contador.textContent =
-        cantidadTotal;
-
-
-    } catch (error) {
-
-      console.error(
-        'Error actualizando carrito:',
-        error
+    const response =
+      await fetch(
+        '/api/cart'
       );
 
+
+    if (!response.ok) {
+      return;
     }
 
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data.success ||
+      !data.cart
+    ) {
+      return;
+    }
+
+
+    const cantidadTotal =
+      data.cart.items.reduce(
+        (total, item) => {
+
+          return (
+            total +
+            item.cantidad
+          );
+
+        },
+        0
+      );
+
+
+    // 🔥 Avisamos al Navbar
+    // (React) en vez de tocar
+    // su DOM directamente
+
+    window.dispatchEvent(
+      new CustomEvent(
+        'servix:cart-updated',
+        {
+          detail: {
+            cartCount:
+              cantidadTotal,
+          },
+        }
+      )
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      'Error actualizando carrito:',
+      error
+    );
+
   }
+
+}
 
 
   // =========================

@@ -141,7 +141,7 @@
 }
 
 
-.productos-search span {
+.productos-search .search-icon {
   position: absolute;
 
   right: 17px;
@@ -150,9 +150,14 @@
 
   transform: translateY(-50%);
 
-  font-size: 17px;
+  width: 18px;
+  height: 18px;
+
+  object-fit: contain;
 
   pointer-events: none;
+
+  filter: brightness(0) invert(1);
 }
 
 

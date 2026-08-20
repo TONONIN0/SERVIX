@@ -1,3 +1,26 @@
+/* =========================
+   RESET / BASE RESPONSIVE
+   (nuevo: evita overflow horizontal
+   y hace que padding no rompa anchos)
+========================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 
 /* =========================
    GENERAL
@@ -7,6 +30,7 @@ main {
   background-color: #07111f;
   color: #f5f7fa;
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
 }
 
 section {
@@ -42,6 +66,7 @@ section {
 
 .hero-content {
   max-width: 700px;
+  width: 100%;
 }
 
 
@@ -91,6 +116,8 @@ section {
   gap: 30px;
 
   margin-top: 35px;
+
+  flex-wrap: wrap;
 }
 
 .hero-button {
@@ -130,11 +157,6 @@ section {
 .hero-link:hover {
   color: #6FBE44;
 }
-
-
-/* =========================
-   HERO VISUAL
-========================= */
 
 
 /* =========================
@@ -181,58 +203,6 @@ section {
   border-radius: 50%;
 
 }
-
-
-/* =========================
-   TABLET
-========================= */
-
-@media (max-width: 900px) {
-
-  .hero-visual {
-
-    max-width: 420px;
-
-  }
-
-}
-
-
-/* =========================
-   MÓVIL
-========================= */
-
-@media (max-width: 600px) {
-
-  .hero-visual {
-
-    width: 75vw;
-
-    max-width: 320px;
-
-    min-width: 220px;
-
-  }
-
-}
-
-
-/* =========================
-   MÓVIL PEQUEÑO
-========================= */
-
-@media (max-width: 400px) {
-
-  .hero-visual {
-
-    width: 70vw;
-
-    min-width: 190px;
-
-  }
-
-}
-
 
 
 .visual-card {
@@ -438,6 +408,7 @@ section {
 .service-card:hover .service-image img {
   transform: scale(1.05);
 }
+
 /* =========================
    PROCESS SECTION
 ========================= */
@@ -707,193 +678,6 @@ section {
 
 
 /* =========================
-   TABLET
-========================= */
-
-@media (max-width: 1100px) {
-
-  .process-track {
-    grid-template-columns:
-      1fr
-      40px
-      1fr
-      40px
-      1fr;
-  }
-
-  .process-image {
-    height: 160px;
-  }
-
-  .process-number {
-    font-size: 100px;
-
-    top: 110px;
-  }
-
-  .process-content {
-    padding: 5px 25px 30px;
-  }
-
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 700px) {
-
-  .process-section {
-    padding: 90px 20px;
-  }
-
-  .process-header {
-    margin-bottom: 55px;
-  }
-
-  .process-header h2 {
-    font-size: 45px;
-
-    letter-spacing: -2px;
-  }
-
-  .process-track {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-  }
-
-  .process-item {
-    width: 100%;
-
-    min-height: 350px;
-
-    box-sizing: border-box;
-  }
-
-  .process-image {
-    height: 160px;
-  }
-
-  .process-number {
-    top: 110px;
-
-    font-size: 100px;
-  }
-
-  .process-content {
-    padding: 5px 30px 30px;
-  }
-
-  .process-arrow {
-    transform: rotate(90deg);
-
-    height: 35px;
-  }
-
-  .process-bottom {
-    flex-wrap: wrap;
-
-    margin-top: 50px;
-
-    text-align: center;
-  }
-
-}
-
-
-/* =========================
-   TABLET
-========================= */
-
-@media (max-width: 900px) {
-
-  section {
-    padding: 80px 6%;
-  }
-
-  .hero {
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    min-height: auto;
-
-    gap: 50px;
-  }
-
-  .hero h1 {
-    font-size: clamp(45px, 10vw, 65px);
-  }
-
-  .hero-visual {
-    width: 100%;
-    max-width: 500px;
-
-    height: 300px;
-  }
-
-  .services-grid,
-  .steps {
-    grid-template-columns: 1fr;
-  }
-
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 600px) {
-
-  section {
-    padding: 70px 20px;
-  }
-
-  .hero {
-    padding-top: 60px;
-  }
-
-  .hero h1 {
-    font-size: 46px;
-
-    letter-spacing: -2px;
-  }
-
-  .hero p {
-    font-size: 16px;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 20px;
-  }
-
-  .hero-button {
-    width: 100%;
-  }
-
-  .hero-visual {
-    height: 240px;
-  }
-
-  .section-header h2,
-  .contact h2 {
-    font-size: 40px;
-  }
-
-}
-/* =========================
-   MARCAS
-========================= */
-/* =========================
    MARCAS
 ========================= */
 
@@ -1115,158 +899,6 @@ section {
 
 
 /* =========================
-   TABLET
-========================= */
-
-@media (max-width: 900px) {
-
-  .brands {
-
-    padding: 45px 0;
-
-  }
-
-
-  .brands-track {
-
-    gap: 55px;
-
-    animation-duration:
-      24s;
-
-  }
-
-
-  .brand {
-
-    width: 165px;
-
-    height: 80px;
-
-    padding:
-      15px 20px;
-
-  }
-
-
-  .brand img {
-
-    max-width: 125px;
-
-    max-height: 48px;
-
-  }
-
-}
-
-
-/* =========================
-   MÓVIL
-========================= */
-
-@media (max-width: 600px) {
-
-  .brands {
-
-    padding: 35px 0;
-
-  }
-
-
-  .brands::before,
-  .brands::after {
-
-    width: 80px;
-
-  }
-
-
-  .brands-track {
-
-    gap: 35px;
-
-    animation-duration:
-      20s;
-
-  }
-
-
-  .brand {
-
-    width: 135px;
-
-    height: 70px;
-
-    padding:
-      12px 16px;
-
-    border-radius: 11px;
-
-  }
-
-
-  .brand img {
-
-    max-width: 105px;
-
-    max-height: 42px;
-
-    opacity: 0.7;
-
-  }
-
-}
-
-
-/* =========================
-   MÓVIL PEQUEÑO
-========================= */
-
-@media (max-width: 400px) {
-
-  .brands-track {
-
-    gap: 25px;
-
-  }
-
-
-  .brand {
-
-    width: 120px;
-
-    height: 65px;
-
-  }
-
-
-  .brand img {
-
-    max-width: 95px;
-
-    max-height: 38px;
-
-  }
-
-}
-
-
-/* =========================
-   REDUCIR MOVIMIENTO
-========================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .brands-track {
-
-    animation:
-      none;
-
-  }
-
-}
-
-/* =========================
    USER AREA
 ========================= */
 
@@ -1302,103 +934,6 @@ section {
 .navbar-user:hover {
   color: #20d58a;
 }
-
-
-/* =========================
-   USER ICON
-========================= */
-
-.user-icon {
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  width: 34px;
-  height: 34px;
-
-  border-radius: 50%;
-
-  background-color: rgba(32, 213, 138, 0.12);
-
-  border: 1px solid rgba(32, 213, 138, 0.35);
-
-  color: #20d58a;
-
-  font-size: 14px;
-
-  font-weight: 700;
-}
-
-
-/* =========================
-   CART
-========================= */
-
-.navbar-cart {
-  position: relative;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  width: 42px;
-  height: 42px;
-
-  border-radius: 10px;
-
-  background-color: #0a1625;
-
-  border: 1px solid rgba(255,255,255,0.08);
-
-  color: #f5f7fa;
-
-  text-decoration: none;
-
-  font-size: 18px;
-
-  transition:
-    border-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.navbar-cart:hover {
-  border-color: rgba(32,213,138,0.5);
-
-  transform: translateY(-2px);
-}
-
-
-/* =========================
-   CART COUNT
-========================= */
-
-.cart-count {
-  position: absolute;
-
-  top: -6px;
-  right: -6px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  width: 18px;
-  height: 18px;
-
-  border-radius: 50%;
-
-  background-color: #20d58a;
-
-  color: #07111f;
-
-  font-size: 10px;
-
-  font-weight: 800;
-}
-
 
 
 /* =========================
@@ -1501,13 +1036,6 @@ section {
   position: relative;
 
   z-index: 2;
-
-}
-
-
-
-
-.experience-container {
 
   max-width: 1200px;
 
@@ -1849,129 +1377,6 @@ section {
 
 
 /* =========================
-   MÓVIL
-========================= */
-
-@media (max-width: 850px) {
-
-  .experience-section {
-
-    padding:
-      90px 7%;
-
-  }
-
-
-  .experience-container {
-
-    grid-template-columns: 1fr;
-
-    gap: 60px;
-
-  }
-
-
-  .experience-content {
-
-    max-width: none;
-
-  }
-
-
-  .experience-visual {
-
-    min-height: 380px;
-
-  }
-
-}
-
-
-@media (max-width: 500px) {
-
-  .experience-section {
-
-    padding:
-      80px 20px;
-
-  }
-
-
-  .experience-content h2 {
-
-    font-size: 43px;
-
-  }
-
-
-  .experience-content p {
-
-    font-size: 15px;
-
-  }
-
-
-  .experience-intro {
-
-    font-size: 17px !important;
-
-  }
-
-
-  .experience-visual {
-
-    min-height: 330px;
-
-  }
-
-
-  .experience-card-main {
-
-    width: 230px;
-
-    min-height: 230px;
-
-    padding: 28px;
-
-  }
-
-
-  .experience-card-main strong {
-
-    font-size: 70px;
-
-  }
-
-
-  .experience-stat {
-
-    padding:
-      14px 17px;
-
-  }
-
-
-  .stat-one {
-
-    right: -5px;
-
-    top: 20px;
-
-  }
-
-
-  .stat-two {
-
-    left: -5px;
-
-    bottom: 20px;
-
-  }
-
-}
-
-
-/* =========================
    CARGA PROGRESIVA
 ========================= */
 
@@ -2138,6 +1543,464 @@ section {
     transform: none;
 
     transition: none;
+
+  }
+
+}
+
+
+/* =====================================================
+   ============  MEDIA QUERIES RESPONSIVE  =============
+   (agrupadas al final, de mayor a menor ancho,
+   para que siempre ganen sobre las reglas de arriba)
+===================================================== */
+
+
+/* =========================
+   ESCRITORIO PEQUEÑO / LAPTOP (1100px)
+========================= */
+
+@media (max-width: 1100px) {
+
+  .process-track {
+    grid-template-columns:
+      1fr
+      40px
+      1fr
+      40px
+      1fr;
+  }
+
+  .process-image {
+    height: 160px;
+  }
+
+  .process-number {
+    font-size: 100px;
+
+    top: 110px;
+  }
+
+  .process-content {
+    padding: 5px 25px 30px;
+  }
+
+}
+
+
+/* =========================
+   TABLET GRANDE (1000px)
+   (nuevo: evita que 3 columnas de
+   servicios se aprieten demasiado)
+========================= */
+
+@media (max-width: 1000px) {
+
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+/* =========================
+   TABLET (900px)
+========================= */
+
+@media (max-width: 900px) {
+
+  section {
+    padding: 80px 6%;
+  }
+
+  .hero {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    min-height: auto;
+
+    gap: 50px;
+  }
+
+  .hero h1 {
+    font-size: clamp(45px, 10vw, 65px);
+  }
+
+  .hero-visual {
+    width: 100%;
+    max-width: 420px;
+
+    height: auto;
+
+    margin: 0 auto;
+  }
+
+  .services-grid,
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-container {
+
+    grid-template-columns: 1fr;
+
+    gap: 60px;
+
+  }
+
+
+  .experience-content {
+
+    max-width: none;
+
+  }
+
+
+  .experience-visual {
+
+    min-height: 380px;
+
+  }
+
+  .brands {
+
+    padding: 45px 0;
+
+  }
+
+
+  .brands-track {
+
+    gap: 55px;
+
+    animation-duration:
+      24s;
+
+  }
+
+
+  .brand {
+
+    width: 165px;
+
+    height: 80px;
+
+    padding:
+      15px 20px;
+
+  }
+
+
+  .brand img {
+
+    max-width: 125px;
+
+    max-height: 48px;
+
+  }
+
+}
+
+
+/* =========================
+   MOBILE (700px) — PROCESO
+========================= */
+
+@media (max-width: 700px) {
+
+  .process-section {
+    padding: 90px 20px;
+  }
+
+  .process-header {
+    margin-bottom: 55px;
+  }
+
+  .process-header h2 {
+    font-size: 45px;
+
+    letter-spacing: -2px;
+  }
+
+  .process-track {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .process-item {
+    width: 100%;
+
+    min-height: 350px;
+
+    box-sizing: border-box;
+  }
+
+  .process-image {
+    height: 160px;
+  }
+
+  .process-number {
+    top: 110px;
+
+    font-size: 100px;
+  }
+
+  .process-content {
+    padding: 5px 30px 30px;
+  }
+
+  .process-arrow {
+    transform: rotate(90deg);
+
+    height: 35px;
+  }
+
+  .process-bottom {
+    flex-wrap: wrap;
+
+    margin-top: 50px;
+
+    text-align: center;
+  }
+
+}
+
+
+/* =========================
+   MÓVIL (600px)
+========================= */
+
+@media (max-width: 600px) {
+
+  section {
+    padding: 70px 20px;
+  }
+
+  .hero {
+    padding-top: 60px;
+  }
+
+  .hero h1 {
+    font-size: 46px;
+
+    letter-spacing: -2px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 20px;
+  }
+
+  /* 🔧 FIX: el botón ya no se
+     estira a lo bruto, tiene tope
+     y queda centrado */
+
+  .hero-button {
+    width: 100%;
+
+    max-width: 320px;
+
+    margin: 0 auto;
+  }
+
+  .hero-link {
+    text-align: center;
+  }
+
+  .hero-visual {
+
+    width: 75vw;
+
+    max-width: 320px;
+
+    min-width: 220px;
+
+    height: auto;
+
+  }
+
+  .section-header h2,
+  .contact h2 {
+    font-size: 40px;
+  }
+
+  .brands {
+
+    padding: 35px 0;
+
+  }
+
+
+  .brands::before,
+  .brands::after {
+
+    width: 80px;
+
+  }
+
+
+  .brands-track {
+
+    gap: 35px;
+
+    animation-duration:
+      20s;
+
+  }
+
+
+  .brand {
+
+    width: 135px;
+
+    height: 70px;
+
+    padding:
+      12px 16px;
+
+    border-radius: 11px;
+
+  }
+
+
+  .brand img {
+
+    max-width: 105px;
+
+    max-height: 42px;
+
+    opacity: 0.7;
+
+  }
+
+  .experience-section {
+
+    padding:
+      80px 20px;
+
+  }
+
+
+  .experience-content h2 {
+
+    font-size: 43px;
+
+  }
+
+
+  .experience-content p {
+
+    font-size: 15px;
+
+  }
+
+
+  .experience-intro {
+
+    font-size: 17px !important;
+
+  }
+
+
+  .experience-visual {
+
+    min-height: 330px;
+
+  }
+
+
+  .experience-card-main {
+
+    width: 230px;
+
+    min-height: 230px;
+
+    padding: 28px;
+
+  }
+
+
+  .experience-card-main strong {
+
+    font-size: 70px;
+
+  }
+
+
+  .experience-stat {
+
+    padding:
+      14px 17px;
+
+  }
+
+
+  .stat-one {
+
+    right: -5px;
+
+    top: 20px;
+
+  }
+
+
+  .stat-two {
+
+    left: -5px;
+
+    bottom: 20px;
+
+  }
+
+}
+
+
+/* =========================
+   MÓVIL PEQUEÑO (400px)
+========================= */
+
+@media (max-width: 400px) {
+
+  .hero-visual {
+
+    width: 70vw;
+
+    min-width: 190px;
+
+  }
+
+  .brands-track {
+
+    gap: 25px;
+
+  }
+
+
+  .brand {
+
+    width: 120px;
+
+    height: 65px;
+
+  }
+
+
+  .brand img {
+
+    max-width: 95px;
+
+    max-height: 38px;
 
   }
 
