@@ -201,7 +201,7 @@ export default function Login() {
 
         {loading
           ? 'Iniciando sesión...'
-          : 'Iniciar sesión →'
+          : 'Iniciar sesión'
         }
 
       </button>

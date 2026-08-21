@@ -230,7 +230,7 @@ export default function Register() {
 
         {loading
           ? 'Creando cuenta...'
-          : 'Crear cuenta →'
+          : 'Crear cuenta'
         }
 
       </button>

@@ -147,6 +147,11 @@ model Order {
 
   total Decimal @db.Decimal(10, 2)
 
+  direccion  String
+  ciudad     String
+  telefono   String
+  notas      String? @db.Text
+
   createdAt DateTime @default(now())
 
   updatedAt DateTime @updatedAt

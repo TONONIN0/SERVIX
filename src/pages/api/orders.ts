@@ -241,10 +241,66 @@ export const POST: APIRoute = async ({
     } = body;
 
 
+    // =================================================
+    // VALIDAR DATOS DE ENTREGA
+    // =================================================
+
     if (
       !direccion ||
       !ciudad ||
       !telefono
+    ) {
+
+      return new Response(
+
+        JSON.stringify({
+
+          error:
+            'Dirección, ciudad y teléfono son obligatorios',
+
+        }),
+
+        {
+
+          status: 400,
+
+          headers: {
+
+            'Content-Type':
+              'application/json',
+
+          },
+
+        }
+
+      );
+
+    }
+
+
+    // =================================================
+    // LIMPIAR DATOS
+    // =================================================
+
+    const direccionLimpia =
+      String(direccion).trim();
+
+    const ciudadLimpia =
+      String(ciudad).trim();
+
+    const telefonoLimpio =
+      String(telefono).trim();
+
+    const notasLimpias =
+      notas
+        ? String(notas).trim()
+        : null;
+
+
+    if (
+      !direccionLimpia ||
+      !ciudadLimpia ||
+      !telefonoLimpio
     ) {
 
       return new Response(
@@ -471,12 +527,44 @@ export const POST: APIRoute = async ({
 
               data: {
 
+                // =========================
+                // USUARIO
+                // =========================
+
                 userId,
+
+                // =========================
+                // ESTADO
+                // =========================
 
                 estado:
                   'pendiente',
 
+                // =========================
+                // TOTAL
+                // =========================
+
                 total,
+
+                // =========================
+                // INFORMACIÓN DE ENTREGA
+                // =========================
+
+                direccion:
+                  direccionLimpia,
+
+                ciudad:
+                  ciudadLimpia,
+
+                telefono:
+                  telefonoLimpio,
+
+                notas:
+                  notasLimpias,
+
+                // =========================
+                // PRODUCTOS
+                // =========================
 
                 items: {
 
@@ -658,4 +746,3 @@ export const POST: APIRoute = async ({
   }
 
 };
-
