@@ -61,7 +61,7 @@ export default function Footer() {
             Contacto
           </h3>
 
-          <a href="#contacto">
+          <a href="/contacto">
             Contáctanos
           </a>
 
@@ -69,14 +69,28 @@ export default function Footer() {
             contacto@servix.com
           </a>
 
-          <a href="tel:+523337803251">
-            +52 33 3780 3251
+          <a href="tel:+523337803261">
+            +52 33 3780 3261
+          </a>
+
+          {/* WHATSAPP */}
+
+          {/* WHATSAPP */}
+          <a
+            href="https://wa.me/523337803261"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-whatsapp"
+            aria-label="Contactar por WhatsApp"
+          >
+            <img
+              src="/assets/whatsapp.avif"
+              alt="WhatsApp"
+            />
           </a>
 
         </div>
 
-
-        
       </div>
 
 
@@ -105,3 +119,4 @@ export default function Footer() {
     </footer>
   );
 }
+

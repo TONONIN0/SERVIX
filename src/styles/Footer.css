@@ -234,3 +234,35 @@
   }
 
 }
+/* =========================
+   WHATSAPP
+========================= */
+
+.footer-whatsapp {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.footer-whatsapp img {
+  width: 42px;
+  height: 42px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+.footer-whatsapp:hover {
+  transform: scale(1.12);
+  opacity: 0.85;
+}
