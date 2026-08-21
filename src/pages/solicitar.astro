@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import '../styles/solicitar.css';
+import Footer from '../components/Footer.jsx';
+
 
 const session = Astro.cookies.get('servix_session');
 
@@ -273,9 +275,10 @@ if (!session) {
 
     </section>
 
+
   </main>
 
-
+<Footer />
   <!-- =========================
        JAVASCRIPT
   ========================== -->

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import '../styles/pedido-confirmado.css';
+import Footer from '../components/Footer.jsx';
 
 const session = Astro.cookies.get('servix_session');
 
@@ -122,6 +123,6 @@ if (!orderId) {
     </section>
 
   </main>
-
+<Footer />
 </Layout>
 

@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import { obtenerSesion } from '../lib/auth';
 import '../styles/carrito.css';
+import Footer from '../components/Footer.jsx';
 
 export const prerender = false;
 // =====================================================
@@ -911,6 +912,8 @@ const usuario =
     cargarCarrito();
 
   </script>
+
+  <Footer />
 
 </Layout>
 

@@ -36,19 +36,19 @@ export default function Footer() {
           </h3>
 
           <a href="/">
-            Inicio
+            Nosotros
           </a>
 
-          <a href="#servicios">
-            Servicios
+          <a href="/productos">
+            Productos
           </a>
 
-          <a href="#como-funciona">
-            Cómo funciona
+          <a href="/pedidos">
+            Mis Solicitudes
           </a>
 
-          <a href="#solicitar">
-            Solicitar entrega
+          <a href="/contacto">
+            Contacto
           </a>
 
         </div>

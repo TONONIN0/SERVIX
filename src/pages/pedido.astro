@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import '../styles/pedido.css';
+import Footer from '../components/Footer.jsx';
 
 const orderId = Astro.url.searchParams.get('id');
 
@@ -316,7 +317,8 @@ if (!orderId) {
 
   </main>
 
-
+  <Footer />
+  
   <script define:vars={{ orderId }}>
 
     const loading =
@@ -773,6 +775,8 @@ if (!orderId) {
     cargarPedido();
 
   </script>
+
+    
 
 </Layout>
 
