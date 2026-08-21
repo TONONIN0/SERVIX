@@ -1,39 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
+import { obtenerSesion } from '../lib/auth';
 import '../styles/carrito.css';
-import prisma from '../lib/prisma';
 
-const session = Astro.cookies.get('servix_session');
 
-if (!session) {
+// =====================================================
+// PROTEGER PÁGINA
+// =====================================================
+
+const sesion =
+  await obtenerSesion(Astro.cookies);
+
+
+if (!sesion) {
+
   return Astro.redirect('/login');
-}
-
-const userId = Number(session.value);
-
-let usuario = null;
-
-if (Number.isInteger(userId) && userId > 0) {
-
-  usuario = await prisma.user.findUnique({
-
-    where: {
-      id: userId,
-    },
-
-    select: {
-      id: true,
-      nombre: true,
-      email: true,
-    },
-
-  });
 
 }
+
+
+const usuario =
+  sesion.user;
+
 ---
-
-
 
 <Layout>
 
@@ -217,657 +207,710 @@ if (Number.isInteger(userId) && userId > 0) {
        JAVASCRIPT
   ========================== -->
 
+  <script>
 
-<script>
+    const loading =
+      document.getElementById(
+        'carrito-loading'
+      );
 
-  const loading =
-    document.getElementById(
-      'carrito-loading'
-    );
+    const vacio =
+      document.getElementById(
+        'carrito-vacio'
+      );
 
-  const vacio =
-    document.getElementById(
-      'carrito-vacio'
-    );
+    const itemsContainer =
+      document.getElementById(
+        'carrito-items'
+      );
 
-  const itemsContainer =
-    document.getElementById(
-      'carrito-items'
-    );
+    const resumen =
+      document.getElementById(
+        'carrito-resumen'
+      );
 
-  const resumen =
-    document.getElementById(
-      'carrito-resumen'
-    );
+    const resumenCantidad =
+      document.getElementById(
+        'resumen-cantidad'
+      );
 
-  const resumenCantidad =
-    document.getElementById(
-      'resumen-cantidad'
-    );
+    const resumenSubtotal =
+      document.getElementById(
+        'resumen-subtotal'
+      );
 
-  const resumenSubtotal =
-    document.getElementById(
-      'resumen-subtotal'
-    );
-
-  const resumenTotal =
-    document.getElementById(
-      'resumen-total'
-    );
-
-
-  // =========================
-  // FORMATEAR PRECIO
-  // =========================
-
-  function formatearPrecio(precio) {
-
-    return new Intl.NumberFormat(
-      'es-MX',
-      {
-        style: 'currency',
-        currency: 'MXN',
-      }
-    ).format(precio);
-
-  }
+    const resumenTotal =
+      document.getElementById(
+        'resumen-total'
+      );
 
 
-  // =========================
-  // ACTUALIZAR CONTADOR NAVBAR
-  // =========================
+    // =========================
+    // FORMATEAR PRECIO
+    // =========================
 
-  function actualizarContadorNavbar(cantidad) {
+    function formatearPrecio(precio) {
 
-    const contador =
-      document.querySelector('.cart-count');
-
-    if (!contador) {
-      return;
-    }
-
-
-    contador.textContent =
-      cantidad;
-
-
-    // Si no hay productos,
-    // ocultamos el contador
-
-    if (cantidad === 0) {
-
-      contador.style.display =
-        'none';
-
-    } else {
-
-      contador.style.display =
-        'flex';
+      return new Intl.NumberFormat(
+        'es-MX',
+        {
+          style: 'currency',
+          currency: 'MXN',
+        }
+      ).format(
+        Number(precio)
+      );
 
     }
 
-  }
+
+    // =========================
+    // ACTUALIZAR CONTADOR NAVBAR
+    // =========================
+
+    function actualizarContadorNavbar(
+      cantidad
+    ) {
+
+      const contador =
+        document.querySelector(
+          '.cart-count'
+        );
 
 
-  // =========================
-  // CARGAR CARRITO
-  // =========================
-
-  async function cargarCarrito() {
-
-    try {
-
-      const response =
-        await fetch('/api/cart');
-
-
-      const data =
-        await response.json();
-
-
-      if (response.status === 401) {
-
-        window.location.href =
-          '/login';
+      if (!contador) {
 
         return;
 
       }
 
 
-      if (!response.ok) {
+      contador.textContent =
+        cantidad;
 
-        throw new Error(
-          data.error ||
-          'No fue posible cargar el carrito'
-        );
+
+      if (cantidad === 0) {
+
+        contador.style.display =
+          'none';
+
+      } else {
+
+        contador.style.display =
+          'flex';
 
       }
 
-
-      const carrito =
-        data.cart;
+    }
 
 
-      loading.style.display =
-        'none';
+    // =========================
+    // CARGAR CARRITO
+    // =========================
+
+    async function cargarCarrito() {
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/cart',
+            {
+              credentials:
+                'same-origin',
+
+              cache:
+                'no-store',
+            }
+          );
 
 
-      // =========================
-      // CARRITO VACÍO
-      // =========================
-
-      if (
-        !carrito.items ||
-        carrito.items.length === 0
-      ) {
-
-        // 🔥 ACTUALIZAR NAVBAR
-        actualizarContadorNavbar(0);
+        const data =
+          await response.json();
 
 
-        // Ocultar productos
-        itemsContainer.style.display =
+        // =========================
+        // SESIÓN EXPIRADA
+        // =========================
+
+        if (
+          response.status === 401
+        ) {
+
+          window.location.href =
+            '/login';
+
+          return;
+
+        }
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            'No fue posible cargar el carrito'
+          );
+
+        }
+
+
+        const carrito =
+          data.cart;
+
+
+        loading.style.display =
           'none';
 
 
-        // Mostrar carrito vacío
-        vacio.style.display =
+        // =========================
+        // CARRITO VACÍO
+        // =========================
+
+        if (
+          !carrito.items ||
+          carrito.items.length === 0
+        ) {
+
+          actualizarContadorNavbar(
+            0
+          );
+
+
+          itemsContainer.style.display =
+            'none';
+
+
+          vacio.style.display =
+            'flex';
+
+
+          resumen.style.display =
+            'none';
+
+
+          return;
+
+        }
+
+
+        // =========================
+        // HAY PRODUCTOS
+        // =========================
+
+        itemsContainer.style.display =
           'flex';
 
 
-        // Ocultar resumen
-        resumen.style.display =
+        vacio.style.display =
           'none';
 
 
-        return;
-
-      }
-
-
-      // =========================
-      // HAY PRODUCTOS
-      // =========================
-
-      itemsContainer.style.display =
-        'flex';
+        resumen.style.display =
+          'block';
 
 
-      vacio.style.display =
-        'none';
+        itemsContainer.innerHTML =
+          '';
 
 
-      resumen.style.display =
-        'block';
+        let cantidadTotal =
+          0;
 
 
-      // =========================
-      // LIMPIAR PRODUCTOS
-      // =========================
+        // =========================
+        // RENDER PRODUCTOS
+        // =========================
 
-      itemsContainer.innerHTML =
-        '';
+        carrito.items.forEach(
+          (item) => {
 
-
-      let cantidadTotal = 0;
-
-
-      // =========================
-      // RENDER PRODUCTOS
-      // =========================
-
-      carrito.items.forEach(
-        (item) => {
-
-          const producto =
-            item.product;
+            const producto =
+              item.product;
 
 
-          cantidadTotal +=
-            item.cantidad;
+            cantidadTotal +=
+              item.cantidad;
 
 
-          const subtotal =
-            Number(
-              producto.precio
-            ) *
-            item.cantidad;
+            const subtotal =
+              Number(
+                producto.precio
+              ) *
+              item.cantidad;
 
 
-          const card =
-            document.createElement(
-              'article'
-            );
+            const card =
+              document.createElement(
+                'article'
+              );
 
 
-          card.className =
-            'carrito-item';
+            card.className =
+              'carrito-item';
 
 
-          card.innerHTML = `
+            card.innerHTML = `
 
-            <div class="item-imagen">
-
-              ${
-                producto.imagen
-
-                ? `
-                  <img
-                    src="${producto.imagen}"
-                    alt="${producto.nombre}"
-                  />
-                `
-
-                : `
-                  <span>
-                    SERVIX
-                  </span>
-                `
-              }
-
-            </div>
-
-
-            <div class="item-info">
-
-              <span class="item-categoria">
+              <div class="item-imagen">
 
                 ${
-                  producto.categoria ||
-                  'Producto industrial'
+                  producto.imagen
+
+                  ? `
+                    <img
+                      src="${producto.imagen}"
+                      alt="${producto.nombre}"
+                    />
+                  `
+
+                  : `
+                    <span>
+                      SERVIX
+                    </span>
+                  `
                 }
-
-              </span>
-
-
-              <h3>
-                ${producto.nombre}
-              </h3>
-
-
-              <p>
-                ${producto.descripcion || ''}
-              </p>
-
-
-              <span class="item-precio">
-
-                ${formatearPrecio(
-                  producto.precio
-                )}
-
-                / unidad
-
-              </span>
-
-            </div>
-
-
-            <div class="item-controles">
-
-              <div class="cantidad-control">
-
-                <button
-                  class="btn-cantidad btn-menos"
-                  data-product-id="${producto.id}"
-                  data-cantidad="${item.cantidad}"
-                >
-                  −
-                </button>
-
-
-                <span>
-                  ${item.cantidad}
-                </span>
-
-
-                <button
-                  class="btn-cantidad btn-mas"
-                  data-product-id="${producto.id}"
-                  data-cantidad="${item.cantidad}"
-                >
-                  +
-                </button>
 
               </div>
 
 
-              <strong class="item-subtotal">
+              <div class="item-info">
 
-                ${formatearPrecio(
-                  subtotal
-                )}
+                <span class="item-categoria">
 
-              </strong>
+                  ${
+                    producto.categoria ||
+                    'Producto industrial'
+                  }
 
-
-              <button
-                class="btn-eliminar"
-                data-product-id="${producto.id}"
-              >
-                Eliminar
-              </button>
-
-            </div>
-
-          `;
+                </span>
 
 
-          itemsContainer.appendChild(
-            card
+                <h3>
+                  ${producto.nombre}
+                </h3>
+
+
+                <p>
+                  ${
+                    producto.descripcion ||
+                    ''
+                  }
+                </p>
+
+
+                <span class="item-precio">
+
+                  ${formatearPrecio(
+                    producto.precio
+                  )}
+
+                  / unidad
+
+                </span>
+
+              </div>
+
+
+              <div class="item-controles">
+
+                <div class="cantidad-control">
+
+                  <button
+                    class="btn-cantidad btn-menos"
+                    data-product-id="${producto.id}"
+                    data-cantidad="${item.cantidad}"
+                  >
+                    −
+                  </button>
+
+
+                  <span>
+                    ${item.cantidad}
+                  </span>
+
+
+                  <button
+                    class="btn-cantidad btn-mas"
+                    data-product-id="${producto.id}"
+                    data-cantidad="${item.cantidad}"
+                  >
+                    +
+                  </button>
+
+                </div>
+
+
+                <strong class="item-subtotal">
+
+                  ${formatearPrecio(
+                    subtotal
+                  )}
+
+                </strong>
+
+
+                <button
+                  class="btn-eliminar"
+                  data-product-id="${producto.id}"
+                >
+                  Eliminar
+                </button>
+
+              </div>
+
+            `;
+
+
+            itemsContainer.appendChild(
+              card
+            );
+
+          }
+        );
+
+
+        // =========================
+        // ACTUALIZAR NAVBAR
+        // =========================
+
+        actualizarContadorNavbar(
+          cantidadTotal
+        );
+
+
+        // =========================
+        // ACTUALIZAR RESUMEN
+        // =========================
+
+        resumenCantidad.textContent =
+          cantidadTotal;
+
+
+        resumenSubtotal.textContent =
+          formatearPrecio(
+            carrito.total
           );
 
-        }
-      );
+
+        resumenTotal.textContent =
+          formatearPrecio(
+            carrito.total
+          );
 
 
-      // =========================
-      // ACTUALIZAR NAVBAR
-      // =========================
-
-      actualizarContadorNavbar(
-        cantidadTotal
-      );
+        activarControles();
 
 
-      // =========================
-      // ACTUALIZAR RESUMEN
-      // =========================
+      } catch (error) {
 
-      resumenCantidad.textContent =
-        cantidadTotal;
-
-
-      resumenSubtotal.textContent =
-        formatearPrecio(
-          carrito.total
+        console.error(
+          '🔥 ERROR:',
+          error
         );
 
 
-      resumenTotal.textContent =
-        formatearPrecio(
-          carrito.total
-        );
+        loading.textContent =
+          'No fue posible cargar el carrito.';
 
-
-      activarControles();
-
-
-    } catch (error) {
-
-      console.error(
-        '🔥 ERROR:',
-        error
-      );
-
-
-      loading.textContent =
-        'No fue posible cargar el carrito.';
+      }
 
     }
 
-  }
-
-
-  // =========================
-  // CONTROLES
-  // =========================
-
-  function activarControles() {
-
 
     // =========================
-    // MÁS / MENOS
+    // CONTROLES
     // =========================
 
-    document
-      .querySelectorAll(
-        '.btn-cantidad'
-      )
-      .forEach(
-        (button) => {
+    function activarControles() {
 
-          button.addEventListener(
-            'click',
-            async () => {
 
-              const productId =
-                Number(
-                  button.dataset.productId
+      // =========================
+      // MÁS / MENOS
+      // =========================
+
+      document
+        .querySelectorAll(
+          '.btn-cantidad'
+        )
+        .forEach(
+          (button) => {
+
+            button.addEventListener(
+              'click',
+              async () => {
+
+                const productId =
+                  Number(
+                    button.dataset
+                      .productId
+                  );
+
+
+                const cantidadActual =
+                  Number(
+                    button.dataset
+                      .cantidad
+                  );
+
+
+                const esMas =
+                  button.classList.contains(
+                    'btn-mas'
+                  );
+
+
+                const nuevaCantidad =
+                  esMas
+                    ? cantidadActual + 1
+                    : cantidadActual - 1;
+
+
+                if (
+                  nuevaCantidad < 1
+                ) {
+
+                  return;
+
+                }
+
+
+                await cambiarCantidad(
+                  productId,
+                  nuevaCantidad
                 );
-
-
-              const cantidadActual =
-                Number(
-                  button.dataset.cantidad
-                );
-
-
-              const esMas =
-                button.classList.contains(
-                  'btn-mas'
-                );
-
-
-              const nuevaCantidad =
-                esMas
-                  ? cantidadActual + 1
-                  : cantidadActual - 1;
-
-
-              if (
-                nuevaCantidad < 1
-              ) {
-
-                return;
 
               }
+            );
+
+          }
+        );
 
 
-              await cambiarCantidad(
-                productId,
-                nuevaCantidad
-              );
+      // =========================
+      // ELIMINAR
+      // =========================
+
+      document
+        .querySelectorAll(
+          '.btn-eliminar'
+        )
+        .forEach(
+          (button) => {
+
+            button.addEventListener(
+              'click',
+              async () => {
+
+                const productId =
+                  Number(
+                    button.dataset
+                      .productId
+                  );
+
+
+                await eliminarProducto(
+                  productId
+                );
+
+              }
+            );
+
+          }
+        );
+
+    }
+
+
+    // =========================
+    // CAMBIAR CANTIDAD
+    // =========================
+
+    async function cambiarCantidad(
+      productId,
+      cantidad
+    ) {
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/cart',
+            {
+
+              method:
+                'PUT',
+
+              credentials:
+                'same-origin',
+
+              headers: {
+
+                'Content-Type':
+                  'application/json',
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  productId,
+
+                  cantidad,
+
+                }),
 
             }
           );
 
+
+        const data =
+          await response.json();
+
+
+        if (
+          response.status === 401
+        ) {
+
+          window.location.href =
+            '/login';
+
+          return;
+
         }
-      );
+
+
+        if (!response.ok) {
+
+          alert(
+            data.error ||
+            'No se pudo actualizar'
+          );
+
+          return;
+
+        }
+
+
+        await cargarCarrito();
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+      }
+
+    }
 
 
     // =========================
-    // ELIMINAR
+    // ELIMINAR PRODUCTO
+    // =========================
+
+    async function eliminarProducto(
+      productId
+    ) {
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/cart',
+            {
+
+              method:
+                'DELETE',
+
+              credentials:
+                'same-origin',
+
+              headers: {
+
+                'Content-Type':
+                  'application/json',
+
+              },
+
+              body:
+                JSON.stringify({
+                  productId,
+                }),
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          response.status === 401
+        ) {
+
+          window.location.href =
+            '/login';
+
+          return;
+
+        }
+
+
+        if (!response.ok) {
+
+          alert(
+            data.error ||
+            'No se pudo eliminar'
+          );
+
+          return;
+
+        }
+
+
+        await cargarCarrito();
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+      }
+
+    }
+
+
+    // =========================
+    // CONTINUAR PEDIDO
     // =========================
 
     document
-      .querySelectorAll(
-        '.btn-eliminar'
+      .getElementById(
+        'btn-continuar'
       )
-      .forEach(
-        (button) => {
+      ?.addEventListener(
+        'click',
+        () => {
 
-          button.addEventListener(
-            'click',
-            async () => {
-
-              const productId =
-                Number(
-                  button.dataset.productId
-                );
-
-
-              await eliminarProducto(
-                productId
-              );
-
-            }
-          );
+          window.location.href =
+            '/solicitar';
 
         }
       );
 
-  }
 
+    // =========================
+    // INICIAR
+    // =========================
 
-  // =========================
-  // CAMBIAR CANTIDAD
-  // =========================
+    cargarCarrito();
 
-  async function cambiarCantidad(
-    productId,
-    cantidad
-  ) {
-
-    try {
-
-      const response =
-        await fetch(
-          '/api/cart',
-          {
-
-            method: 'PUT',
-
-            headers: {
-              'Content-Type':
-                'application/json',
-            },
-
-            body:
-              JSON.stringify({
-
-                productId,
-
-                cantidad,
-
-              }),
-
-          }
-        );
-
-
-      const data =
-        await response.json();
-
-
-      if (!response.ok) {
-
-        alert(
-          data.error ||
-          'No se pudo actualizar'
-        );
-
-        return;
-
-      }
-
-
-      // 🔥 RECARGAR CARRITO
-      // Y ACTUALIZAR NAVBAR
-
-      await cargarCarrito();
-
-
-    } catch (error) {
-
-      console.error(error);
-
-    }
-
-  }
-
-
-  // =========================
-  // ELIMINAR PRODUCTO
-  // =========================
-
-  async function eliminarProducto(
-    productId
-  ) {
-
-    try {
-
-      const response =
-        await fetch(
-          '/api/cart',
-          {
-
-            method: 'DELETE',
-
-            headers: {
-              'Content-Type':
-                'application/json',
-            },
-
-            body:
-              JSON.stringify({
-                productId,
-              }),
-
-          }
-        );
-
-
-      const data =
-        await response.json();
-
-
-      if (!response.ok) {
-
-        alert(
-          data.error ||
-          'No se pudo eliminar'
-        );
-
-        return;
-
-      }
-
-
-      // 🔥 RECARGAR CARRITO
-      // Y ACTUALIZAR NAVBAR
-
-      await cargarCarrito();
-
-
-    } catch (error) {
-
-      console.error(error);
-
-    }
-
-  }
-
-
-  // =========================
-  // CONTINUAR PEDIDO
-  // =========================
-
-  document
-    .getElementById(
-      'btn-continuar'
-    )
-    ?.addEventListener(
-      'click',
-      () => {
-
-        window.location.href =
-          '/solicitar';
-
-      }
-    );
-
-
-  // =========================
-  // INICIAR
-  // =========================
-
-  cargarCarrito();
-
-</script>
-
-
+  </script>
 
 </Layout>
 

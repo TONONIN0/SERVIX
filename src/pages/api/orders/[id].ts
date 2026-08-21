@@ -1,8 +1,110 @@
-
 import type { APIRoute } from 'astro';
+import { createHash } from 'node:crypto';
 import prisma from '../../../lib/prisma';
 
 export const prerender = false;
+
+
+// =====================================================
+// AUTENTICAR SESIÓN
+// =====================================================
+
+async function obtenerUsuarioDesdeSesion(
+  cookies: Parameters<APIRoute>[0]['cookies']
+) {
+
+  const session =
+    cookies.get('servix_session');
+
+
+  if (!session?.value) {
+    return null;
+  }
+
+
+  // =========================
+  // HASH DEL TOKEN
+  // =========================
+
+  const tokenHash =
+    createHash('sha256')
+      .update(session.value)
+      .digest('hex');
+
+
+  // =========================
+  // BUSCAR SESIÓN
+  // =========================
+
+  const sesion =
+    await prisma.session.findUnique({
+
+      where: {
+        tokenHash,
+      },
+
+      select: {
+
+        userId: true,
+
+        expiresAt: true,
+
+      },
+
+    });
+
+
+  if (!sesion) {
+
+    cookies.delete(
+      'servix_session',
+      {
+        path: '/',
+      }
+    );
+
+    return null;
+
+  }
+
+
+  // =========================
+  // VERIFICAR EXPIRACIÓN
+  // =========================
+
+  if (
+    sesion.expiresAt <=
+    new Date()
+  ) {
+
+    await prisma.session.delete({
+
+      where: {
+        tokenHash,
+      },
+
+    });
+
+    cookies.delete(
+      'servix_session',
+      {
+        path: '/',
+      }
+    );
+
+    return null;
+
+  }
+
+
+  return sesion.userId;
+
+}
+
+
+// =====================================================
+// GET — DETALLE DEL PEDIDO
+// =====================================================
 
 export const GET: APIRoute = async ({
   params,
@@ -11,55 +113,45 @@ export const GET: APIRoute = async ({
 
   try {
 
-    console.log('🔎 Consultando detalle del pedido...');
+    console.log(
+      '🔎 Consultando detalle del pedido...'
+    );
 
 
     // =========================
     // VERIFICAR SESIÓN
     // =========================
 
-    const session =
-      cookies.get('servix_session');
-
-
-    if (!session) {
-
-      return new Response(
-        JSON.stringify({
-          error: 'No has iniciado sesión',
-        }),
-        {
-          status: 401,
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-        }
+    const userId =
+      await obtenerUsuarioDesdeSesion(
+        cookies
       );
 
-    }
 
-
-    const userId =
-      Number(session.value);
-
-
-    if (
-      !Number.isInteger(userId) ||
-      userId <= 0
-    ) {
+    if (!userId) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'Sesión inválida',
+
+          error:
+            'No has iniciado sesión',
+
         }),
+
         {
+
           status: 401,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -79,16 +171,27 @@ export const GET: APIRoute = async ({
     ) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'ID de pedido inválido',
+
+          error:
+            'ID de pedido inválido',
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -109,7 +212,8 @@ export const GET: APIRoute = async ({
 
         where: {
 
-          id: orderId,
+          id:
+            orderId,
 
           userId,
 
@@ -120,7 +224,9 @@ export const GET: APIRoute = async ({
           items: {
 
             include: {
+
               product: true,
+
             },
 
           },
@@ -137,17 +243,27 @@ export const GET: APIRoute = async ({
     if (!pedido) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'No existe este pedido',
+
         }),
+
         {
+
           status: 404,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -169,7 +285,8 @@ export const GET: APIRoute = async ({
 
         success: true,
 
-        order: pedido,
+        order:
+          pedido,
 
       }),
 
@@ -224,4 +341,3 @@ export const GET: APIRoute = async ({
   }
 
 };
-

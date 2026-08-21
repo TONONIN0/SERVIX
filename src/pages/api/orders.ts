@@ -1,6 +1,6 @@
-
 import type { APIRoute } from 'astro';
 import prisma from '../../lib/prisma';
+import { obtenerSesion } from '../../lib/auth';
 
 export const prerender = false;
 
@@ -15,73 +15,70 @@ export const GET: APIRoute = async ({
 
   try {
 
-    console.log('📋 Consultando pedidos...');
+    console.log(
+      '📋 Consultando pedidos...'
+    );
 
 
-    // =========================
-    // SESIÓN
-    // =========================
+    // =================================================
+    // AUTENTICAR
+    // =================================================
 
-    const session =
-      cookies.get('servix_session');
+    const sesion =
+      await obtenerSesion(cookies);
 
 
-    if (!session) {
+    if (!sesion) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'No has iniciado sesión',
+
+          error:
+            'No has iniciado sesión',
+
         }),
+
         {
+
           status: 401,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     const userId =
-      Number(session.value);
+      sesion.userId;
 
 
-    if (
-      !Number.isInteger(userId) ||
-      userId <= 0
-    ) {
-
-      return new Response(
-        JSON.stringify({
-          error: 'Sesión inválida',
-        }),
-        {
-          status: 401,
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-        }
-      );
-
-    }
-
-
-    // =========================
+    // =================================================
     // BUSCAR PEDIDOS
-    // =========================
+    // =================================================
 
     const pedidos =
       await prisma.order.findMany({
 
         where: {
+
           userId,
+
         },
 
         orderBy: {
-          createdAt: 'desc',
+
+          createdAt:
+            'desc',
+
         },
 
         include: {
@@ -89,7 +86,9 @@ export const GET: APIRoute = async ({
           items: {
 
             include: {
+
               product: true,
+
             },
 
           },
@@ -111,7 +110,8 @@ export const GET: APIRoute = async ({
 
         success: true,
 
-        orders: pedidos,
+        orders:
+          pedidos,
 
       }),
 
@@ -179,63 +179,55 @@ export const POST: APIRoute = async ({
 
   try {
 
-    console.log('📦 Creando pedido...');
+    console.log(
+      '📦 Creando pedido...'
+    );
 
 
-    // =========================
-    // SESIÓN
-    // =========================
+    // =================================================
+    // AUTENTICAR
+    // =================================================
 
-    const session =
-      cookies.get('servix_session');
+    const sesion =
+      await obtenerSesion(cookies);
 
 
-    if (!session) {
+    if (!sesion) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'No has iniciado sesión',
+
+          error:
+            'No has iniciado sesión',
+
         }),
+
         {
+
           status: 401,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     const userId =
-      Number(session.value);
+      sesion.userId;
 
 
-    if (
-      !Number.isInteger(userId) ||
-      userId <= 0
-    ) {
-
-      return new Response(
-        JSON.stringify({
-          error: 'Sesión inválida',
-        }),
-        {
-          status: 401,
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-        }
-      );
-
-    }
-
-
-    // =========================
+    // =================================================
     // BODY
-    // =========================
+    // =================================================
 
     const body =
       await request.json();
@@ -256,31 +248,43 @@ export const POST: APIRoute = async ({
     ) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'Dirección, ciudad y teléfono son obligatorios',
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
-    // =========================
+    // =================================================
     // CARRITO
-    // =========================
+    // =================================================
 
     const carrito =
       await prisma.cart.findUnique({
 
         where: {
+
           userId,
+
         },
 
         include: {
@@ -288,7 +292,9 @@ export const POST: APIRoute = async ({
           items: {
 
             include: {
+
               product: true,
+
             },
 
           },
@@ -301,17 +307,27 @@ export const POST: APIRoute = async ({
     if (!carrito) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'No existe un carrito',
+
         }),
+
         {
+
           status: 404,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -322,44 +338,66 @@ export const POST: APIRoute = async ({
     ) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'Tu carrito está vacío',
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
-    // =========================
+    // =================================================
     // VALIDAR STOCK
-    // =========================
+    // =================================================
 
     for (
       const item of carrito.items
     ) {
 
-      if (!item.product.activo) {
+      if (
+        !item.product.activo
+      ) {
 
         return new Response(
+
           JSON.stringify({
+
             error:
               `El producto "${item.product.nombre}" ya no está disponible`,
+
           }),
+
           {
+
             status: 400,
+
             headers: {
+
               'Content-Type':
                 'application/json',
+
             },
+
           }
+
         );
 
       }
@@ -371,17 +409,27 @@ export const POST: APIRoute = async ({
       ) {
 
         return new Response(
+
           JSON.stringify({
+
             error:
               `No hay suficiente stock de "${item.product.nombre}"`,
+
           }),
+
           {
+
             status: 400,
+
             headers: {
+
               'Content-Type':
                 'application/json',
+
             },
+
           }
+
         );
 
       }
@@ -389,9 +437,9 @@ export const POST: APIRoute = async ({
     }
 
 
-    // =========================
+    // =================================================
     // CALCULAR TOTAL
-    // =========================
+    // =================================================
 
     let total = 0;
 
@@ -401,18 +449,21 @@ export const POST: APIRoute = async ({
     ) {
 
       total +=
-        Number(item.product.precio) *
+        Number(
+          item.product.precio
+        ) *
         item.cantidad;
 
     }
 
 
-    // =========================
+    // =================================================
     // CREAR PEDIDO
-    // =========================
+    // =================================================
 
     const pedido =
       await prisma.$transaction(
+
         async (tx) => {
 
           const nuevoPedido =
@@ -454,7 +505,9 @@ export const POST: APIRoute = async ({
                 items: {
 
                   include: {
+
                     product: true,
+
                   },
 
                 },
@@ -464,9 +517,9 @@ export const POST: APIRoute = async ({
             });
 
 
-          // =========================
+          // ===========================================
           // DESCONTAR STOCK
-          // =========================
+          // ===========================================
 
           for (
             const item of carrito.items
@@ -475,14 +528,19 @@ export const POST: APIRoute = async ({
             await tx.product.update({
 
               where: {
-                id: item.productId,
+
+                id:
+                  item.productId,
+
               },
 
               data: {
 
                 stock: {
+
                   decrement:
                     item.cantidad,
+
                 },
 
               },
@@ -492,15 +550,17 @@ export const POST: APIRoute = async ({
           }
 
 
-          // =========================
+          // ===========================================
           // VACIAR CARRITO
-          // =========================
+          // ===========================================
 
           await tx.cartItem.deleteMany({
 
             where: {
+
               cartId:
                 carrito.id,
+
             },
 
           });
@@ -509,6 +569,7 @@ export const POST: APIRoute = async ({
           return nuevoPedido;
 
         }
+
       );
 
 
@@ -518,9 +579,9 @@ export const POST: APIRoute = async ({
     );
 
 
-    // =========================
+    // =================================================
     // RESPUESTA
-    // =========================
+    // =================================================
 
     return new Response(
 

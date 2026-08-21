@@ -1,83 +1,145 @@
 import type { APIRoute } from 'astro';
-import prisma from '../../lib/prisma';
+import { obtenerSesion } from '../../lib/auth';
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ cookies }) => {
+
+// =====================================================
+// GET — OBTENER USUARIO ACTUAL
+// =====================================================
+
+export const GET: APIRoute = async ({
+  cookies,
+}) => {
+
   try {
-    const session = cookies.get('servix_session');
 
-    if (!session) {
-      return new Response(
-        JSON.stringify({
-          authenticated: false,
-        }),
-        {
-          status: 401,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-    }
+    console.log(
+      '👤 Consultando sesión actual...'
+    );
 
-    const userId = Number(session.value);
 
-    const usuario = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        id: true,
-        nombre: true,
-        email: true,
-      },
-    });
+    // =================================================
+    // AUTENTICAR SESIÓN
+    // =================================================
 
-    if (!usuario) {
-      cookies.delete('servix_session', {
-        path: '/',
-      });
+    const sesion =
+      await obtenerSesion(cookies);
+
+
+    // =================================================
+    // NO AUTENTICADO
+    // =================================================
+
+    if (!sesion) {
 
       return new Response(
+
         JSON.stringify({
-          authenticated: false,
+
+          authenticated:
+            false,
+
         }),
+
         {
-          status: 401,
+
+          status:
+            401,
+
           headers: {
-            'Content-Type': 'application/json',
+
+            'Content-Type':
+              'application/json',
+
           },
+
         }
+
       );
+
     }
+
+
+    // =================================================
+    // SESIÓN VÁLIDA
+    // =================================================
+
+    console.log(
+      '✅ Usuario autenticado:',
+      sesion.user.id
+    );
+
 
     return new Response(
+
       JSON.stringify({
-        authenticated: true,
-        user: usuario,
+
+        authenticated:
+          true,
+
+        user:
+          sesion.user,
+
       }),
+
       {
-        status: 200,
+
+        status:
+          200,
+
         headers: {
-          'Content-Type': 'application/json',
+
+          'Content-Type':
+            'application/json',
+
+          'Cache-Control':
+            'no-store',
+
         },
+
       }
+
     );
+
 
   } catch (error) {
-    console.error('🔥 ERROR ME:', error);
+
+    console.error(
+      '🔥 ERROR ME:',
+      error
+    );
+
 
     return new Response(
+
       JSON.stringify({
-        error: 'Error interno del servidor',
+
+        authenticated:
+          false,
+
+        error:
+          'Error interno del servidor',
+
       }),
+
       {
-        status: 500,
+
+        status:
+          500,
+
         headers: {
-          'Content-Type': 'application/json',
+
+          'Content-Type':
+            'application/json',
+
         },
+
       }
+
     );
+
   }
+
 };
+

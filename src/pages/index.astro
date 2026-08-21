@@ -4,23 +4,58 @@ import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import '../styles/index.css';
 import prisma from '../lib/prisma';
+
 const session = Astro.cookies.get('servix_session');
 
 let usuario = null;
 
-if (session) {
-  const userId = Number(session.value);
+if (session?.value) {
 
-  usuario = await prisma.user.findUnique({
+  const { createHash } = await import('node:crypto');
+
+  const tokenHash = createHash('sha256')
+    .update(session.value)
+    .digest('hex');
+
+  const sesion = await prisma.session.findUnique({
     where: {
-      id: userId,
+      tokenHash,
     },
-    select: {
-      id: true,
-      nombre: true,
-      email: true,
+    include: {
+      user: {
+        select: {
+          id: true,
+          nombre: true,
+          email: true,
+        },
+      },
     },
   });
+
+  if (
+    sesion &&
+    sesion.expiresAt > new Date()
+  ) {
+
+    usuario = sesion.user;
+
+  } else if (sesion) {
+
+    await prisma.session.delete({
+      where: {
+        id: sesion.id,
+      },
+    });
+
+    Astro.cookies.delete(
+      'servix_session',
+      {
+        path: '/',
+      }
+    );
+
+  }
+
 }
 ---
 

@@ -1,14 +1,7 @@
-
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import '../styles/pedido.css';
-
-const session = Astro.cookies.get('servix_session');
-
-if (!session) {
-  return Astro.redirect('/login');
-}
 
 const orderId = Astro.url.searchParams.get('id');
 

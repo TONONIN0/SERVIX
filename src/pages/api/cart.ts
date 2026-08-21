@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import prisma from '../../lib/prisma';
+import { obtenerSesion } from '../../lib/auth';
 
 export const prerender = false;
 
@@ -14,60 +15,63 @@ export const GET: APIRoute = async ({
 
   try {
 
-    console.log('🛒 Consultando carrito...');
+    console.log(
+      '🛒 Consultando carrito...'
+    );
 
-    const session =
-      cookies.get('servix_session');
+
+    // =================================================
+    // AUTENTICAR SESIÓN
+    // =================================================
+
+    const sesion =
+      await obtenerSesion(cookies);
 
 
-    if (!session) {
+    if (!sesion) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'No has iniciado sesión',
+
+          error:
+            'No has iniciado sesión',
+
         }),
+
         {
+
           status: 401,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     const userId =
-      Number(session.value);
+      sesion.userId;
 
 
-    if (
-      !Number.isInteger(userId) ||
-      userId <= 0
-    ) {
-
-      return new Response(
-        JSON.stringify({
-          error: 'Sesión inválida',
-        }),
-        {
-          status: 401,
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-        }
-      );
-
-    }
-
+    // =================================================
+    // BUSCAR CARRITO
+    // =================================================
 
     let carrito =
       await prisma.cart.findUnique({
 
         where: {
+
           userId,
+
         },
 
         include: {
@@ -75,7 +79,9 @@ export const GET: APIRoute = async ({
           items: {
 
             include: {
+
               product: true,
+
             },
 
           },
@@ -85,13 +91,19 @@ export const GET: APIRoute = async ({
       });
 
 
+    // =================================================
+    // CREAR CARRITO SI NO EXISTE
+    // =================================================
+
     if (!carrito) {
 
       carrito =
         await prisma.cart.create({
 
           data: {
+
             userId,
+
           },
 
           include: {
@@ -99,7 +111,9 @@ export const GET: APIRoute = async ({
             items: {
 
               include: {
+
                 product: true,
+
               },
 
             },
@@ -111,13 +125,19 @@ export const GET: APIRoute = async ({
     }
 
 
+    // =================================================
+    // CALCULAR TOTAL
+    // =================================================
+
     const total =
       carrito.items.reduce(
         (acumulado, item) => {
 
           return (
             acumulado +
-            Number(item.product.precio) *
+            Number(
+              item.product.precio
+            ) *
             item.cantidad
           );
 
@@ -132,6 +152,10 @@ export const GET: APIRoute = async ({
     );
 
 
+    // =================================================
+    // RESPUESTA
+    // =================================================
+
     return new Response(
 
       JSON.stringify({
@@ -140,9 +164,11 @@ export const GET: APIRoute = async ({
 
         cart: {
 
-          id: carrito.id,
+          id:
+            carrito.id,
 
-          items: carrito.items,
+          items:
+            carrito.items,
 
           total,
 
@@ -164,7 +190,6 @@ export const GET: APIRoute = async ({
       }
 
     );
-
 
   } catch (error) {
 
@@ -218,58 +243,46 @@ export const POST: APIRoute = async ({
       '🛒 Agregando producto al carrito...'
     );
 
-    
-
 
     // =================================================
-    // SESIÓN
+    // AUTENTICAR SESIÓN
     // =================================================
 
-    const session =
-      cookies.get('servix_session');
+    const sesion =
+      await obtenerSesion(cookies);
 
 
-    if (!session) {
+    if (!sesion) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'No has iniciado sesión',
+
+          error:
+            'No has iniciado sesión',
+
         }),
+
         {
+
           status: 401,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     const userId =
-      Number(session.value);
-
-
-    if (
-      !Number.isInteger(userId) ||
-      userId <= 0
-    ) {
-
-      return new Response(
-        JSON.stringify({
-          error: 'Sesión inválida',
-        }),
-        {
-          status: 401,
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-        }
-      );
-
-    }
+      sesion.userId;
 
 
     // =================================================
@@ -285,8 +298,14 @@ export const POST: APIRoute = async ({
 
 
     const cantidad =
-      Number(body.cantidad ?? 1);
+      Number(
+        body.cantidad ?? 1
+      );
 
+
+    // =================================================
+    // VALIDAR PRODUCTO
+    // =================================================
 
     if (
       !Number.isInteger(productId) ||
@@ -294,20 +313,35 @@ export const POST: APIRoute = async ({
     ) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'Producto inválido',
+
+          error:
+            'Producto inválido',
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
+
+    // =================================================
+    // VALIDAR CANTIDAD
+    // =================================================
 
     if (
       !Number.isInteger(cantidad) ||
@@ -315,17 +349,27 @@ export const POST: APIRoute = async ({
     ) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'La cantidad debe ser mayor a 0',
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -345,8 +389,13 @@ export const POST: APIRoute = async ({
       await prisma.product.findFirst({
 
         where: {
-          id: productId,
-          activo: true,
+
+          id:
+            productId,
+
+          activo:
+            true,
+
         },
 
       });
@@ -355,35 +404,51 @@ export const POST: APIRoute = async ({
     if (!producto) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'El producto no existe',
+
         }),
+
         {
+
           status: 404,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     // =================================================
-    // BUSCAR / CREAR CARRITO
+    // BUSCAR CARRITO
     // =================================================
 
     let carrito =
       await prisma.cart.findUnique({
 
         where: {
+
           userId,
+
         },
 
       });
 
+
+    // =================================================
+    // CREAR CARRITO SI NO EXISTE
+    // =================================================
 
     if (!carrito) {
 
@@ -391,7 +456,9 @@ export const POST: APIRoute = async ({
         await prisma.cart.create({
 
           data: {
+
             userId,
+
           },
 
         });
@@ -400,7 +467,7 @@ export const POST: APIRoute = async ({
 
 
     // =================================================
-    // BUSCAR PRODUCTO EN CARRITO
+    // BUSCAR ITEM EXISTENTE
     // =================================================
 
     const itemExistente =
@@ -410,9 +477,11 @@ export const POST: APIRoute = async ({
 
           cartId_productId: {
 
-            cartId: carrito.id,
+            cartId:
+              carrito.id,
 
-            productId: producto.id,
+            productId:
+              producto.id,
 
           },
 
@@ -423,12 +492,13 @@ export const POST: APIRoute = async ({
 
     const cantidadFinal =
       itemExistente
-        ? itemExistente.cantidad + cantidad
+        ? itemExistente.cantidad +
+          cantidad
         : cantidad;
 
 
     // =================================================
-    // COMPROBAR STOCK
+    // VALIDAR STOCK
     // =================================================
 
     if (
@@ -437,24 +507,34 @@ export const POST: APIRoute = async ({
     ) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             `Solo hay ${producto.stock} unidades disponibles`,
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     // =================================================
-    // ACTUALIZAR
+    // ACTUALIZAR ITEM EXISTENTE
     // =================================================
 
     if (itemExistente) {
@@ -463,11 +543,17 @@ export const POST: APIRoute = async ({
         await prisma.cartItem.update({
 
           where: {
-            id: itemExistente.id,
+
+            id:
+              itemExistente.id,
+
           },
 
           data: {
-            cantidad: cantidadFinal,
+
+            cantidad:
+              cantidadFinal,
+
           },
 
         });
@@ -487,7 +573,8 @@ export const POST: APIRoute = async ({
           message:
             'Producto agregado al carrito',
 
-          item: itemActualizado,
+          item:
+            itemActualizado,
 
         }),
 
@@ -510,7 +597,7 @@ export const POST: APIRoute = async ({
 
 
     // =================================================
-    // CREAR ITEM
+    // CREAR NUEVO ITEM
     // =================================================
 
     const nuevoItem =
@@ -545,7 +632,8 @@ export const POST: APIRoute = async ({
         message:
           'Producto agregado al carrito',
 
-        item: nuevoItem,
+        item:
+          nuevoItem,
 
       }),
 
@@ -563,7 +651,6 @@ export const POST: APIRoute = async ({
       }
 
     );
-
 
   } catch (error) {
 
@@ -601,6 +688,7 @@ export const POST: APIRoute = async ({
 
 };
 
+
 // =====================================================
 // PUT — ACTUALIZAR CANTIDAD
 // =====================================================
@@ -618,54 +706,44 @@ export const PUT: APIRoute = async ({
 
 
     // =================================================
-    // SESIÓN
+    // AUTENTICAR SESIÓN
     // =================================================
 
-    const session =
-      cookies.get('servix_session');
+    const sesion =
+      await obtenerSesion(cookies);
 
 
-    if (!session) {
+    if (!sesion) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'No has iniciado sesión',
+
+          error:
+            'No has iniciado sesión',
+
         }),
+
         {
+
           status: 401,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     const userId =
-      Number(session.value);
-
-
-    if (
-      !Number.isInteger(userId) ||
-      userId <= 0
-    ) {
-
-      return new Response(
-        JSON.stringify({
-          error: 'Sesión inválida',
-        }),
-        {
-          status: 401,
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-        }
-      );
-
-    }
+      sesion.userId;
 
 
     // =================================================
@@ -684,26 +762,45 @@ export const PUT: APIRoute = async ({
       Number(body.cantidad);
 
 
+    // =================================================
+    // VALIDAR PRODUCTO
+    // =================================================
+
     if (
       !Number.isInteger(productId) ||
       productId <= 0
     ) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'Producto inválido',
+
+          error:
+            'Producto inválido',
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
+
+    // =================================================
+    // VALIDAR CANTIDAD
+    // =================================================
 
     if (
       !Number.isInteger(cantidad) ||
@@ -711,17 +808,27 @@ export const PUT: APIRoute = async ({
     ) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'La cantidad debe ser mayor a 0',
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -735,8 +842,13 @@ export const PUT: APIRoute = async ({
       await prisma.product.findFirst({
 
         where: {
-          id: productId,
-          activo: true,
+
+          id:
+            productId,
+
+          activo:
+            true,
+
         },
 
       });
@@ -745,24 +857,34 @@ export const PUT: APIRoute = async ({
     if (!producto) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'El producto no existe',
+
         }),
+
         {
+
           status: 404,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     // =================================================
-    // COMPROBAR STOCK
+    // VALIDAR STOCK
     // =================================================
 
     if (
@@ -771,17 +893,27 @@ export const PUT: APIRoute = async ({
     ) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             `Solo hay ${producto.stock} unidades disponibles`,
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -795,7 +927,9 @@ export const PUT: APIRoute = async ({
       await prisma.cart.findUnique({
 
         where: {
+
           userId,
+
         },
 
       });
@@ -804,17 +938,27 @@ export const PUT: APIRoute = async ({
     if (!carrito) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'El carrito no existe',
+
         }),
+
         {
+
           status: 404,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -846,17 +990,27 @@ export const PUT: APIRoute = async ({
     if (!item) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'El producto no está en el carrito',
+
         }),
+
         {
+
           status: 404,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -870,11 +1024,16 @@ export const PUT: APIRoute = async ({
       await prisma.cartItem.update({
 
         where: {
-          id: item.id,
+
+          id:
+            item.id,
+
         },
 
         data: {
+
           cantidad,
+
         },
 
       });
@@ -914,7 +1073,6 @@ export const PUT: APIRoute = async ({
       }
 
     );
-
 
   } catch (error) {
 
@@ -970,54 +1128,44 @@ export const DELETE: APIRoute = async ({
 
 
     // =================================================
-    // SESIÓN
+    // AUTENTICAR SESIÓN
     // =================================================
 
-    const session =
-      cookies.get('servix_session');
+    const sesion =
+      await obtenerSesion(cookies);
 
 
-    if (!session) {
+    if (!sesion) {
 
       return new Response(
+
         JSON.stringify({
-          error: 'No has iniciado sesión',
+
+          error:
+            'No has iniciado sesión',
+
         }),
+
         {
+
           status: 401,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     const userId =
-      Number(session.value);
-
-
-    if (
-      !Number.isInteger(userId) ||
-      userId <= 0
-    ) {
-
-      return new Response(
-        JSON.stringify({
-          error: 'Sesión inválida',
-        }),
-        {
-          status: 401,
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-        }
-      );
-
-    }
+      sesion.userId;
 
 
     // =================================================
@@ -1032,23 +1180,37 @@ export const DELETE: APIRoute = async ({
       Number(body.productId);
 
 
+    // =================================================
+    // VALIDAR PRODUCTO
+    // =================================================
+
     if (
       !Number.isInteger(productId) ||
       productId <= 0
     ) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'Producto inválido',
+
         }),
+
         {
+
           status: 400,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -1062,7 +1224,9 @@ export const DELETE: APIRoute = async ({
       await prisma.cart.findUnique({
 
         where: {
+
           userId,
+
         },
 
       });
@@ -1071,17 +1235,27 @@ export const DELETE: APIRoute = async ({
     if (!carrito) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'El carrito no existe',
+
         }),
+
         {
+
           status: 404,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
@@ -1113,30 +1287,43 @@ export const DELETE: APIRoute = async ({
     if (!item) {
 
       return new Response(
+
         JSON.stringify({
+
           error:
             'El producto no está en el carrito',
+
         }),
+
         {
+
           status: 404,
+
           headers: {
+
             'Content-Type':
               'application/json',
+
           },
+
         }
+
       );
 
     }
 
 
     // =================================================
-    // ELIMINAR
+    // ELIMINAR ITEM
     // =================================================
 
     await prisma.cartItem.delete({
 
       where: {
-        id: item.id,
+
+        id:
+          item.id,
+
       },
 
     });
@@ -1146,6 +1333,10 @@ export const DELETE: APIRoute = async ({
       '✅ Producto eliminado'
     );
 
+
+    // =================================================
+    // RESPUESTA
+    // =================================================
 
     return new Response(
 
@@ -1172,7 +1363,6 @@ export const DELETE: APIRoute = async ({
       }
 
     );
-
 
   } catch (error) {
 
@@ -1209,4 +1399,3 @@ export const DELETE: APIRoute = async ({
   }
 
 };
-

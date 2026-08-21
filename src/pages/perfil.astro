@@ -3,23 +3,75 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import prisma from '../lib/prisma';
+import { createHash } from 'node:crypto';
 import '../styles/perfil.css';
 
 const session = Astro.cookies.get('servix_session');
 
-if (!session) {
+if (!session?.value) {
   return Astro.redirect('/login');
 }
 
-const userId = Number(session.value);
+// =========================
+// HASH DEL TOKEN
+// =========================
 
-if (!Number.isInteger(userId) || userId <= 0) {
+const tokenHash = createHash('sha256')
+  .update(session.value)
+  .digest('hex');
+
+// =========================
+// BUSCAR SESIÓN
+// =========================
+
+const sesion = await prisma.session.findUnique({
+  where: {
+    tokenHash,
+  },
+  select: {
+    userId: true,
+    expiresAt: true,
+  },
+});
+
+// =========================
+// SESIÓN NO EXISTE
+// =========================
+
+if (!sesion) {
+  Astro.cookies.delete('servix_session', {
+    path: '/',
+  });
+
   return Astro.redirect('/login');
 }
+
+// =========================
+// SESIÓN EXPIRADA
+// =========================
+
+if (sesion.expiresAt <= new Date()) {
+
+  await prisma.session.delete({
+    where: {
+      tokenHash,
+    },
+  });
+
+  Astro.cookies.delete('servix_session', {
+    path: '/',
+  });
+
+  return Astro.redirect('/login');
+}
+
+// =========================
+// BUSCAR USUARIO
+// =========================
 
 const usuario = await prisma.user.findUnique({
   where: {
-    id: userId,
+    id: sesion.userId,
   },
   select: {
     id: true,
@@ -29,7 +81,12 @@ const usuario = await prisma.user.findUnique({
   },
 });
 
+// =========================
+// USUARIO NO EXISTE
+// =========================
+
 if (!usuario) {
+
   Astro.cookies.delete('servix_session', {
     path: '/',
   });

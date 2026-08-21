@@ -3,12 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import '../styles/pedidos.css';
 
-const session =
-  Astro.cookies.get('servix_session');
 
-if (!session) {
-  return Astro.redirect('/login');
-}
 ---
 
 <Layout>
