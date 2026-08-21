@@ -1,13 +1,17 @@
 import type { APIRoute } from 'astro';
 import bcrypt from 'bcryptjs';
-import { createHash, randomBytes } from 'node:crypto';
+import {
+  createHash,
+  randomBytes,
+} from 'node:crypto';
+
 import prisma from '../../lib/prisma';
 
 export const prerender = false;
 
 
 // =====================================================
-// POST — LOGIN
+// LOGIN
 // =====================================================
 
 export const POST: APIRoute = async ({
@@ -17,15 +21,18 @@ export const POST: APIRoute = async ({
 
   try {
 
-    console.log('📥 Login recibido');
+    console.log(
+      '📥 Login recibido'
+    );
 
 
-    // =================================================
+    // =========================
     // BODY
-    // =================================================
+    // =========================
 
     const body =
       await request.json();
+
 
     const {
       email,
@@ -33,14 +40,12 @@ export const POST: APIRoute = async ({
     } = body;
 
 
-    // =================================================
+    // =========================
     // VALIDAR DATOS
-    // =================================================
+    // =========================
 
     if (
-      typeof email !== 'string' ||
-      typeof password !== 'string' ||
-      !email.trim() ||
+      !email ||
       !password
     ) {
 
@@ -71,19 +76,19 @@ export const POST: APIRoute = async ({
     }
 
 
-    // =================================================
+    // =========================
     // NORMALIZAR EMAIL
-    // =================================================
+    // =========================
 
     const emailNormalizado =
-      email
+      String(email)
         .toLowerCase()
         .trim();
 
 
-    // =================================================
+    // =========================
     // BUSCAR USUARIO
-    // =================================================
+    // =========================
 
     console.log(
       '🔎 Buscando usuario...'
@@ -102,10 +107,6 @@ export const POST: APIRoute = async ({
 
       });
 
-
-    // =================================================
-    // USUARIO NO EXISTE
-    // =================================================
 
     if (!usuario) {
 
@@ -136,9 +137,9 @@ export const POST: APIRoute = async ({
     }
 
 
-    // =================================================
+    // =========================
     // VERIFICAR CONTRASEÑA
-    // =================================================
+    // =========================
 
     console.log(
       '🔐 Verificando contraseña...'
@@ -147,8 +148,11 @@ export const POST: APIRoute = async ({
 
     const passwordCorrecta =
       await bcrypt.compare(
+
         password,
+
         usuario.password
+
       );
 
 
@@ -181,11 +185,13 @@ export const POST: APIRoute = async ({
     }
 
 
-    // =================================================
+    // =========================
     // VERIFICAR EMAIL
-    // =================================================
+    // =========================
 
-    if (!usuario.emailVerified) {
+    if (
+      !usuario.emailVerified
+    ) {
 
       console.log(
         '⚠️ Correo no verificado'
@@ -230,18 +236,18 @@ export const POST: APIRoute = async ({
     );
 
 
-    // =================================================
-    // GENERAR TOKEN
-    // =================================================
+    // =========================
+    // TOKEN
+    // =========================
 
     const token =
       randomBytes(32)
         .toString('hex');
 
 
-    // =================================================
-    // HASH DEL TOKEN
-    // =================================================
+    // =========================
+    // HASH TOKEN
+    // =========================
 
     const tokenHash =
       createHash('sha256')
@@ -249,20 +255,31 @@ export const POST: APIRoute = async ({
         .digest('hex');
 
 
-    // =================================================
-    // EXPIRACIÓN
-    // =================================================
+    // =========================
+    // FECHAS
+    // =========================
+
+    const ahora =
+      new Date();
+
 
     const expiresAt =
       new Date(
-        Date.now() +
-        7 * 24 * 60 * 60 * 1000
+
+        ahora.getTime() +
+        7 *
+        24 *
+        60 *
+        60 *
+        1000
+
       );
 
 
-    // =================================================
-    // ELIMINAR SESIONES ANTERIORES
-    // =================================================
+    // =========================
+    // ELIMINAR SESIONES
+    // ANTERIORES
+    // =========================
 
     await prisma.session.deleteMany({
 
@@ -276,9 +293,9 @@ export const POST: APIRoute = async ({
     });
 
 
-    // =================================================
+    // =========================
     // CREAR SESIÓN
-    // =================================================
+    // =========================
 
     await prisma.session.create({
 
@@ -289,6 +306,12 @@ export const POST: APIRoute = async ({
 
         tokenHash,
 
+        createdAt:
+          ahora,
+
+        updatedAt:
+          ahora,
+
         expiresAt,
 
       },
@@ -297,13 +320,13 @@ export const POST: APIRoute = async ({
 
 
     console.log(
-      '🔐 Sesión segura creada'
+      '🔐 Sesión creada'
     );
 
 
-    // =================================================
+    // =========================
     // COOKIE
-    // =================================================
+    // =========================
 
     cookies.set(
 
@@ -313,8 +336,7 @@ export const POST: APIRoute = async ({
 
       {
 
-        httpOnly:
-          true,
+        httpOnly: true,
 
         secure:
           import.meta.env.PROD,
@@ -326,16 +348,19 @@ export const POST: APIRoute = async ({
           '/',
 
         maxAge:
-          60 * 60 * 24 * 7,
+          7 *
+          24 *
+          60 *
+          60,
 
       }
 
     );
 
 
-    // =================================================
-    // LOGIN CORRECTO
-    // =================================================
+    // =========================
+    // RESPUESTA
+    // =========================
 
     console.log(
       '🎉 Login correcto'
