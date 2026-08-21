@@ -182,3 +182,16 @@ model OrderItem {
   @@index([orderId])
   @@index([productId])
 }
+
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  email     String
+  asunto    String
+  mensaje   String   @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}

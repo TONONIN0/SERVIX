@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import '../styles/contacto.css';
 import Footer from '../components/Footer.jsx';
+
 export const prerender = false;
 ---
 
@@ -66,7 +67,9 @@ export const prerender = false;
         </p>
 
 
-        <!-- EMAIL -->
+        <!-- =========================
+             EMAIL
+        ========================== -->
 
         <div class="contacto-item">
 
@@ -89,7 +92,9 @@ export const prerender = false;
         </div>
 
 
-        <!-- TELÉFONO -->
+        <!-- =========================
+             TELÉFONO
+        ========================== -->
 
         <div class="contacto-item">
 
@@ -112,7 +117,9 @@ export const prerender = false;
         </div>
 
 
-        <!-- HORARIO -->
+        <!-- =========================
+             HORARIO
+        ========================== -->
 
         <div class="contacto-item">
 
@@ -139,62 +146,63 @@ export const prerender = false;
         </div>
 
 
-        <!-- UBICACIÓN -->
-        
-<!-- UBICACIÓN -->
+        <!-- =========================
+             UBICACIÓN
+        ========================== -->
 
-<div class="contacto-location">
+        <div class="contacto-location">
 
-  <div class="location-header">
+          <div class="location-header">
 
-    <div class="contacto-icon">
-      ●
-    </div>
+            <div class="contacto-icon">
+              ●
+            </div>
 
-    <div>
+            <div>
 
-      <span>
-        Ubicación
-      </span>
+              <span>
+                Ubicación
+              </span>
 
-      <strong>
-        Guadalajara, Jalisco
-      </strong>
+              <strong>
+                Guadalajara, Jalisco
+              </strong>
 
-    </div>
+            </div>
 
-  </div>
-
-
-  <div class="contacto-map">
-
-    <iframe
-      src="https://www.google.com/maps?q=20.648088,-103.2315074&z=17&output=embed"
-      width="100%"
-      height="230"
-      style="border:0;"
-      allowfullscreen=""
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      title="Ubicación SERVIX"
-    ></iframe>
-
-  </div>
+          </div>
 
 
-  <a
-    href="https://www.google.com/maps/@20.648088,-103.2315074,3a,75y,339.24h,57.88t/data=!3m7!1e1!3m5!1sDocjg3KThuH6qetayNPXzg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D32.12%26panoid%3DDocjg3KThuH6qetayNPXzg%26yaw%3D339.24!7i13312!8i6656?entry=ttu"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="location-map-link"
-  >
-    Abrir en Google Maps 
-  </a>
+          <!-- MAPA -->
 
-</div>
+          <div class="contacto-map">
+
+            <iframe
+              src="https://www.google.com/maps?q=20.648088,-103.2315074&z=17&output=embed"
+              width="100%"
+              height="230"
+              style="border:0;"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Ubicación SERVIX"
+            ></iframe>
+
+          </div>
 
 
-        
+          <!-- GOOGLE MAPS -->
+
+          <a
+            href="https://www.google.com/maps/@20.648088,-103.2315074,3a,75y,339.24h,57.88t/data=!3m7!1e0!3m5!1sDocjg3KThuH6qetayNPXzg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D32.12%26panoid%3DDocjg3KThuH6qetayNPXzg%26yaw%3D339.24!7i13312!8i6656?entry=ttu"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="location-map-link"
+          >
+            Abrir en Google Maps →
+          </a>
+
+        </div>
 
       </div>
 
@@ -228,7 +236,9 @@ export const prerender = false;
           class="contacto-form"
         >
 
-          <!-- NOMBRE -->
+          <!-- =========================
+               NOMBRE
+          ========================== -->
 
           <div class="form-group">
 
@@ -241,13 +251,16 @@ export const prerender = false;
               id="nombre"
               name="nombre"
               placeholder="Tu nombre"
+              autocomplete="name"
               required
             />
 
           </div>
 
 
-          <!-- EMAIL -->
+          <!-- =========================
+               EMAIL
+          ========================== -->
 
           <div class="form-group">
 
@@ -260,13 +273,16 @@ export const prerender = false;
               id="email"
               name="email"
               placeholder="tu@correo.com"
+              autocomplete="email"
               required
             />
 
           </div>
 
 
-          <!-- TELÉFONO -->
+          <!-- =========================
+               TELÉFONO
+          ========================== -->
 
           <div class="form-group">
 
@@ -279,12 +295,15 @@ export const prerender = false;
               id="telefono"
               name="telefono"
               placeholder="+52 33 0000 0000"
+              autocomplete="tel"
             />
 
           </div>
 
 
-          <!-- ASUNTO -->
+          <!-- =========================
+               ASUNTO
+          ========================== -->
 
           <div class="form-group">
 
@@ -327,7 +346,9 @@ export const prerender = false;
           </div>
 
 
-          <!-- MENSAJE -->
+          <!-- =========================
+               MENSAJE
+          ========================== -->
 
           <div class="form-group">
 
@@ -346,23 +367,27 @@ export const prerender = false;
           </div>
 
 
-          <!-- BOTÓN -->
+          <!-- =========================
+               BOTÓN
+          ========================== -->
 
           <button
             type="submit"
+            id="contacto-submit"
             class="contacto-submit"
           >
-
-            Enviar mensaje
-
-            
-
+            Enviar mensaje 
           </button>
 
+
+          <!-- =========================
+               ESTADO
+          ========================== -->
 
           <p
             id="contacto-status"
             class="contacto-status"
+            aria-live="polite"
           ></p>
 
         </form>
@@ -408,7 +433,7 @@ export const prerender = false;
 
 
   <!-- =========================
-       FORMULARIO
+       JAVASCRIPT FORMULARIO
   ========================== -->
 
   <script>
@@ -423,28 +448,184 @@ export const prerender = false;
         'contacto-status'
       );
 
+    const submitButton =
+      document.getElementById(
+        'contacto-submit'
+      );
+
 
     formulario?.addEventListener(
       'submit',
-      (event) => {
+      async (event) => {
 
         event.preventDefault();
 
 
-        status.textContent =
-          'Gracias por contactarnos. Próximamente conectaremos este formulario con el sistema de mensajes.';
+        if (!formulario || !status || !submitButton) {
+          return;
+        }
 
-        status.classList.add(
-          'visible'
+
+        // =========================
+        // DESACTIVAR BOTÓN
+        // =========================
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+          'Enviando...';
+
+        status.textContent = '';
+
+        status.classList.remove(
+          'visible',
+          'success',
+          'error'
         );
 
 
-        formulario.reset();
+        try {
+
+          // =========================
+          // OBTENER DATOS
+          // =========================
+
+          const formData =
+            new FormData(
+              formulario
+            );
+
+
+          const datos = {
+
+            nombre:
+              String(
+                formData.get('nombre') || ''
+              ).trim(),
+
+            email:
+              String(
+                formData.get('email') || ''
+              ).trim(),
+
+            telefono:
+              String(
+                formData.get('telefono') || ''
+              ).trim(),
+
+            asunto:
+              String(
+                formData.get('asunto') || ''
+              ).trim(),
+
+            mensaje:
+              String(
+                formData.get('mensaje') || ''
+              ).trim(),
+
+          };
+
+
+          // =========================
+          // ENVIAR AL SERVIDOR
+          // =========================
+
+          const response =
+            await fetch(
+              '/api/contacto',
+              {
+
+                method: 'POST',
+
+                headers: {
+                  'Content-Type':
+                    'application/json',
+                },
+
+                credentials:
+                  'same-origin',
+
+                body:
+                  JSON.stringify(
+                    datos
+                  ),
+
+              }
+            );
+
+
+          const data =
+            await response.json();
+
+
+          // =========================
+          // ERROR
+          // =========================
+
+          if (!response.ok) {
+
+            throw new Error(
+              data.error ||
+              'No fue posible enviar el mensaje.'
+            );
+
+          }
+
+
+          // =========================
+          // ÉXITO
+          // =========================
+
+          status.textContent =
+            data.message ||
+            'Mensaje enviado correctamente. Nos pondremos en contacto contigo pronto.';
+
+          status.classList.add(
+            'visible',
+            'success'
+          );
+
+
+          formulario.reset();
+
+
+        } catch (error) {
+
+          console.error(
+            '🔥 ERROR FORMULARIO CONTACTO:',
+            error
+          );
+
+
+          status.textContent =
+            error.message ||
+            'No fue posible enviar el mensaje. Intenta nuevamente.';
+
+          status.classList.add(
+            'visible',
+            'error'
+          );
+
+
+        } finally {
+
+          // =========================
+          // REACTIVAR BOTÓN
+          // =========================
+
+          submitButton.disabled = false;
+
+          submitButton.textContent =
+            'Enviar mensaje';
+
+        }
 
       }
     );
 
   </script>
+
+
   <Footer />
 
 </Layout>
