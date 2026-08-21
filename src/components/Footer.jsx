@@ -69,8 +69,8 @@ export default function Footer() {
             contacto@servix.com
           </a>
 
-          <a href="tel:+523312345678">
-            +52 33 1234 5678
+          <a href="tel:+523337803251">
+            +52 33 3780 3251
           </a>
 
         </div>

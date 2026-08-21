@@ -1,0 +1,450 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import '../styles/contacto.css';
+import Footer from '../components/Footer.jsx';
+export const prerender = false;
+---
+
+<Layout>
+
+  <Navbar client:load />
+
+  <main class="contacto-page">
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="contacto-hero">
+
+      <div class="contacto-hero-content">
+
+        <span class="section-label">
+          SERVIX / CONTACTO
+        </span>
+
+        <h1>
+          Estamos para ayudarte
+        </h1>
+
+        <p>
+          ¿Necesitas una refacción, material o componente
+          industrial? Cuéntanos qué necesitas y te
+          ayudaremos a encontrar una solución rápida.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         CONTACTO
+    ========================== -->
+
+    <section class="contacto-container">
+
+      <!-- =========================
+           INFORMACIÓN
+      ========================== -->
+
+      <div class="contacto-info">
+
+        <span class="contacto-label">
+          HABLEMOS
+        </span>
+
+        <h2>
+          Cuéntanos qué necesitas
+        </h2>
+
+        <p class="contacto-description">
+          Nuestro objetivo es ayudarte a conseguir
+          lo que necesitas para que tu operación
+          no se detenga.
+        </p>
+
+
+        <!-- EMAIL -->
+
+        <div class="contacto-item">
+
+          <div class="contacto-icon">
+            ✉
+          </div>
+
+          <div>
+
+            <span>
+              Correo electrónico
+            </span>
+
+            <a href="mailto:contacto@servix.com">
+              contacto@servix.com
+            </a>
+
+          </div>
+
+        </div>
+
+
+        <!-- TELÉFONO -->
+
+        <div class="contacto-item">
+
+          <div class="contacto-icon">
+            ☎
+          </div>
+
+          <div>
+
+            <span>
+              Teléfono
+            </span>
+
+            <a href="tel:+523337803261">
+              +52 33 3780 3261
+            </a>
+
+          </div>
+
+        </div>
+
+
+        <!-- HORARIO -->
+
+        <div class="contacto-item">
+
+          <div class="contacto-icon">
+            ◷
+          </div>
+
+          <div>
+
+            <span>
+              Horario de atención
+            </span>
+
+            <strong>
+              Lunes a viernes
+            </strong>
+
+            <small>
+              9:00 AM — 6:00 PM
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <!-- UBICACIÓN -->
+        
+<!-- UBICACIÓN -->
+
+<div class="contacto-location">
+
+  <div class="location-header">
+
+    <div class="contacto-icon">
+      ●
+    </div>
+
+    <div>
+
+      <span>
+        Ubicación
+      </span>
+
+      <strong>
+        Guadalajara, Jalisco
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <div class="contacto-map">
+
+    <iframe
+      src="https://www.google.com/maps?q=20.648088,-103.2315074&z=17&output=embed"
+      width="100%"
+      height="230"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Ubicación SERVIX"
+    ></iframe>
+
+  </div>
+
+
+  <a
+    href="https://www.google.com/maps/@20.648088,-103.2315074,3a,75y,339.24h,57.88t/data=!3m7!1e1!3m5!1sDocjg3KThuH6qetayNPXzg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D32.12%26panoid%3DDocjg3KThuH6qetayNPXzg%26yaw%3D339.24!7i13312!8i6656?entry=ttu"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="location-map-link"
+  >
+    Abrir en Google Maps 
+  </a>
+
+</div>
+
+
+        
+
+      </div>
+
+
+      <!-- =========================
+           FORMULARIO
+      ========================== -->
+
+      <div class="contacto-form-card">
+
+        <div class="form-header">
+
+          <span>
+            CONTACTO SERVIX
+          </span>
+
+          <h2>
+            Envíanos un mensaje
+          </h2>
+
+          <p>
+            Completa el formulario y nos pondremos
+            en contacto contigo.
+          </p>
+
+        </div>
+
+
+        <form
+          id="contacto-form"
+          class="contacto-form"
+        >
+
+          <!-- NOMBRE -->
+
+          <div class="form-group">
+
+            <label for="nombre">
+              Nombre
+            </label>
+
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              placeholder="Tu nombre"
+              required
+            />
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label for="email">
+              Correo electrónico
+            </label>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="tu@correo.com"
+              required
+            />
+
+          </div>
+
+
+          <!-- TELÉFONO -->
+
+          <div class="form-group">
+
+            <label for="telefono">
+              Teléfono
+            </label>
+
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              placeholder="+52 33 0000 0000"
+            />
+
+          </div>
+
+
+          <!-- ASUNTO -->
+
+          <div class="form-group">
+
+            <label for="asunto">
+              ¿En qué podemos ayudarte?
+            </label>
+
+            <select
+              id="asunto"
+              name="asunto"
+              required
+            >
+
+              <option value="">
+                Selecciona una opción
+              </option>
+
+              <option value="cotizacion">
+                Solicitar cotización
+              </option>
+
+              <option value="producto">
+                Buscar un producto
+              </option>
+
+              <option value="pedido">
+                Información sobre mi pedido
+              </option>
+
+              <option value="empresa">
+                Atención empresarial
+              </option>
+
+              <option value="otro">
+                Otro
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- MENSAJE -->
+
+          <div class="form-group">
+
+            <label for="mensaje">
+              Mensaje
+            </label>
+
+            <textarea
+              id="mensaje"
+              name="mensaje"
+              rows="6"
+              placeholder="Cuéntanos qué necesitas..."
+              required
+            ></textarea>
+
+          </div>
+
+
+          <!-- BOTÓN -->
+
+          <button
+            type="submit"
+            class="contacto-submit"
+          >
+
+            Enviar mensaje
+
+            
+
+          </button>
+
+
+          <p
+            id="contacto-status"
+            class="contacto-status"
+          ></p>
+
+        </form>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="contacto-cta">
+
+      <div>
+
+        <span class="section-label">
+          SERVIX
+        </span>
+
+        <h2>
+          ¿Necesitas algo urgente?
+        </h2>
+
+        <p>
+          Encuentra los productos que necesitas
+          y solicita tu entrega directamente desde SERVIX.
+        </p>
+
+      </div>
+
+      <a
+        href="/productos"
+        class="contacto-cta-button"
+      >
+        Ver productos
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       FORMULARIO
+  ========================== -->
+
+  <script>
+
+    const formulario =
+      document.getElementById(
+        'contacto-form'
+      );
+
+    const status =
+      document.getElementById(
+        'contacto-status'
+      );
+
+
+    formulario?.addEventListener(
+      'submit',
+      (event) => {
+
+        event.preventDefault();
+
+
+        status.textContent =
+          'Gracias por contactarnos. Próximamente conectaremos este formulario con el sistema de mensajes.';
+
+        status.classList.add(
+          'visible'
+        );
+
+
+        formulario.reset();
+
+      }
+    );
+
+  </script>
+  <Footer />
+
+</Layout>
